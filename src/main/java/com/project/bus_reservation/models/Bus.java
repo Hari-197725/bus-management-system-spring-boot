@@ -1,7 +1,9 @@
 package com.project.bus_reservation.models;
 
+import com.project.bus_reservation.enums.BusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -22,13 +24,15 @@ public class Bus {
     @Column(nullable = false, updatable = false, unique = true)
     private Integer busNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
-    private Integer busType;
+    private BusType busType;
 
     @Min(5)
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = true)
     private Integer totalSeats;
 
+    @NotBlank
     @Column(nullable = false, updatable = true)
     private String operatorNames;
 
