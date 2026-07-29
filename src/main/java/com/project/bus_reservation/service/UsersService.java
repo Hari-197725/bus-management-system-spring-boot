@@ -18,10 +18,11 @@ public class UsersService {
         return usersRepository.save(users);
     }
 
-
-
-    public List<Users> getAllUsers() {
-        return usersRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<Users> users = usersRepository.findAll();
+        return users.stream()
+                .map(user -> new UserResponse(user.getId(), user.getName(), user.getEmail()))
+                .toList();
     }
 
     public Users getUsersById(Long id) {
