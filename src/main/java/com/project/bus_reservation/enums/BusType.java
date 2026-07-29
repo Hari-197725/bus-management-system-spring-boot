@@ -1,7 +1,9 @@
 package com.project.bus_reservation.enums;
 
 public enum BusType {
-    SLEEPER(1), SEMI_SLEEPER(2), SEATER(3);
+    SLEEPER(1),
+    SEMI_SLEEPER(2),
+    SEATER(3);
 
     private final int value;
 

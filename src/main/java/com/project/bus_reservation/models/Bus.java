@@ -1,5 +1,6 @@
 package com.project.bus_reservation.models;
 
+import com.project.bus_reservation.enums.BusStatus;
 import com.project.bus_reservation.enums.BusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -36,8 +37,9 @@ public class Bus {
     @Column(nullable = false, updatable = true)
     private String operatorNames;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = true)
-    private Integer status;
+    private BusStatus status;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

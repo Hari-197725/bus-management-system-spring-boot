@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,7 +18,11 @@ import java.time.LocalDateTime;
 // if you want all the other operation and also you are gonna use DTO then should use @Data. @Data is safe for DTOs because
 // DTOs are simple data containers and don't have JPA/Hibernate behaviour. Rule: @Entity → Avoid @Data; DTO → Use @Data.
 @Entity
-@Data
+//@Data
+@Getter
+@NoArgsConstructor
+@Setter
+@AllArgsConstructor
 // @Table(name = "users") is optional if the table name matches the entity name.
 // Use @Table(name = "...") when you want to explicitly specify the database table name.
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
