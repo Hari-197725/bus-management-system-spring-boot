@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 public class Users {
     @Id // @Id already implies the primary key, so the @Column settings are unnecessary here.
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    // @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @NotBlank

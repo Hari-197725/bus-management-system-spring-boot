@@ -7,7 +7,7 @@ public enum BusStatus {
 
     private final int value;
 
-    BusStatus(int value) {
+    private BusStatus(int value) {
         this.value = value;
     }
 

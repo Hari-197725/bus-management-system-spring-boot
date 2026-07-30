@@ -22,6 +22,7 @@ public class Cancellation {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+
     @Column(name = "booking_id")
     private Long bookingId;
 

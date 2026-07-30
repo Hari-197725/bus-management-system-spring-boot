@@ -6,6 +6,7 @@ import com.project.bus_reservation.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,9 +21,11 @@ public class UsersService {
 
     public List<UserResponse> getAllUsers() {
         List<Users> users = usersRepository.findAll();
-        return users.stream()
-                .map(user -> new UserResponse(user.getId(), user.getName(), user.getEmail()))
-                .toList();
+        List<UserResponse> userResponseList = new ArrayList<>();
+        for (Users user : users) {
+            userResponseList.add(new UserResponse(user.getId(), user.getName(), user.getEmail()));
+        }
+        return userResponseList;
     }
 
     public Users getUsersById(Long id) {

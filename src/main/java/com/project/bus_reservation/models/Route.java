@@ -30,11 +30,12 @@ public class Route {
 
     @NotBlank
     @Positive
-    @Column(name = "distance", nullable = false, updatable = true)
-    private double distance;
+    @Column(name = "distance_km", nullable = false, updatable = true)
+    private double distanceKm;
 
+    @Positive
     @Column(name = "estimated_duration", nullable = false, updatable = true)
-    private double estimatedDuration;
+    private Integer estimatedDuration;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
