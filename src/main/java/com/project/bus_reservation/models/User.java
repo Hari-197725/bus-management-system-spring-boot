@@ -5,11 +5,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 // @Data generates more code than a JPA entity usually needs. Some of that generated code can cause unexpected problems.
@@ -26,11 +30,16 @@ import java.time.LocalDateTime;
 // @Table(name = "users") is optional if the table name matches the entity name.
 // Use @Table(name = "...") when you want to explicitly specify the database table name.
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
-public class Users {
+@Table(name = "users")
+public class User {
     @Id // @Id already implies the primary key, so the @Column settings are unnecessary here.
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
+
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
+
 
     @NotBlank
     @Size(min = 2, max = 100)

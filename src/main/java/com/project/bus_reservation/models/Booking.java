@@ -2,11 +2,13 @@ package com.project.bus_reservation.models;
 
 import com.project.bus_reservation.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -21,8 +23,15 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "user_id", nullable = false, updatable = false)
-    private Long userId;
+//    @Column(name = "user_id", nullable = false, updatable = false)
+//    private Long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToOne(mappedBy = "booking")
+    private Cancellation cancellation;
 
     @CreationTimestamp
     @Column(name = "booking_date", nullable = false, updatable = false)

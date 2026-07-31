@@ -2,10 +2,9 @@ package com.project.bus_reservation.controller;
 
 import com.project.bus_reservation.dto.request.UserRequest;
 import com.project.bus_reservation.dto.response.UserResponse;
-import com.project.bus_reservation.models.Users;
+import com.project.bus_reservation.models.User;
 import com.project.bus_reservation.service.UsersService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +19,16 @@ public class UsersController {
     @Autowired
     private UsersService userService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Users> createUsers(@Valid @RequestBody Users users) {
-        return new ResponseEntity<>(userService.createUsers(users), HttpStatus.CREATED);
-    }
-
+//    Normal post mappiing method
 //    @PostMapping("/create")
-//    public UserResponse createUsers(@Valid @RequestBody UserRequest userRequest) {
-//        return userService.createUsers();
+//    public ResponseEntity<Users> createUsers(@Valid @RequestBody Users users) {
+//        return new ResponseEntity<>(userService.createUsers(users), HttpStatus.CREATED);
 //    }
+
+    @PostMapping("/create")
+    public UserResponse createUsers(@Valid @RequestBody UserRequest userRequest) {
+        return userService.createUsers(userRequest);
+    }
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
@@ -36,12 +36,12 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Users> getUsersById(@PathVariable Long id) {
+    public ResponseEntity<User> getUsersById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Users> updateUsersById(@PathVariable Long id, @RequestBody Users users) {
+    public ResponseEntity<User> updateUsersById(@PathVariable Long id, @RequestBody User users) {
         return new ResponseEntity<>(userService.updateUsersById(users), HttpStatus.OK);
     }
 
