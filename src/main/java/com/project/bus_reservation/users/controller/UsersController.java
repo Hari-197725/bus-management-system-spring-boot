@@ -1,9 +1,9 @@
-package com.project.bus_reservation.controller;
+package com.project.bus_reservation.users.controller;
 
-import com.project.bus_reservation.dto.request.UserRequest;
-import com.project.bus_reservation.dto.response.UserResponse;
-import com.project.bus_reservation.models.User;
-import com.project.bus_reservation.service.UsersService;
+import com.project.bus_reservation.users.dto.request.UserRequest;
+import com.project.bus_reservation.users.dto.response.UserResponse;
+import com.project.bus_reservation.users.entity.User;
+import com.project.bus_reservation.users.service.UsersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

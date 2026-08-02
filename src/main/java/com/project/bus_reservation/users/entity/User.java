@@ -1,5 +1,6 @@
-package com.project.bus_reservation.models;
+package com.project.bus_reservation.users.entity;
 
+import com.project.bus_reservation.models.Booking;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,9 +25,7 @@ import java.util.List;
 @Entity
 //@Data
 @Getter
-@NoArgsConstructor
 @Setter
-@AllArgsConstructor
 // @Table(name = "users") is optional if the table name matches the entity name.
 // Use @Table(name = "...") when you want to explicitly specify the database table name.
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").

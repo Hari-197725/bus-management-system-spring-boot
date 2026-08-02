@@ -1,9 +1,10 @@
-package com.project.bus_reservation.service;
+package com.project.bus_reservation.users.service;
 
-import com.project.bus_reservation.dto.request.UserRequest;
-import com.project.bus_reservation.dto.response.UserResponse;
-import com.project.bus_reservation.models.User;
-import com.project.bus_reservation.repository.UsersRepository;
+import com.project.bus_reservation.users.dto.request.UserRequest;
+import com.project.bus_reservation.users.dto.response.UserResponse;
+import com.project.bus_reservation.users.entity.User;
+import com.project.bus_reservation.users.mapper.UserMapper;
+import com.project.bus_reservation.users.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,24 +17,26 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private UserMapper  userMapper;
+
 //    public Users createUsers(Users users) {
 //        return usersRepository.save(users);
 //    }
 
     public void createUsers(UserRequest userRequest) {
-        User user = new User();
-        user.setEmail(userRequest.getEmail());
-        user.setName(userRequest.getName());
-        user.setPhoneNumber(userRequest.getPhone());
-        usersRepository.save(user);
-        return;
+        usersRepository.save(userMapper.toEntity(userRequest));
     }
 
     public List<UserResponse> getAllUsers() {
         List<User> users = usersRepository.findAll();
+//        return users
+//                .stream()
+//                .map(user -> userMapper.toResponse(user))
+//                .toList();
         List<UserResponse> userResponseList = new ArrayList<>();
         for (User user : users) {
-            userResponseList.add(new UserResponse(user.getId(), user.getName(), user.getEmail()));
+            userResponseList.add(userMapper.toResponse(user));
         }
         return userResponseList;
     }

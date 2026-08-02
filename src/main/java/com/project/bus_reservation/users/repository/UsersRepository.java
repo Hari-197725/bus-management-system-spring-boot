@@ -1,6 +1,6 @@
-package com.project.bus_reservation.repository;
+package com.project.bus_reservation.users.repository;
 
-import com.project.bus_reservation.models.User;
+import com.project.bus_reservation.users.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsersRepository extends JpaRepository<User, Long> {

@@ -1,8 +1,7 @@
 package com.project.bus_reservation.models;
 
-import com.project.bus_reservation.enums.Gender;
+import com.project.bus_reservation.common.enums.Gender;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.constraints.*;
 import lombok.*;
 

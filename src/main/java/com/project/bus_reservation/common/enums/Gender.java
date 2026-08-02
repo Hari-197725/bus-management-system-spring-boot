@@ -1,4 +1,4 @@
-package com.project.bus_reservation.enums;
+package com.project.bus_reservation.common.enums;
 
 public enum Gender {
     MALE(1), FEMALE(2), OTHER(3);

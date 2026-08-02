@@ -1,15 +1,15 @@
-package com.project.bus_reservation.dto.response;
+package com.project.bus_reservation.users.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
 @Setter
-public class UserResponse {
+@AllArgsConstructor
+public class UserRequest {
 
-    private Long id;
     private String name;
     private String email;
+    private String phone;
 }

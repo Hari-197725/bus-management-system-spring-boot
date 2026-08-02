@@ -1,6 +1,7 @@
 package com.project.bus_reservation.models;
 
 import com.project.bus_reservation.enums.BookingStatus;
+import com.project.bus_reservation.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
