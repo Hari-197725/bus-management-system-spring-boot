@@ -20,8 +20,13 @@ public class UsersService {
 //        return usersRepository.save(users);
 //    }
 
-    public UserResponse createUsers(UserRequest userRequest) {
-        return usersRepository.save(userRequest);
+    public void createUsers(UserRequest userRequest) {
+        User user = new User();
+        user.setEmail(userRequest.getEmail());
+        user.setName(userRequest.getName());
+        user.setPhoneNumber(userRequest.getPhone());
+        usersRepository.save(user);
+        return;
     }
 
     public List<UserResponse> getAllUsers() {

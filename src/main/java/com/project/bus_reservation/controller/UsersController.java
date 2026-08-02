@@ -19,15 +19,16 @@ public class UsersController {
     @Autowired
     private UsersService userService;
 
-//    Normal post mappiing method
+//    Normal post mapping method
 //    @PostMapping("/create")
 //    public ResponseEntity<Users> createUsers(@Valid @RequestBody Users users) {
 //        return new ResponseEntity<>(userService.createUsers(users), HttpStatus.CREATED);
 //    }
 
-    @PostMapping("/create")
-    public UserResponse createUsers(@Valid @RequestBody UserRequest userRequest) {
-        return userService.createUsers(userRequest);
+    @PostMapping
+    public ResponseEntity<Void> createUsers(@Valid @RequestBody UserRequest userRequest) {
+        userService.createUsers(userRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
