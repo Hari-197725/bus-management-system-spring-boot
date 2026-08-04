@@ -1,4 +1,4 @@
-package com.project.bus_reservation.enums;
+package com.project.bus_reservation.buses.enums;
 
 public enum BusStatus {
     ACTIVE(1),

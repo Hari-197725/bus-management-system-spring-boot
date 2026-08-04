@@ -25,6 +25,23 @@ public class UsersController {
 //        return new ResponseEntity<>(userService.createUsers(users), HttpStatus.CREATED);
 //    }
 
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<User> getUsersById(@PathVariable Long id) {
+//        return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
+//    }
+
+//    @PutMapping("/{id}")
+//    public ResponseEntity<User> updateUsersById(@PathVariable Long id, @RequestBody User users) {
+//        return new ResponseEntity<>(userService.updateUsersById(users), HttpStatus.OK);
+//    }
+
+
+//    @DeleteMapping("/{id}")
+//    public void deleteUsersById(@PathVariable Long id) {
+//        userService.deleteUsersById(id);
+//    }
+
     @PostMapping
     public ResponseEntity<Void> createUsers(@Valid @RequestBody UserRequest userRequest) {
         userService.createUsers(userRequest);
@@ -37,17 +54,19 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUsersById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUsersById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUsersById(@PathVariable Long id, @RequestBody User users) {
-        return new ResponseEntity<>(userService.updateUsersById(users), HttpStatus.OK);
+    public ResponseEntity<UserResponse> updateUsersById(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        return new ResponseEntity<>(userService.updateUsersById(id, userRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUsersById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUsersById(@PathVariable Long id) {
         userService.deleteUsersById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

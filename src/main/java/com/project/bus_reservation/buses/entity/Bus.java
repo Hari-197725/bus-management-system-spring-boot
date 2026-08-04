@@ -1,7 +1,7 @@
-package com.project.bus_reservation.models;
+package com.project.bus_reservation.buses.entity;
 
-import com.project.bus_reservation.enums.BusStatus;
-import com.project.bus_reservation.enums.BusType;
+import com.project.bus_reservation.buses.enums.BusStatus;
+import com.project.bus_reservation.buses.enums.BusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

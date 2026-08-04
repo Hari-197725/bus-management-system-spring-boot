@@ -18,7 +18,7 @@ public class UsersService {
     private UsersRepository usersRepository;
 
     @Autowired
-    private UserMapper  userMapper;
+    private UserMapper userMapper;
 
 //    public Users createUsers(Users users) {
 //        return usersRepository.save(users);
@@ -41,16 +41,34 @@ public class UsersService {
         return userResponseList;
     }
 
-    public User getUsersById(Long id) {
-        return usersRepository.getReferenceById(id);
+//    public User getUsersById(Long id) {
+//        return usersRepository.getReferenceById(id);
+//    }
+
+    public UserResponse getUsersById(Long id) {
+        User user = usersRepository.getReferenceById(id);
+        return userMapper.toResponse(user);
     }
 
-    public User updateUsersById(User users) {
-        return usersRepository.save(users);
+//    public User updateUsersById(User users) {
+//        return usersRepository.save(users);
+//    }
+
+    public UserResponse updateUsersById(Long id, UserRequest userRequest) {
+        User user = usersRepository.getReferenceById(id);
+        user.setName(userRequest.getName());
+        user.setPhoneNumber(userRequest.getPhone());
+        user.setEmail(userRequest.getEmail());
+       User updatedUser =  usersRepository.save(user);
+        return userMapper.toResponse(updatedUser);
     }
 
-    public void deleteUsersById(Long id) {
+
+//    public void deleteUsersById(Long id) {
+//        usersRepository.deleteById(id);
+//    }
+
+    public void deleteUsersById(Long id){
         usersRepository.deleteById(id);
     }
-
 }
