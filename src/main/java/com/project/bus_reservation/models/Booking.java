@@ -34,6 +34,9 @@ public class Booking {
     @OneToOne(mappedBy = "booking")
     private Cancellation cancellation;
 
+
+    private Long ScheduleId;
+
     @CreationTimestamp
     @Column(name = "booking_date", nullable = false, updatable = false)
     private LocalDate bookingDate;

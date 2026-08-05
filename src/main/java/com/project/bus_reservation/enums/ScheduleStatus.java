@@ -1,7 +1,7 @@
 package com.project.bus_reservation.enums;
 
 public enum ScheduleStatus {
-    SCHEDULED(1), BOARDING(2), DEPARTED(3), IN_TRANSIT(4), ARRIVED(5), CANCELLED(6);
+    BOARDING(1), DEPARTED(2), IN_TRANSIT(3), ARRIVED(4), CANCELLED(5);
 
     private final int value;
 
