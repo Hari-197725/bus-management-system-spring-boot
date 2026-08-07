@@ -2,9 +2,10 @@ package com.project.bus_reservation.buses.entity;
 
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
+import com.project.bus_reservation.operator.entity.Operator;
+import com.project.bus_reservation.models.Seat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,9 +32,19 @@ public class Bus {
     @Column(nullable = false, updatable = false, unique = true, length = 6)
     private Integer busNumber;
 
+    @Column(nullable = false)
+    private String busName;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
     private BusType busType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "operator_id")
+    private Operator operator;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus")
+    private List<Seat> seats;
 
     @Min(18)
     @Column(nullable = false, updatable = true)

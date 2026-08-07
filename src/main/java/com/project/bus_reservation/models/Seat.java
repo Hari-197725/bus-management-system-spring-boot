@@ -1,5 +1,6 @@
 package com.project.bus_reservation.models;
 
+import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.enums.SeatStatus;
 import com.project.bus_reservation.enums.SeatType;
 import jakarta.persistence.*;
@@ -19,19 +20,18 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "bus_id", nullable = false, updatable = false)
-    private Long busId;
-
     @NotNull
     @Positive
     @Column(name = "seat_number", nullable = false, updatable = false)
     private Integer seatNumber;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "bus_id")
+    private Bus bus;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "seat_type", nullable = false)
     private SeatType seatType;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

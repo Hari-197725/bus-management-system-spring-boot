@@ -34,7 +34,7 @@ public class User {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
     @NotBlank

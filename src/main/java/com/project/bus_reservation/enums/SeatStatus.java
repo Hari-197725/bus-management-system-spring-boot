@@ -1,7 +1,7 @@
 package com.project.bus_reservation.enums;
 
 public enum SeatStatus {
-    AVAILABLE(1), BOOKED(2), BLOCKED(3);
+    AVAILABLE(1), BOOKED(2);
 
     private final int value;
 

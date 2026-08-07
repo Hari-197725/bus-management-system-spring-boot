@@ -1,7 +1,7 @@
 package com.project.bus_reservation.enums;
 
 public enum SeatType {
-    WiNDOW(1), AISLE(2), LOWER_BERTH(3), UPPER_BERTH(4);
+    WINDOW(1), AISLE(2), LOWER_BERTH(3), UPPER_BERTH(4);
 
     private final int value;
 
