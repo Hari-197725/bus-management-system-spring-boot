@@ -1,15 +1,13 @@
 package com.project.bus_reservation.users.entity;
 
 import com.project.bus_reservation.models.Booking;
+import com.project.bus_reservation.users.dto.request.UserRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -25,20 +23,19 @@ import java.util.List;
 @Entity
 //@Data
 @Getter
-@Setter
 // @Table(name = "users") is optional if the table name matches the entity name.
 // Use @Table(name = "...") when you want to explicitly specify the database table name.
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
 @Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id // @Id already implies the primary key, so the @Column settings are unnecessary here.
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
-
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -65,4 +62,16 @@ public class User {
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
+
+    @Builder
+    private User(String email, String name, String phoneNumber) { // This is the constructor of this class.
+        this.email = email;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updateUser(UserRequest userRequest) {
+        this.name = userRequest.getName() != null ? userRequest.getName() : this.name;
+        this.phoneNumber = userRequest.getPhone() != null ? userRequest.getPhone() : this.phoneNumber;
+    }
 }

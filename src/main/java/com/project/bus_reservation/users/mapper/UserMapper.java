@@ -13,10 +13,9 @@ public class UserMapper {
     }
 
     public User toEntity(UserRequest userRequest) {
-        User user = new User();
-        user.setName(userRequest.getName());
-        user.setEmail(userRequest.getEmail());
-        user.setPhoneNumber(userRequest.getPhone());
-        return user;
+        return User.builder()
+                .name(userRequest.getName())
+                .phoneNumber(userRequest.getPhone())
+                .build();
     }
 }

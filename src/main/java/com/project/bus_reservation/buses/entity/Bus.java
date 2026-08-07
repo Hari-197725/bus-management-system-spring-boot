@@ -21,25 +21,22 @@ import java.time.LocalDateTime;
 //@Data
 public class Bus {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @NotNull
     @Positive
-    @Column(nullable = false, updatable = false, unique = true)
+    @Min(6)
+    @Column(nullable = false, updatable = false, unique = true, length = 6)
     private Integer busNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
     private BusType busType;
 
-    @Min(5)
+    @Min(18)
     @Column(nullable = false, updatable = true)
     private Integer totalSeats;
-
-    @NotBlank
-    @Column(nullable = false, updatable = true)
-    private String operatorNames;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = true)

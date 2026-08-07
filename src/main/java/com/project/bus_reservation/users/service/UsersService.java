@@ -5,6 +5,7 @@ import com.project.bus_reservation.users.dto.response.UserResponse;
 import com.project.bus_reservation.users.entity.User;
 import com.project.bus_reservation.users.mapper.UserMapper;
 import com.project.bus_reservation.users.repository.UsersRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,10 +57,8 @@ public class UsersService {
 
     public UserResponse updateUsersById(Long id, UserRequest userRequest) {
         User user = usersRepository.getReferenceById(id);
-        user.setName(userRequest.getName());
-        user.setPhoneNumber(userRequest.getPhone());
-        user.setEmail(userRequest.getEmail());
-       User updatedUser =  usersRepository.save(user);
+        user.updateUser(userRequest);
+        User updatedUser =  usersRepository.save(user);
         return userMapper.toResponse(updatedUser);
     }
 
