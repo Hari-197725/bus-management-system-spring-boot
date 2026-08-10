@@ -25,7 +25,7 @@ import java.time.LocalTime;
 @Table(name = "schedules")
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column(name = "bus_id", nullable = false, updatable = false)

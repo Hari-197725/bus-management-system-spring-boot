@@ -14,7 +14,7 @@ import lombok.*;
 @Table(name = "booking_details")
 public class BookingDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @Column(name = "booking_id", nullable = false, updatable = false)

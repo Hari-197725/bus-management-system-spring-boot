@@ -28,6 +28,17 @@ public class BusesService {
     @Autowired
     private BusMapper busMapper;
 
+    public BusResponse createBus(BusRequest busRequest) {
+        if (busRequest.getSeats().size() != busRequest.getTotalSeats()) {
+            throw new ResponseStatusException(BAD_REQUEST,
+                    "Seat count (" + busRequest.getSeats().size() + ") does not match totalSeats (" + busRequest.getTotalSeats() + ")");
+        }
+        Operator operator = operatorRepository.findById(busRequest.getOperatorId())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + busRequest.getOperatorId()));
+        Bus bus = busMapper.toEntity(busRequest, operator);
+        return busMapper.toResponse(busesRepository.save(bus));
+    }
+
     public List<BusResponse> getAllBuses() {
         return busesRepository.findAll().stream()
                 .map(busMapper::toResponse)
@@ -40,14 +51,5 @@ public class BusesService {
         return busMapper.toResponse(bus);
     }
 
-    public BusResponse createBus(BusRequest request) {
-        if (request.getSeats().size() != request.getTotalSeats()) {
-            throw new ResponseStatusException(BAD_REQUEST,
-                    "Seat count (" + request.getSeats().size() + ") does not match totalSeats (" + request.getTotalSeats() + ")");
-        }
-        Operator operator = operatorRepository.findById(request.getOperatorId())
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + request.getOperatorId()));
-        Bus bus = busMapper.toEntity(request, operator);
-        return busMapper.toResponse(busesRepository.save(bus));
-    }
+
 }

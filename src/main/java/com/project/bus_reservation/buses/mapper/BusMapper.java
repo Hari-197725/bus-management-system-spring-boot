@@ -48,16 +48,16 @@ public class BusMapper {
         );
     }
 
-    public Bus toEntity(BusRequest request, Operator operator) {
+    public Bus toEntity(BusRequest busrequest, Operator operator) {
         Bus bus = new Bus();
-        bus.setBusNumber(request.getBusNumber());
-        bus.setBusName(request.getBusName());
-        bus.setBusType(request.getBusType());
-        bus.setTotalSeats(request.getTotalSeats());
-        bus.setStatus(request.getStatus());
+        bus.setBusNumber(busrequest.getBusNumber());
+        bus.setBusName(busrequest.getBusName());
+        bus.setBusType(busrequest.getBusType());
+        bus.setTotalSeats(busrequest.getTotalSeats());
+        bus.setStatus(busrequest.getStatus());
         bus.setOperator(operator);
 
-        List<Seat> seats = request.getSeats().stream()
+        List<Seat> seats = busrequest.getSeats().stream()
                 .map(seatReq -> {
                     Seat seat = new Seat();
                     seat.setSeatNumber(seatReq.getSeatNumber());

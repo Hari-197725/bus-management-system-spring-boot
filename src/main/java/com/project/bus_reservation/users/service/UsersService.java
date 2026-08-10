@@ -25,6 +25,18 @@ public class UsersService {
 //        return usersRepository.save(users);
 //    }
 
+//    public User getUsersById(Long id) {
+//        return usersRepository.getReferenceById(id);
+//    }
+
+//    public User updateUsersById(User users) {
+//        return usersRepository.save(users);
+//    }
+
+//    public void deleteUsersById(Long id) {
+//        usersRepository.deleteById(id);
+//    }
+
     public void createUsers(UserRequest userRequest) {
         usersRepository.save(userMapper.toEntity(userRequest));
     }
@@ -42,32 +54,22 @@ public class UsersService {
         return userResponseList;
     }
 
-//    public User getUsersById(Long id) {
-//        return usersRepository.getReferenceById(id);
-//    }
 
     public UserResponse getUsersById(Long id) {
         User user = usersRepository.getReferenceById(id);
         return userMapper.toResponse(user);
     }
 
-//    public User updateUsersById(User users) {
-//        return usersRepository.save(users);
-//    }
 
     public UserResponse updateUsersById(Long id, UserRequest userRequest) {
         User user = usersRepository.getReferenceById(id);
         user.updateUser(userRequest);
-        User updatedUser =  usersRepository.save(user);
+        User updatedUser = usersRepository.save(user);
         return userMapper.toResponse(updatedUser);
     }
 
 
-//    public void deleteUsersById(Long id) {
-//        usersRepository.deleteById(id);
-//    }
-
-    public void deleteUsersById(Long id){
+    public void deleteUsersById(Long id) {
         usersRepository.deleteById(id);
     }
 }

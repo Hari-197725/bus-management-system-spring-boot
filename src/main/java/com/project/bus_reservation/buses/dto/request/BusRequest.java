@@ -17,7 +17,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 public class BusRequest {
 
     @NotNull

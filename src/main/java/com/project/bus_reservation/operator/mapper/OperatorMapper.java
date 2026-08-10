@@ -16,9 +16,9 @@ public class OperatorMapper {
         );
     }
 
-    public Operator toEntity(OperatorRequest request) {
+    public Operator toEntity(OperatorRequest operatorRequest) {
         Operator operator = new Operator();
-        operator.setOperatorName(request.getOperatorName());
+        operator.setOperatorName(operatorRequest.getOperatorName());
         return operator;
     }
 }

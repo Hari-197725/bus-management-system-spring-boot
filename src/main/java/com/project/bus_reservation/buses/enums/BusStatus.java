@@ -2,8 +2,7 @@ package com.project.bus_reservation.buses.enums;
 
 public enum BusStatus {
     ACTIVE(1),
-    INACTIVE(2),
-    UNDER_MAINTENANCE(3);
+    INACTIVE(2);
 
     private final int value;
 

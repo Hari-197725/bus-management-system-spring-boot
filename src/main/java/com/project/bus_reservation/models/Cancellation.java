@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "cancellations")
 public class Cancellation {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
 //    @Column(name = "booking_id", nullable = false, updatable = false)

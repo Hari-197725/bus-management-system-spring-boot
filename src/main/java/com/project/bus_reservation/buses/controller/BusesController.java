@@ -19,8 +19,8 @@ public class BusesController {
     private BusesService busesService;
 
     @PostMapping
-    public ResponseEntity<BusResponse> createBus(@Valid @RequestBody BusRequest request) {
-        return new ResponseEntity<>(busesService.createBus(request), HttpStatus.CREATED);
+    public ResponseEntity<BusResponse> createBus(@Valid @RequestBody BusRequest busrequest) {
+        return new ResponseEntity<>(busesService.createBus(busrequest), HttpStatus.CREATED);
     }
 
     @GetMapping
