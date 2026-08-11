@@ -2,7 +2,7 @@ package com.project.bus_reservation.buses.dto.request;
 
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
-import com.project.bus_reservation.enums.SeatType;
+import com.project.bus_reservation.seats.enums.SeatType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.project.bus_reservation.enums;
+package com.project.bus_reservation.seats.enums;
 
 public enum SeatType {
     WINDOW(1), AISLE(2), LOWER_BERTH(3), UPPER_BERTH(4);

@@ -1,4 +1,4 @@
-package com.project.bus_reservation.enums;
+package com.project.bus_reservation.seats.enums;
 
 public enum SeatStatus {
     AVAILABLE(1), BOOKED(2);

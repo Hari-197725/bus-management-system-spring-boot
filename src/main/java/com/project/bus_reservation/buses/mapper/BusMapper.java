@@ -3,9 +3,9 @@ package com.project.bus_reservation.buses.mapper;
 import com.project.bus_reservation.buses.dto.request.BusRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
-import com.project.bus_reservation.enums.SeatStatus;
+import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.operator.entity.Operator;
-import com.project.bus_reservation.models.Seat;
+import com.project.bus_reservation.seats.entity.Seat;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

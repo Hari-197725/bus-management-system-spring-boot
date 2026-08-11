@@ -1,8 +1,8 @@
-package com.project.bus_reservation.models;
+package com.project.bus_reservation.seats.entity;
 
 import com.project.bus_reservation.buses.entity.Bus;
-import com.project.bus_reservation.enums.SeatStatus;
-import com.project.bus_reservation.enums.SeatType;
+import com.project.bus_reservation.seats.enums.SeatStatus;
+import com.project.bus_reservation.seats.enums.SeatType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -12,8 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-//@Data
+//@AllArgsConstructor
 @Table(name = "seats")
 public class Seat {
     @Id
@@ -36,5 +35,4 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private SeatStatus seatStatus;
-
 }

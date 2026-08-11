@@ -3,7 +3,7 @@ package com.project.bus_reservation.buses.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
-import com.project.bus_reservation.enums.SeatType;
+import com.project.bus_reservation.seats.enums.SeatType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
