@@ -28,7 +28,7 @@ public class SeatsService {
         return seatsRepository.findAll().stream().map(seatMapper::toResponse).toList();
     }
 
-    public SeatResponse getSeatById (Long id){
-        
-    }
+//    public SeatResponse getSeatById (Long id){
+//
+//    }
 }

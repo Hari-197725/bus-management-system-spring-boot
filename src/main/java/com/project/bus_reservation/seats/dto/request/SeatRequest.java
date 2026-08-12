@@ -4,6 +4,8 @@ import com.project.bus_reservation.buses.dto.request.BusRequest;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.enums.SeatType;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -24,4 +26,8 @@ public class SeatRequest {
 
     @NotNull
     private SeatStatus seatStatus;
+
+    @Valid
+    @NotEmpty
+    private BusRequest busRequests;
 }

@@ -3,6 +3,8 @@ package com.project.bus_reservation.buses.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
+import com.project.bus_reservation.operator.dto.response.OperatorResponse;
+import com.project.bus_reservation.seats.dto.response.SeatResponse;
 import com.project.bus_reservation.seats.enums.SeatType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,27 +28,6 @@ public class BusResponse {
     private BusStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private OperatorResponse operator;
-    private List<SeatResponse> seats;
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class OperatorResponse {
-        private Long id;
-        private String operatorName;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SeatResponse {
-        private Integer seatNo;
-        private SeatType seatType;
-
-        @JsonProperty("isAvailable")
-        private Boolean isAvailable;
-    }
+//    private OperatorResponse operator;
+//    private List<SeatResponse> seats;
 }

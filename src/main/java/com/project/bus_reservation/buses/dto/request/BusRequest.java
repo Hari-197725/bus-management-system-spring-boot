@@ -2,14 +2,9 @@ package com.project.bus_reservation.buses.dto.request;
 
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
-import com.project.bus_reservation.seats.enums.SeatType;
+import com.project.bus_reservation.seats.dto.request.SeatRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,20 +36,20 @@ public class BusRequest {
     @NotNull
     private BusStatus status;
 
-    @Valid
-    @NotEmpty
-    private List<SeatRequest> seats;
+//    @Valid
+//    @NotEmpty
+//    private List<SeatRequest> seats;
 
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class SeatRequest {
-
-        @NotNull
-        @Positive
-        private Integer seatNumber;
-
-        @NotNull
-        private SeatType seatType;
-    }
+//    @Getter
+//    @Setter
+//    @AllArgsConstructor
+//    public static class SeatRequest {
+//
+//        @NotNull
+//        @Positive
+//        private Integer seatNumber;
+//
+//        @NotNull
+//        private SeatType seatType;
+//    }
 }
