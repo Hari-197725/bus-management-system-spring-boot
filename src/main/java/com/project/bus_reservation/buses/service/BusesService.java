@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -29,12 +29,9 @@ public class BusesService {
     private BusMapper busMapper;
 
     public BusResponse createBus(BusRequest busRequest) {
-        if (busRequest.getSeats().size() != busRequest.getTotalSeats()) {
-            throw new ResponseStatusException(BAD_REQUEST,
-                    "Seat count (" + busRequest.getSeats().size() + ") does not match totalSeats (" + busRequest.getTotalSeats() + ")");
-        }
         Operator operator = operatorRepository.findById(busRequest.getOperatorId())
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + busRequest.getOperatorId()));
+
         Bus bus = busMapper.toEntity(busRequest, operator);
         return busMapper.toResponse(busesRepository.save(bus));
     }
@@ -46,9 +43,8 @@ public class BusesService {
     }
 
     public BusResponse getBusById(Long id) {
-        Bus bus = busesRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + id));
-        return busMapper.toResponse(bus);
+        Optional<Bus> bus = busesRepository.findById(id);
+        return busMapper.toResponse(bus.get());
     }
 
 

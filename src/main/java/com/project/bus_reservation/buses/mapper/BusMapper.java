@@ -8,6 +8,8 @@ import com.project.bus_reservation.seats.dto.response.SeatResponse;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.seats.entity.Seat;
+import com.project.bus_reservation.seats.mapper.SeatMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,26 +18,24 @@ import java.util.List;
 @Component
 public class BusMapper {
 
+    @Autowired
+    private SeatMapper seatMapper;
+
     public BusResponse toResponse(Bus bus) {
-//        List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
-//        if (bus.getSeats() != null) {
-//            bus.getSeats().forEach(seat -> seatResponses.add(
-//                    new BusResponse.SeatResponse(
-//                            seat.getSeatNumber(),
-//                            seat.getSeatType(),
-//                            seat.getSeatStatus() == SeatStatus.AVAILABLE
-//                    )
-//            ));
-//        }
-//
-//        BusResponse.OperatorResponse operatorResponse = null;
-//        if (bus.getOperator() != null) {
-//            operatorResponse = new BusResponse.OperatorResponse(
-//                    bus.getOperator().getId(),
-//                    bus.getOperator().getOperatorName()
-//            );
-//        }
-//
+        List<SeatResponse> seatResponses = bus.getSeats()
+                .stream()
+                .map(seatMapper::toResponse)
+                .toList();
+
+        OperatorResponse operatorResponse = null;
+        if (bus.getOperator() != null) {
+            operatorResponse = new OperatorResponse(
+                    bus.getOperator().getId(),
+                    bus.getOperator().getOperatorName(),
+                    bus.getOperator().getJoinedAt()
+            );
+        }
+
         return new BusResponse(
                 bus.getId(),
                 bus.getBusNumber(),
@@ -44,10 +44,9 @@ public class BusMapper {
                 bus.getTotalSeats(),
                 bus.getStatus(),
                 bus.getCreatedAt(),
-                bus.getModifiedAt()
-//                ,
-//                operatorResponse,
-//                seatResponses
+                bus.getModifiedAt(),
+                operatorResponse,
+                seatResponses
         );
     }
 

@@ -12,7 +12,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-//@AllArgsConstructor
 @Table(name = "seats")
 public class Seat {
     @Id

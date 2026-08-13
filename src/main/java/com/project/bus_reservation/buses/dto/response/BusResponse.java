@@ -28,6 +28,6 @@ public class BusResponse {
     private BusStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-//    private OperatorResponse operator;
-//    private List<SeatResponse> seats;
+    private OperatorResponse operator;
+    private List<SeatResponse> seats;
 }

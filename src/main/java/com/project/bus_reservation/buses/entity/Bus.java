@@ -20,7 +20,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@Data
 public class Bus {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

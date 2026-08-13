@@ -1,6 +1,6 @@
 package com.project.bus_reservation.seats.mapper;
 
-import com.project.bus_reservation.seats.dto.request.SeatRequest;
+import com.project.bus_reservation.seats.dto.request.BusSeatRequest;
 import com.project.bus_reservation.seats.dto.response.SeatResponse;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
@@ -11,24 +11,17 @@ import java.util.List;
 @Component
 public class SeatMapper {
 
-    public Seat toEntity(SeatRequest seatRequest) {
-//        Seat seat = new Seat();
-//        seat.setSeatNumber(seatRequest.getSeatNumber());
-//        seat.setSeatType(seatRequest.getSeatType());
-//        seat.setSeatStatus(seatRequest.getSeatStatus());
-
-        List<SeatRequest> seats = seatRequest.stream()
-                .map(seatReq -> {
+    public static List<Seat> toEntity(BusSeatRequest busSeatRequest) {
+        return busSeatRequest.getSeats()
+                .stream()
+                .map(s -> {
                     Seat seat = new Seat();
-                    seat.setSeatNumber(seatRequest.getSeatNumber());
-                    seat.setSeatType(seatRequest.getSeatType());
+                    seat.setSeatNumber(s.getSeatNumber());
+                    seat.setSeatType(s.getSeatType());
                     seat.setSeatStatus(SeatStatus.AVAILABLE);
-//                    seat.setBus(bus);
                     return seat;
                 })
                 .toList();
-
-        return seat;
     }
 
     public SeatResponse toResponse(Seat seat) {
