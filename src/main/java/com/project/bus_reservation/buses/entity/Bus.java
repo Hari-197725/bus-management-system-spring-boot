@@ -6,6 +6,7 @@ import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.seats.entity.Seat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -31,6 +32,7 @@ public class Bus {
     @Column(nullable = false, updatable = false, unique = true, length = 6)
     private Integer busNumber;
 
+    @NotBlank
     @Column(nullable = false)
     private String busName;
 

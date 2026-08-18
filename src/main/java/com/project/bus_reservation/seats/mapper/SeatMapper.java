@@ -24,7 +24,7 @@ public class SeatMapper {
                 .toList();
     }
 
-    public SeatResponse toResponse(Seat seat) {
+    public  SeatResponse toResponse(Seat seat) {
         return new SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
