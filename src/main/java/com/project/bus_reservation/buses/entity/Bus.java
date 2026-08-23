@@ -37,7 +37,7 @@ public class Bus {
     private String busName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private BusType busType;
 
     @ManyToOne(fetch = FetchType.LAZY)

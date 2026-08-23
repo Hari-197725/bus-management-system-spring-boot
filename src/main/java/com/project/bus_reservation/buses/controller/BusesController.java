@@ -1,6 +1,7 @@
 package com.project.bus_reservation.buses.controller;
 
 import com.project.bus_reservation.buses.dto.request.BusRequest;
+import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.service.BusesService;
 import jakarta.validation.Valid;
@@ -31,5 +32,15 @@ public class BusesController {
     @GetMapping("/{id}")
     public ResponseEntity<BusResponse> getBusById(@PathVariable Long id) {
         return new ResponseEntity<>(busesService.getBusById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public void updateById(@PathVariable Long id ,@Valid @RequestBody BusUpdateRequest busUpdateRequest){
+         busesService.updateById(id, busUpdateRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBusById(@PathVariable Long id) {
+        busesService.deleteBusById(id);
     }
 }

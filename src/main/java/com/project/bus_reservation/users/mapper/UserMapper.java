@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public UserResponse toResponse(User user) {
+    public static UserResponse toResponse(User user) {
         return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber());
     }
 
-    public User toEntity(UserRequest userRequest) {
+    public static User toEntity(UserRequest userRequest) {
         return User.builder()
                 .name(userRequest.getName())
                 .phoneNumber(userRequest.getPhone())

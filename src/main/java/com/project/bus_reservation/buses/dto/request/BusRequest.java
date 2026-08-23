@@ -13,9 +13,6 @@ import java.util.List;
 public class BusRequest {
 
     @NotNull
-    private Long busId;
-
-    @NotNull
     @Positive
     @Min(6)
     private Integer busNumber;
@@ -33,7 +30,6 @@ public class BusRequest {
     @Min(18)
     @Max(30)
     private Integer totalSeats;
-
 
     @NotNull
     private List<SeatRequest> seats;

@@ -23,19 +23,19 @@ public class OperatorService {
     private OperatorMapper operatorMapper;
 
     public OperatorResponse createOperator(OperatorRequest request) {
-        Operator operator = operatorMapper.toEntity(request);
-        return operatorMapper.toResponse(operatorRepository.save(operator));
+        Operator operator = OperatorMapper.toEntity(request);
+        return OperatorMapper.toResponse(operatorRepository.save(operator));
     }
 
     public List<OperatorResponse> getAllOperators() {
         return operatorRepository.findAll().stream()
-                .map(operatorMapper::toResponse)
+                .map(OperatorMapper::toResponse)
                 .toList();
     }
 
     public OperatorResponse getOperatorById(Long id) {
         Operator operator = operatorRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + id));
-        return operatorMapper.toResponse(operator);
+        return OperatorMapper.toResponse(operator);
     }
 }

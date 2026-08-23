@@ -1,30 +1,30 @@
 package com.project.bus_reservation.buses.mapper;
 
 import com.project.bus_reservation.buses.dto.request.BusRequest;
+import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.enums.BusStatus;
+import com.project.bus_reservation.buses.repository.BusesRepository;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
-import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.seats.entity.Seat;
-import com.project.bus_reservation.seats.mapper.SeatMapper;
+import com.project.bus_reservation.seats.enums.SeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class BusMapper {
 
     @Autowired
-    private SeatMapper seatMapper;
+    BusesRepository busesRepository;
 
-    public BusResponse toResponse(Bus bus) {
+    public static BusResponse toResponse(Bus bus) {
         List<BusResponse.SeatResponse> seatResponses = bus.getSeats()
                 .stream()
-                .map(seatMapper::toResponse)
+                .map(BusMapper::toResponse)
                 .toList();
 
         OperatorResponse operatorResponse = null;
@@ -35,7 +35,6 @@ public class BusMapper {
                     bus.getOperator().getJoinedAt()
             );
         }
-
 
         return new BusResponse(
                 bus.getId(),
@@ -52,7 +51,7 @@ public class BusMapper {
     }
 
 
-    public Bus toEntity(BusRequest busrequest, Operator operator) {
+    public static Bus toEntity(BusRequest busrequest, Operator operator) {
         Bus bus = new Bus();
         bus.setBusNumber(busrequest.getBusNumber());
         bus.setBusName(busrequest.getBusName());
@@ -75,4 +74,15 @@ public class BusMapper {
 
         return bus;
     }
+
+    public static BusResponse.SeatResponse toResponse(Seat seat) {
+        return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
+    }
+
+    public static Bus toUpdate(BusUpdateRequest busUpdateRequest, Bus bus, Operator operator){
+        bus.setBusType(busUpdateRequest.getBusType());
+        bus.setOperator(operator);
+        return bus;
+    }
+
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperatorMapper {
 
-    public OperatorResponse toResponse(Operator operator) {
+    public static OperatorResponse toResponse(Operator operator) {
         return new OperatorResponse(
                 operator.getId(),
                 operator.getOperatorName(),
@@ -16,7 +16,7 @@ public class OperatorMapper {
         );
     }
 
-    public Operator toEntity(OperatorRequest operatorRequest) {
+    public static Operator toEntity(OperatorRequest operatorRequest) {
         Operator operator = new Operator();
         operator.setOperatorName(operatorRequest.getOperatorName());
         return operator;

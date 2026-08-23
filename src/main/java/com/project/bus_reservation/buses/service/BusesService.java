@@ -1,6 +1,7 @@
 package com.project.bus_reservation.buses.service;
 
 import com.project.bus_reservation.buses.dto.request.BusRequest;
+import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.mapper.BusMapper;
@@ -25,27 +26,37 @@ public class BusesService {
     @Autowired
     private OperatorRepository operatorRepository;
 
-    @Autowired
-    private BusMapper busMapper;
-
     public BusResponse createBus(BusRequest busRequest) {
         Operator operator = operatorRepository.findById(busRequest.getOperatorId())
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + busRequest.getOperatorId()));
 
-        Bus bus = busMapper.toEntity(busRequest, operator);
-        return busMapper.toResponse(busesRepository.save(bus));
+        Bus bus = BusMapper.toEntity(busRequest, operator);
+        return BusMapper.toResponse(busesRepository.save(bus));
     }
 
     public List<BusResponse> getAllBuses() {
         return busesRepository.findAll().stream()
-                .map(busMapper::toResponse)
+                .map(BusMapper::toResponse)
                 .toList();
     }
 
     public BusResponse getBusById(Long id) {
         Optional<Bus> bus = busesRepository.findById(id);
-        return busMapper.toResponse(bus.get());
+        return BusMapper.toResponse(bus.get());
     }
 
+    public void updateById(Long id, BusUpdateRequest busUpdateRequest){
+        Optional<Bus> bus = busesRepository.findById(id);
+        Optional<Operator> operator = operatorRepository.findById(busUpdateRequest.getOperatorId());
+        if(bus.isPresent()&&operator.isPresent()){
+            Bus _bus = bus.get();
+            Operator _operator = operator.get();
+            Bus updatedBus = BusMapper.toUpdate(busUpdateRequest, _bus, _operator);
+            busesRepository.save(updatedBus);
+        }
+    }
 
+    public void deleteBusById(Long id) {
+        busesRepository.deleteById(id);
+    }
 }
