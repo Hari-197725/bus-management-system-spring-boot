@@ -1,7 +1,7 @@
 package com.project.bus_reservation.seats.mapper;
 
-import com.project.bus_reservation.seats.dto.request.BusSeatRequest;
-import com.project.bus_reservation.seats.dto.response.SeatResponse;
+import com.project.bus_reservation.buses.dto.request.BusRequest;
+import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class SeatMapper {
 
-    public static List<Seat> toEntity(BusSeatRequest busSeatRequest) {
+    public static List<Seat> toEntity(BusRequest busSeatRequest) {
         return busSeatRequest.getSeats()
                 .stream()
                 .map(s -> {
@@ -24,8 +24,8 @@ public class SeatMapper {
                 .toList();
     }
 
-    public  SeatResponse toResponse(Seat seat) {
-        return new SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
+    public BusResponse.SeatResponse toResponse(Seat seat) {
+        return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
 }

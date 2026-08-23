@@ -1,14 +1,19 @@
 package com.project.bus_reservation.buses.dto.request;
 
-import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
+import com.project.bus_reservation.seats.enums.SeatType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class BusRequest {
+
+    @NotNull
+    private Long busId;
 
     @NotNull
     @Positive
@@ -26,8 +31,21 @@ public class BusRequest {
 
     @NotNull
     @Min(18)
+    @Max(30)
     private Integer totalSeats;
 
+
     @NotNull
-    private BusStatus status;
+    private List<SeatRequest> seats;
+
+    @Getter
+    public static class SeatRequest {
+
+        @NotNull
+        @Positive
+        private Integer seatNumber;
+
+        @NotNull
+        private SeatType seatType;
+    }
 }

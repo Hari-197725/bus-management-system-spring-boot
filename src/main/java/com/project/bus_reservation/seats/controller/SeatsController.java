@@ -1,8 +1,7 @@
 package com.project.bus_reservation.seats.controller;
 
+import com.project.bus_reservation.buses.dto.request.BusRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
-import com.project.bus_reservation.seats.dto.request.BusSeatRequest;
-import com.project.bus_reservation.seats.dto.response.SeatResponse;
 import com.project.bus_reservation.seats.service.SeatsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,12 @@ public class SeatsController {
     private SeatsService seatsService;
 
     @GetMapping
-    public ResponseEntity<List<SeatResponse>> getAllSeats() {
+    public ResponseEntity<List<BusResponse.SeatResponse>> getAllSeats() {
         return new ResponseEntity<>(seatsService.getAllSeats(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Void> createSeat(@Valid @RequestBody BusSeatRequest busSeatRequest) throws Exception {
+    public ResponseEntity<Void> createSeat(@Valid @RequestBody BusRequest busSeatRequest) throws Exception {
         try {
             seatsService.createSeat(busSeatRequest);
             return new ResponseEntity<>(HttpStatus.CREATED);
