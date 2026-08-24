@@ -5,26 +5,22 @@ import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.enums.BusStatus;
-import com.project.bus_reservation.buses.repository.BusesRepository;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Component
 public class BusMapper {
 
-    @Autowired
-    BusesRepository busesRepository;
-
-    public static BusResponse toResponse(Bus bus) {
+    public static BusResponse toResponseBus(Bus bus) {
         List<BusResponse.SeatResponse> seatResponses = bus.getSeats()
                 .stream()
-                .map(BusMapper::toResponse)
+                .map(BusMapper::toResponseSeat)
                 .toList();
 
         OperatorResponse operatorResponse = null;
@@ -75,13 +71,19 @@ public class BusMapper {
         return bus;
     }
 
-    public static BusResponse.SeatResponse toResponse(Seat seat) {
+    public static BusResponse.SeatResponse toResponseSeat(Seat seat) {
         return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
     public static Bus toUpdate(BusUpdateRequest busUpdateRequest, Bus bus, Operator operator){
+        if (busUpdateRequest.getBusType() != null) {
         bus.setBusType(busUpdateRequest.getBusType());
+        }
+
+        if(operator!=null){
         bus.setOperator(operator);
+        }
+
         return bus;
     }
 
