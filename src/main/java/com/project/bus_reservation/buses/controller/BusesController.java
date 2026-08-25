@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/buses")
+@RequestMapping("/api/v1/bues")
 public class BusesController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class BusesController {
         return new ResponseEntity<>(busesService.getBusById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public void updateById(@PathVariable Long id ,@Valid @RequestBody BusUpdateRequest busUpdateRequest){
          busesService.updateById(id, busUpdateRequest);
     }

@@ -53,60 +53,52 @@ public class BusesService {
     }
 
     public void updateById(Long id, BusUpdateRequest busUpdateRequest) {
+        Bus bus = busesRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id:" + id));
+
+        Operator operator = null;
+        if(busUpdateRequest.getOperatorId() != null) {
+            operator = operatorRepository.findById(busUpdateRequest.getOperatorId())
+                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not fount with id: " + busUpdateRequest.getOperatorId()));
+        }
+
+        Bus updatedBus = BusMapper.toUpdate(busUpdateRequest, bus, operator);
+        busesRepository.save(updatedBus);
+
+
 //        Optional<Bus> bus = busesRepository.findById(id);
-//        Optional<Operator> operator = operatorRepository.findById(busUpdateRequest.getOperatorId());
+//
 //        Bus _bus = null;
 //        Operator _operator = null;
 //
 //        if (bus.isPresent()) {
 //            _bus = bus.get();
 //        } else {
-//            throw new ResponseStatusException(NOT_FOUND, "Bus not found with id:" + id);
+//            throw new ResponseStatusException(
+//                    NOT_FOUND,
+//                    "Bus not found with id: " + id
+//            );
 //        }
 //
-//        if (operator.isPresent()) {
-//            _operator = operator.get();
-//        } else {
-//            throw new ResponseStatusException(NOT_FOUND, "Operator not fount with id: " + busUpdateRequest.getOperatorId());
+//        // Only search for operator if operatorId is provided
+//        if (busUpdateRequest.getOperatorId() != null) {
+//
+//            Optional<Operator> operator =
+//                    operatorRepository.findById(busUpdateRequest.getOperatorId());
+//
+//            if (operator.isPresent()) {
+//                _operator = operator.get();
+//            } else {
+//                throw new ResponseStatusException(
+//                        NOT_FOUND,
+//                        "Operator not found with id: " + busUpdateRequest.getOperatorId()
+//                );
+//            }
 //        }
 //
 //        Bus updatedBus = BusMapper.toUpdate(busUpdateRequest, _bus, _operator);
+//
 //        busesRepository.save(updatedBus);
-
-
-        Optional<Bus> bus = busesRepository.findById(id);
-
-        Bus _bus = null;
-        Operator _operator = null;
-
-        if (bus.isPresent()) {
-            _bus = bus.get();
-        } else {
-            throw new ResponseStatusException(
-                    NOT_FOUND,
-                    "Bus not found with id: " + id
-            );
-        }
-
-        // Only search for operator if operatorId is provided
-        if (busUpdateRequest.getOperatorId() != null) {
-
-            Optional<Operator> operator =
-                    operatorRepository.findById(busUpdateRequest.getOperatorId());
-
-            if (operator.isPresent()) {
-                _operator = operator.get();
-            } else {
-                throw new ResponseStatusException(
-                        NOT_FOUND,
-                        "Operator not found with id: " + busUpdateRequest.getOperatorId()
-                );
-            }
-        }
-
-        Bus updatedBus = BusMapper.toUpdate(busUpdateRequest, _bus, _operator);
-
-        busesRepository.save(updatedBus);
     }
 
     public void deleteBusById(Long id) {

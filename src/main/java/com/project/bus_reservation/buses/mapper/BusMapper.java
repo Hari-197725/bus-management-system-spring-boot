@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Component
 public class BusMapper {
@@ -77,11 +80,11 @@ public class BusMapper {
 
     public static Bus toUpdate(BusUpdateRequest busUpdateRequest, Bus bus, Operator operator){
         if (busUpdateRequest.getBusType() != null) {
-        bus.setBusType(busUpdateRequest.getBusType());
+            bus.setBusType(busUpdateRequest.getBusType());
         }
 
-        if(operator!=null){
-        bus.setOperator(operator);
+        if(operator != null){
+            bus.setOperator(operator);
         }
 
         return bus;
