@@ -10,15 +10,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/v1/buses/{busId}")
+@RequestMapping("/api/v1/buses/{busId}/seats")
 public class BusSeatsController {
 
     @Autowired
     BusSeatsService busSeatsService;
 
-    @GetMapping("/seats")
-    public ResponseEntity<BusResponse.SeatResponse> getSeatsByBusId(@PathVariable Long id) {
-        return new ResponseEntity(busSeatsService.getSeatsByBusId(id), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<BusResponse.SeatResponse>> getSeatsByBusId(@PathVariable Long busId) {
+        return new ResponseEntity<>(busSeatsService.getSeatsByBusId(busId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{seatId}")
+    public ResponseEntity<BusResponse.SeatResponse> getSeatBySeatId(@PathVariable Long busId, @PathVariable Long seatId) {
+        return new ResponseEntity<>(busSeatsService.getSeatBySeatId(busId, seatId), HttpStatus.OK);
     }
 }

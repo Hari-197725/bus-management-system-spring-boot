@@ -7,10 +7,13 @@ import com.project.bus_reservation.buses.repository.BusesRepository;
 import com.project.bus_reservation.seats.entity.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class BusSeatsService {
@@ -25,18 +28,28 @@ public class BusSeatsService {
             _bus = bus.get();
         }
 
-
         List<Seat> seats = _bus.getSeats();
-        for(Seat seat : seats){
-            
-        }
-
         List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
-        for(Seat seat : seats){
-          seatResponses.add(BusMapper.toResponseSeat(seat));
+        for (Seat seat : seats) {
+            seatResponses.add(BusMapper.toResponseSeat(seat));
         }
 
         return seatResponses;
+    }
 
+    public BusResponse.SeatResponse getSeatBySeatId(Long busId, Long seatId) {
+        Bus bus = busesRepository.findById(busId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + busId));
+
+        List<Seat> seats = bus.getSeats();
+        BusResponse.SeatResponse seatResponse = null;
+
+        for (Seat seat : seats) {
+            if (seat.getId().equals(seatId)) {
+                seatResponse = BusMapper.toResponseSeat(seat);
+                break;
+            }
+        }
+
+        return seatResponse;
     }
 }

@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-//@Data
 @Table(name = "routes")
 public class Route {
     @Id
@@ -29,8 +28,8 @@ public class Route {
 
     @NotBlank
     @Positive
-    @Column(name = "distance_km", nullable = false, updatable = true)
-    private double distanceKm;
+    @Column(name = "distance", nullable = false, updatable = true)
+    private double distance;
 
     @Positive
     @Column(name = "estimated_duration", nullable = false, updatable = true)

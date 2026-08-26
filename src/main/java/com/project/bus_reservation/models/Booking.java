@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,7 +8,6 @@ import com.project.bus_reservation.buses.mapper.BusMapper;
 import com.project.bus_reservation.buses.repository.BusesRepository;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
