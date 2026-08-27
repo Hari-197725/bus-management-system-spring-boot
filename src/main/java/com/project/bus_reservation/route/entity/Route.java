@@ -1,4 +1,4 @@
-package com.project.bus_reservation.models;
+package com.project.bus_reservation.route.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

@@ -10,12 +10,8 @@ import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Component
 public class BusMapper {
@@ -78,16 +74,20 @@ public class BusMapper {
         return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
-    public static Bus toUpdate(BusUpdateRequest busUpdateRequest, Bus bus, Operator operator){
-        if (busUpdateRequest.getBusType() != null) {
-            bus.setBusType(busUpdateRequest.getBusType());
-        }
+//    public static Bus toUpdate(BusUpdateRequest busUpdateRequest, Bus bus){
+//        if (busUpdateRequest.getBusType() != null) {
+//            bus.setBusType(busUpdateRequest.getBusType());
+//        }
+//
+//        if(busUpdateRequest.getOperatorId()!=null){
+//            bus.setOperator(busUpdateRequest.getOperatorId());
+//        }
 
-        if(operator != null){
-            bus.setOperator(operator);
-        }
-
-        return bus;
-    }
+//        if(operator != null){
+//            bus.setOperator(operator);
+//        }
+//
+//        return bus;
+//    }
 
 }

@@ -24,9 +24,6 @@ public class BusRequest {
     private BusType busType;
 
     @NotNull
-    private Long operatorId;
-
-    @NotNull
     @Min(18)
     @Max(30)
     private Integer totalSeats;

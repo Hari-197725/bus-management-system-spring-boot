@@ -13,34 +13,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/bues")
+@RequestMapping("/api/v1/operator/{operatorId}/bus")
 public class BusesController {
 
     @Autowired
     private BusesService busesService;
 
     @PostMapping
-    public ResponseEntity<BusResponse> createBus(@Valid @RequestBody BusRequest busrequest) {
-        return new ResponseEntity<>(busesService.createBus(busrequest), HttpStatus.CREATED);
+    public ResponseEntity<BusResponse> createBus(@Valid @RequestBody BusRequest busrequest, @PathVariable Long operatorId) {
+        return new ResponseEntity<>(busesService.createBus(busrequest, operatorId), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<BusResponse>> getAllBuses() {
-        return new ResponseEntity<>(busesService.getAllBuses(), HttpStatus.OK);
+    public ResponseEntity<List<BusResponse>> getAllBuses(@PathVariable Long operatorId) {
+        return new ResponseEntity<>(busesService.getAllBuses(operatorId), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BusResponse> getBusById(@PathVariable Long id) {
-        return new ResponseEntity<>(busesService.getBusById(id), HttpStatus.OK);
+    @GetMapping("/{busId}")
+    public ResponseEntity<BusResponse> getBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
+        return new ResponseEntity<>(busesService.getBusById(operatorId, busId), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public void updateById(@PathVariable Long id ,@Valid @RequestBody BusUpdateRequest busUpdateRequest){
-         busesService.updateById(id, busUpdateRequest);
-    }
+//    @PatchMapping("/{busId}")
+//    public void updateById(@PathVariable Long operatorId, @PathVariable Long busId, @Valid @RequestBody BusUpdateRequest busUpdateRequest) {
+//        busesService.updateById(operatorId, busId, busUpdateRequest);
+//    }
 
-    @DeleteMapping("/{id}")
-    public void deleteBusById(@PathVariable Long id) {
-        busesService.deleteBusById(id);
+    @DeleteMapping("/{busId}")
+    public void deleteBusById(@PathVariable Long busId) {
+        busesService.deleteBusById(busId);
     }
 }
