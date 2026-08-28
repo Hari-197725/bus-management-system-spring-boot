@@ -14,10 +14,17 @@ import org.springframework.web.bind.annotation.*;
 public class RouteController {
 
     @Autowired
-   private RouteService routeService;
+    private RouteService routeService;
 
     @PostMapping
-    public ResponseEntity<RouteResponse> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteRequest routeRequest){
-    return new ResponseEntity<>(routeService.createRoute(operatorId, routeRequest), HttpStatus.CREATED);
+    public ResponseEntity<RouteResponse> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteRequest routeRequest) {
+        return new ResponseEntity<>(routeService.createRoute(operatorId, routeRequest), HttpStatus.CREATED);
+    }
+
+
+
+    @DeleteMapping("/{routeId}")
+    public void deleteRouteById(@PathVariable Long operatorId, @PathVariable Long routeId){
+        routeService.deleteRouteById(operatorId, routeId);
     }
 }

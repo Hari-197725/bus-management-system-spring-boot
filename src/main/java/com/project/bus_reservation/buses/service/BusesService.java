@@ -1,7 +1,6 @@
 package com.project.bus_reservation.buses.service;
 
 import com.project.bus_reservation.buses.dto.request.BusRequest;
-import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.mapper.BusMapper;
@@ -30,8 +29,8 @@ public class BusesService {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        Bus bus = BusMapper.toEntity(busRequest, operator);
-        return BusMapper.toResponseBus(busesRepository.save(bus));
+        Bus bus = BusMapper.toBusEntity(busRequest, operator);
+        return BusMapper.toBusResponse(busesRepository.save(bus));
     }
 
     public List<BusResponse> getAllBuses(Long operatorId) {
@@ -41,7 +40,7 @@ public class BusesService {
         List<BusResponse> busResponses = new ArrayList<>();
         List<Bus> buses = operator.getBuses();
         for (Bus bus : buses) {
-            busResponses.add(BusMapper.toResponseBus(bus));
+            busResponses.add(BusMapper.toBusResponse(bus));
         }
 
         return busResponses;
@@ -55,7 +54,7 @@ public class BusesService {
         List<Bus> buses = operator.getBuses();
         for (Bus bus : buses) {
             if (bus.getId().equals(busId)) {
-                busResponse = BusMapper.toResponseBus(bus);
+                busResponse = BusMapper.toBusResponse(bus);
             }
         }
 
@@ -124,7 +123,16 @@ public class BusesService {
 //        busesRepository.save(updatedBus);
 //    }
 
-    public void deleteBusById(Long busId) {
-        busesRepository.deleteById(busId);
+    public void deleteBusById(Long operatorId, Long busId) {
+        Operator operator = operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+
+        List<Bus> buses = operator.getBuses();
+        for (Bus bus : buses) {
+            if (bus.getId().equals(busId)) {
+                busesRepository.deleteById(busId);
+                break;
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.project.bus_reservation.buses.mapper;
 
 import com.project.bus_reservation.buses.dto.request.BusRequest;
-import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.enums.BusStatus;
@@ -16,10 +15,10 @@ import java.util.List;
 @Component
 public class BusMapper {
 
-    public static BusResponse toResponseBus(Bus bus) {
+    public static BusResponse toBusResponse(Bus bus) {
         List<BusResponse.SeatResponse> seatResponses = bus.getSeats()
                 .stream()
-                .map(BusMapper::toResponseSeat)
+                .map(BusMapper::toSeatResponse)
                 .toList();
 
         OperatorResponse operatorResponse = null;
@@ -46,7 +45,7 @@ public class BusMapper {
     }
 
 
-    public static Bus toEntity(BusRequest busrequest, Operator operator) {
+    public static Bus toBusEntity(BusRequest busrequest, Operator operator) {
         Bus bus = new Bus();
         bus.setBusNumber(busrequest.getBusNumber());
         bus.setBusName(busrequest.getBusName());
@@ -70,7 +69,7 @@ public class BusMapper {
         return bus;
     }
 
-    public static BusResponse.SeatResponse toResponseSeat(Seat seat) {
+    public static BusResponse.SeatResponse toSeatResponse(Seat seat) {
         return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
@@ -89,5 +88,4 @@ public class BusMapper {
 //
 //        return bus;
 //    }
-
 }

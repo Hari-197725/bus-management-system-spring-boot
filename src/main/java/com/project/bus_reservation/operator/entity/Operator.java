@@ -1,6 +1,7 @@
 package com.project.bus_reservation.operator.entity;
 
 import com.project.bus_reservation.buses.entity.Bus;
+import com.project.bus_reservation.route.entity.Route;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,9 @@ public class Operator {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operator")
     private List<Bus> buses = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "operator")
+    private List<Route> routes = new ArrayList<>();
 
     @Column(nullable = false)
     @UpdateTimestamp

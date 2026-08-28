@@ -21,7 +21,7 @@ public class SeatService {
         List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
 
         for (Seat seat : seats) {
-            seatResponses.add(BusMapper.toResponseSeat(seat));
+            seatResponses.add(BusMapper.toSeatResponse(seat));
         }
 
 

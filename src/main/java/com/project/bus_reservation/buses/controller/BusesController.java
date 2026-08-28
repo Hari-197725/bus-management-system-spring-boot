@@ -40,7 +40,7 @@ public class BusesController {
 //    }
 
     @DeleteMapping("/{busId}")
-    public void deleteBusById(@PathVariable Long busId) {
-        busesService.deleteBusById(busId);
+    public void deleteBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
+        busesService.deleteBusById(operatorId, busId);
     }
 }

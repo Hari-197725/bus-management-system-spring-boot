@@ -1,7 +1,9 @@
 package com.project.bus_reservation.route.entity;
 
+import com.project.bus_reservation.operator.entity.Operator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,23 +25,27 @@ public class Route {
     private String source;
 
     @NotBlank
-    @Column(name = "destination", nullable = false, updatable = true)
+    @Column(name = "destination", nullable = false)
     private String destination;
 
-    @NotBlank
     @Positive
-    @Column(name = "distance", nullable = false, updatable = true)
+    @Column(name = "distance", nullable = false)
     private double distance;
 
     @Positive
-    @Column(name = "estimated_duration", nullable = false, updatable = true)
+    @Column(nullable = false)
     private Integer estimatedDuration;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "Operator_id")
+    private Operator operator;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "modified_at", nullable = false, updatable = true)
+    @Column(name = "modified_at", nullable = false)
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 }

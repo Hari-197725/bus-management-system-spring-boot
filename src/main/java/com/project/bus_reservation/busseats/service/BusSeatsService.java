@@ -31,7 +31,7 @@ public class BusSeatsService {
         List<Seat> seats = _bus.getSeats();
         List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
         for (Seat seat : seats) {
-            seatResponses.add(BusMapper.toResponseSeat(seat));
+            seatResponses.add(BusMapper.toSeatResponse(seat));
         }
 
         return seatResponses;
@@ -45,7 +45,7 @@ public class BusSeatsService {
 
         for (Seat seat : seats) {
             if (seat.getId().equals(seatId)) {
-                seatResponse = BusMapper.toResponseSeat(seat);
+                seatResponse = BusMapper.toSeatResponse(seat);
                 break;
             }
         }
