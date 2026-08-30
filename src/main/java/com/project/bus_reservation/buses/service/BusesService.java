@@ -1,12 +1,16 @@
 package com.project.bus_reservation.buses.service;
 
 import com.project.bus_reservation.buses.dto.request.BusRequest;
+import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.mapper.BusMapper;
 import com.project.bus_reservation.buses.repository.BusesRepository;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
+import com.project.bus_reservation.route.dto.response.RouteResponse;
+import com.project.bus_reservation.route.entity.Route;
+import com.project.bus_reservation.route.mapper.RouteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -62,77 +66,60 @@ public class BusesService {
 
     }
 
-//    public void updateById(Long operatorId, Long busId, BusUpdateRequest busUpdateRequest) {
-//
-//        Operator givenOperator = operatorRepository.findById(operatorId)
-//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
-//
-//        List<Bus> buses = givenOperator.getBuses();
-//        Operator operator = null;
-//        Bus bus1 = null;
-//        Bus updatedBus = null;
-//
-//        for (Bus bus : buses) {
-//            if (bus.getId().equals(busId) && busUpdateRequest.getOperatorId() != null) {
-//                bus1 = bus;
-//                updatedBus = BusMapper.toUpdate(busUpdateRequest, bus);
-//            }
-//        }
-
-
-//            operator = operatorRepository.findById(busUpdateRequest.getOperatorId())
-//                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not fount with id: " + busUpdateRequest.getOperatorId()));
-//        }
-//
-//        Bus updatedBus = BusMapper.toUpdate(busUpdateRequest, bus, operator);
-//        busesRepository.save(updatedBus);
-
-
-//        Optional<Bus> bus = busesRepository.findById(id);
-//
-//        Bus _bus = null;
-//        Operator _operator = null;
-//
-//        if (bus.isPresent()) {
-//            _bus = bus.get();
-//        } else {
-//            throw new ResponseStatusException(
-//                    NOT_FOUND,
-//                    "Bus not found with id: " + id
-//            );
-//        }
-//
-//        // Only search for operator if operatorId is provided
-//        if (busUpdateRequest.getOperatorId() != null) {
-//
-//            Optional<Operator> operator =
-//                    operatorRepository.findById(busUpdateRequest.getOperatorId());
-//
-//            if (operator.isPresent()) {
-//                _operator = operator.get();
-//            } else {
-//                throw new ResponseStatusException(
-//                        NOT_FOUND,
-//                        "Operator not found with id: " + busUpdateRequest.getOperatorId()
-//                );
-//            }
-//        }
-//
-//        Bus updatedBus = BusMapper.toUpdate(busUpdateRequest, _bus, _operator);
-//
-//        busesRepository.save(updatedBus);
-//    }
-
-    public void deleteBusById(Long operatorId, Long busId) {
+    public RouteResponse getAllRoutesByBusId(Long operatorId, Long busId) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+
 
         List<Bus> buses = operator.getBuses();
         for (Bus bus : buses) {
             if (bus.getId().equals(busId)) {
-                busesRepository.deleteById(busId);
-                break;
+                return RouteMapper.toRouteResponse(bus.getRoute());
             }
         }
+
+        return null;
+    }
+
+
+    public void updateBusByBusId(Long operatorId, Long busId, BusUpdateRequest busUpdateRequest) {
+        Operator operator = operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+
+        if (busUpdateRequest.getBusType() != null && busUpdateRequest.getOperatorId() == null) {
+            List<Bus> buses = operator.getBuses();
+            for (Bus bus : buses) {
+                if (bus.getId().equals(busId)) {
+                    Bus _bus = BusMapper.toUpdate(busUpdateRequest, bus);
+                    busesRepository.save(_bus);
+                    break;
+                }
+            }
+        }
+
+
+    }
+
+    public void deleteBusById(Long operatorId, Long busId) {
+//        This method is working partially so its not correct.
+
+//        Operator operator = operatorRepository.findById(operatorId)
+//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+//
+//        List<Bus> buses = operator.getBuses();
+//        for (Bus bus : buses) {
+//            if (bus.getId().equals(busId)) {
+//                busesRepository.deleteById(busId);
+//                buses.remove(bus);
+//                break;
+//            }
+//        }
+
+//        This method is said by AI but it has some internal issues
+
+//        Bus bus = busesRepository.findByIdAndoperatorId(operatorId, busId)
+//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + busId));
+//
+//        busesRepository.delete(bus);
     }
 }

@@ -9,6 +9,6 @@ import lombok.Setter;
 public class BusUpdateRequest {
 
     private BusType busType;
-
     private Long operatorId;
+    private Long routeId;
 }

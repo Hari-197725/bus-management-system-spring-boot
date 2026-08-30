@@ -3,6 +3,7 @@ package com.project.bus_reservation.buses.dto.response;
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
+import com.project.bus_reservation.route.dto.response.RouteResponse;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.enums.SeatType;
 import lombok.AllArgsConstructor;
@@ -21,14 +22,15 @@ public class BusResponse {
 
     private Long id;
     private Integer busNo;
-    private BusType busType;
     private String busName;
+    private BusType busType;
+    private OperatorResponse operator;
+    private List<SeatResponse> seats;
+    private RouteResponse route;
     private Integer totalSeats;
     private BusStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private OperatorResponse operator;
-    private List<SeatResponse> seats;
 
     @Getter
     @Setter

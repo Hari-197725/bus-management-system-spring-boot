@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -32,20 +33,30 @@ public class RouteService {
         return RouteMapper.toRouteResponse(routeRepository.save(route));
     }
 
-    public void deleteRouteById(Long operatorId, Long routeId){
+    public List<RouteResponse> getAllRoutes(Long operatorId) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
+        List<RouteResponse> routeResponses = new ArrayList<>();
         List<Route> routes = operator.getRoutes();
-        for(Route route : routes){
-            if(route.getId().equals(routeId)){
+        for (Route route : routes) {
+            routeResponses.add(RouteMapper.toRouteResponse(route));
+        }
+
+        return routeResponses;
+    }
+
+    public void deleteRouteById(Long operatorId, Long routeId) {
+        Operator operator = operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId)); // Checking if the operator is exist.
+        List<Route> routes = operator.getRoutes();
+        for (Route route : routes) {
+            if (route.getId().equals(routeId)) {
                 routeRepository.deleteById(routeId);
                 break;
             }
         }
     }
-
-
 
 
 }

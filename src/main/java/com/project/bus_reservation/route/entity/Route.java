@@ -1,5 +1,6 @@
 package com.project.bus_reservation.route.entity;
 
+import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.operator.entity.Operator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -36,10 +37,13 @@ public class Route {
     @Column(nullable = false)
     private Integer estimatedDuration;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "Operator_id")
+    @JoinColumn(nullable = false, name = "operator_id")
     private Operator operator;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "bus_id")
+    private Bus bus;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

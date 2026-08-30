@@ -1,10 +1,15 @@
 package com.project.bus_reservation.route.mapper;
 
+import com.project.bus_reservation.buses.dto.response.BusResponse;
+import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.operator.entity.Operator;
+import com.project.bus_reservation.operator.mapper.OperatorMapper;
 import com.project.bus_reservation.route.dto.request.RouteRequest;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import com.project.bus_reservation.route.entity.Route;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class RouteMapper {
@@ -17,15 +22,20 @@ public class RouteMapper {
         route.setEstimatedDuration(routeRequest.getEstimatedDuration());
         route.setOperator(operator);
 
+
         return route;
     }
 
     public static RouteResponse toRouteResponse(Route route) {
+
+        Long operatorId = OperatorMapper.toResponse(route.getOperator()).getId();
+
         return new RouteResponse(route.getId(),
                 route.getSource(),
                 route.getDestination(),
                 route.getDistance(),
                 route.getEstimatedDuration(),
+                operatorId,
                 route.getCreatedAt(),
                 route.getModifiedAt()
         );

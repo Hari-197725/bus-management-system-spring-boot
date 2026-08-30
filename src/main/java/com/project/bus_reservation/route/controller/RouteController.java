@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/operator/{operatorId}/route")
 public class RouteController {
@@ -21,10 +23,14 @@ public class RouteController {
         return new ResponseEntity<>(routeService.createRoute(operatorId, routeRequest), HttpStatus.CREATED);
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<RouteResponse>> getAllRoutes(@PathVariable Long operatorId){
+        return new ResponseEntity<>(routeService.getAllRoutes(operatorId), HttpStatus.OK);
+    }
 
     @DeleteMapping("/{routeId}")
-    public void deleteRouteById(@PathVariable Long operatorId, @PathVariable Long routeId){
+    public ResponseEntity<Void> deleteRouteById(@PathVariable Long operatorId, @PathVariable Long routeId) {
         routeService.deleteRouteById(operatorId, routeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

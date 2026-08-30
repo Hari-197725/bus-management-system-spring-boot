@@ -3,6 +3,7 @@ package com.project.bus_reservation.buses.entity;
 import com.project.bus_reservation.buses.enums.BusStatus;
 import com.project.bus_reservation.buses.enums.BusType;
 import com.project.bus_reservation.operator.entity.Operator;
+import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -46,6 +47,9 @@ public class Bus {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus")
     private List<Seat> seats;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bus")
+    private Route route;
 
     @Min(18)
     @Column(nullable = false, updatable = true)
