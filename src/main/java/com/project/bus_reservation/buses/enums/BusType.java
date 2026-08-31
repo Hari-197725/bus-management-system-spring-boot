@@ -1,5 +1,8 @@
 package com.project.bus_reservation.buses.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BusType {
     SLEEPER(1),
     SEMI_SLEEPER(2),

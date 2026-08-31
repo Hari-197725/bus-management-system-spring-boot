@@ -15,6 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,14 +46,14 @@ public class Bus {
     @JoinColumn(nullable = false, name = "operator_id")
     private Operator operator;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus")
-    private List<Seat> seats;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
+    private List<Seat> seats = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bus")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
     private Route route;
 
     @Min(18)
-    @Column(nullable = false, updatable = true)
+    @Column(nullable = false)
     private Integer totalSeats;
 
     @Enumerated(EnumType.STRING)

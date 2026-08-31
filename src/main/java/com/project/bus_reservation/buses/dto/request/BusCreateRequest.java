@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class BusRequest {
+public class BusCreateRequest {
 
     @NotNull
     @Positive

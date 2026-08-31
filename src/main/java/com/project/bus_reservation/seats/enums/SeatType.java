@@ -1,5 +1,8 @@
 package com.project.bus_reservation.seats.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum SeatType {
     WINDOW(1), AISLE(2), LOWER_BERTH(3), UPPER_BERTH(4);
 

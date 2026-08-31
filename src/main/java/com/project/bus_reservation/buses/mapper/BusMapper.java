@@ -1,7 +1,6 @@
 package com.project.bus_reservation.buses.mapper;
 
-import com.project.bus_reservation.buses.dto.request.BusRequest;
-import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
+import com.project.bus_reservation.buses.dto.request.BusCreateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
 import com.project.bus_reservation.buses.entity.Bus;
 import com.project.bus_reservation.buses.enums.BusStatus;
@@ -45,16 +44,17 @@ public class BusMapper {
         );
     }
 
-    public static Bus toBusEntity(BusRequest busrequest, Operator operator) {
+    public static Bus toBusEntity(BusCreateRequest busCreateRequest, Operator operator) {
         Bus bus = new Bus();
-        bus.setBusNumber(busrequest.getBusNumber());
-        bus.setBusName(busrequest.getBusName());
-        bus.setBusType(busrequest.getBusType());
-        bus.setTotalSeats(busrequest.getTotalSeats());
+        bus.setBusNumber(busCreateRequest.getBusNumber());
+        bus.setBusName(busCreateRequest.getBusName());
+        bus.setBusType(busCreateRequest.getBusType());
+        bus.setTotalSeats(busCreateRequest.getTotalSeats());
         bus.setStatus(BusStatus.ACTIVE);
         bus.setOperator(operator);
+        bus.setRoute(null);
 
-        List<Seat> seats = busrequest.getSeats().stream()
+        List<Seat> seats = busCreateRequest.getSeats().stream()
                 .map(seatReq -> {
                     Seat seat = new Seat();
                     seat.setSeatNumber(seatReq.getSeatNumber());
@@ -73,22 +73,8 @@ public class BusMapper {
         return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
-    public static Bus toUpdate(BusUpdateRequest busUpdateRequest, Bus bus) {
-        if (busUpdateRequest.getBusType() != null) {
-            bus.setBusType(busUpdateRequest.getBusType());
-        }
-
-//        if(busUpdateRequest.getRouteId()!= null){
-//            bus.setRoute(busUpdateRequest.getRouteId());
-//        }
-//        if(busUpdateRequest.getOperatorId()!=null){
-//            bus.setOperator(busUpdateRequest.getOperatorId());
-//        }
-
-//        if(operator != null){
-//            bus.setOperator(operator);
-//        }
-
+    public static Bus updateBusTransfer(Operator transferOperator, Bus bus){
+        bus.setOperator(transferOperator);
         return bus;
     }
 }

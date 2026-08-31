@@ -1,9 +1,8 @@
 package com.project.bus_reservation.buses.controller;
 
-import com.project.bus_reservation.buses.dto.request.BusRequest;
-import com.project.bus_reservation.buses.dto.request.BusUpdateRequest;
+import com.project.bus_reservation.buses.dto.request.BusCreateRequest;
 import com.project.bus_reservation.buses.dto.response.BusResponse;
-import com.project.bus_reservation.buses.service.BusesService;
+import com.project.bus_reservation.buses.service.BusService;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,38 +17,38 @@ import java.util.List;
 public class BusesController {
 
     @Autowired
-    private BusesService busesService;
+    private BusService busService;
 
     @PostMapping
-    public ResponseEntity<BusResponse> createBus(@Valid @RequestBody BusRequest busrequest, @PathVariable Long operatorId) {
-        return new ResponseEntity<>(busesService.createBus(busrequest, operatorId), HttpStatus.CREATED);
+    public ResponseEntity<BusResponse> createBus(@PathVariable Long operatorId, @Valid @RequestBody BusCreateRequest busCreateRequest) {
+        return new ResponseEntity<>(busService.createBus(operatorId, busCreateRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<BusResponse>> getAllBuses(@PathVariable Long operatorId) {
-        return new ResponseEntity<>(busesService.getAllBuses(operatorId), HttpStatus.OK);
+        return new ResponseEntity<>(busService.getAllBuses(operatorId), HttpStatus.OK);
     }
 
     @GetMapping("/{busId}")
     public ResponseEntity<BusResponse> getBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
-        return new ResponseEntity<>(busesService.getBusById(operatorId, busId), HttpStatus.OK);
+        return new ResponseEntity<>(busService.getBusById(operatorId, busId), HttpStatus.OK);
     }
 
     @GetMapping("/{busId}/route")
-    public ResponseEntity<RouteResponse> getRoutesByBusId(@PathVariable Long operatorId, @PathVariable Long busId){
-        return new ResponseEntity<>(busesService.getAllRoutesByBusId(operatorId, busId), HttpStatus.OK);
+    public ResponseEntity<RouteResponse> getRouteByBusId(@PathVariable Long operatorId, @PathVariable Long busId) {
+        return new ResponseEntity<>(busService.getAllRoutesByBusId(operatorId, busId), HttpStatus.OK);
     }
 
 
-
-    @PatchMapping("/{busId}")
-    public ResponseEntity<Void> updateBusByBusId(@PathVariable Long operatorId, @PathVariable Long busId, @Valid @RequestBody BusUpdateRequest busUpdateRequest) {
-        return new ResponseEntity<>(busesService.updateById(operatorId, busId, busUpdateRequest), HttpStatus.NO_CONTENT);
-    }
-
-
-//    @DeleteMapping("/{busId}")
-//    public void deleteBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
-//        busesService.deleteBusById(operatorId, busId);
+//    @PatchMapping("/{busId}")
+//    public ResponseEntity<Void> updateBusByBusId(@PathVariable Long operatorId, @PathVariable Long busId, @Valid @RequestBody BusTransferUpdateRequest busTransferUpdateRequest) {
+//        busService.updateBusByBusId(operatorId, busId, busTransferUpd
 //    }
+
+
+    @DeleteMapping("/{busId}")
+    public ResponseEntity<Void> deleteBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
+        busService.deleteBusById(operatorId, busId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
