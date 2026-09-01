@@ -1,6 +1,6 @@
 package com.project.bus_reservation.route.controller;
 
-import com.project.bus_reservation.route.dto.request.RouteRequest;
+import com.project.bus_reservation.route.dto.request.RouteCreateRequest;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import com.project.bus_reservation.route.service.RouteService;
 import jakarta.validation.Valid;
@@ -19,8 +19,8 @@ public class RouteController {
     private RouteService routeService;
 
     @PostMapping
-    public ResponseEntity<RouteResponse> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteRequest routeRequest) {
-        return new ResponseEntity<>(routeService.createRoute(operatorId, routeRequest), HttpStatus.CREATED);
+    public ResponseEntity<RouteResponse> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
+        return new ResponseEntity<>(routeService.createRoute(operatorId, routeCreateRequest), HttpStatus.CREATED);
     }
 
     @GetMapping

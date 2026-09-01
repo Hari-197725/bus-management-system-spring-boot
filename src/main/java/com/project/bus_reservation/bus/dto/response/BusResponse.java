@@ -1,7 +1,7 @@
-package com.project.bus_reservation.buses.dto.response;
+package com.project.bus_reservation.bus.dto.response;
 
-import com.project.bus_reservation.buses.enums.BusStatus;
-import com.project.bus_reservation.buses.enums.BusType;
+import com.project.bus_reservation.bus.enums.BusStatus;
+import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import com.project.bus_reservation.seats.enums.SeatStatus;

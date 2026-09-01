@@ -1,6 +1,6 @@
 package com.project.bus_reservation.seats.entity;
 
-import com.project.bus_reservation.buses.entity.Bus;
+import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.enums.SeatType;
 import jakarta.persistence.*;

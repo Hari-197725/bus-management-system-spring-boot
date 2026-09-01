@@ -1,10 +1,10 @@
-package com.project.bus_reservation.buses.service;
+package com.project.bus_reservation.bus.service;
 
-import com.project.bus_reservation.buses.dto.request.BusCreateRequest;
-import com.project.bus_reservation.buses.dto.response.BusResponse;
-import com.project.bus_reservation.buses.entity.Bus;
-import com.project.bus_reservation.buses.mapper.BusMapper;
-import com.project.bus_reservation.buses.repository.BusesRepository;
+import com.project.bus_reservation.bus.dto.request.BusCreateRequest;
+import com.project.bus_reservation.bus.dto.response.BusResponse;
+import com.project.bus_reservation.bus.entity.Bus;
+import com.project.bus_reservation.bus.mapper.BusMapper;
+import com.project.bus_reservation.bus.repository.BusesRepository;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -36,7 +37,18 @@ public class BusService {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        Bus bus = BusMapper.toBusEntity(busCreateRequest, operator);
+        List<Route> routeList = operator.getRoutes();
+        Route _route= null;
+        for(Route route : routeList){
+            if(route.getId().equals(busCreateRequest.getRouteId())){
+               _route = route;
+               break;
+            }else {
+                throw new ResponseStatusException(BAD_REQUEST, "Route id not found with in operator: " + busCreateRequest.getRouteId());
+            }
+        }
+
+        Bus bus = BusMapper.toBusEntity(operator, _route, busCreateRequest);
         return BusMapper.toBusResponse(busesRepository.save(bus));
     }
 

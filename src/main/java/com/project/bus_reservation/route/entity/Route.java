@@ -1,10 +1,9 @@
 package com.project.bus_reservation.route.entity;
 
-import com.project.bus_reservation.buses.entity.Bus;
+import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.operator.entity.Operator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,7 +41,7 @@ public class Route {
     private Operator operator;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "bus_id")
+    @JoinColumn(name = "bus_id")
     private Bus bus;
 
     @Column(name = "created_at", nullable = false, updatable = false)

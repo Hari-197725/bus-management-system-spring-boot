@@ -1,8 +1,8 @@
-package com.project.bus_reservation.buses.controller;
+package com.project.bus_reservation.bus.controller;
 
-import com.project.bus_reservation.buses.dto.request.BusCreateRequest;
-import com.project.bus_reservation.buses.dto.response.BusResponse;
-import com.project.bus_reservation.buses.service.BusService;
+import com.project.bus_reservation.bus.dto.request.BusCreateRequest;
+import com.project.bus_reservation.bus.dto.response.BusResponse;
+import com.project.bus_reservation.bus.service.BusService;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/operator/{operatorId}/bus")
-public class BusesController {
+public class BusController {
 
     @Autowired
     private BusService busService;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/operators")
+@RequestMapping("/api/v1/operator")
 public class OperatorController {
 
     @Autowired

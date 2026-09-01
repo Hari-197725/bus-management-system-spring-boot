@@ -1,6 +1,6 @@
 package com.project.bus_reservation.operator.entity;
 
-import com.project.bus_reservation.buses.entity.Bus;
+import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.route.entity.Route;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

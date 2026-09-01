@@ -1,6 +1,6 @@
 package com.project.bus_reservation.seats.controller;
 
-import com.project.bus_reservation.buses.dto.response.BusResponse;
+import com.project.bus_reservation.bus.dto.response.BusResponse;
 import com.project.bus_reservation.seats.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

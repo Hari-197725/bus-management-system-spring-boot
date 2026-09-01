@@ -1,7 +1,5 @@
 package com.project.bus_reservation.route.dto.response;
 
-import com.project.bus_reservation.buses.dto.response.BusResponse;
-import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,7 @@ public class RouteResponse {
     private double distance;
     private Integer estimatedDuration;
     private Long operatorId;
+    private Long busId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

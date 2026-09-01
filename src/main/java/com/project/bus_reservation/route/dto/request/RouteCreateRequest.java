@@ -8,8 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RouteRequest {
-
+public class RouteCreateRequest {
     @NotBlank
     private String source;
 
@@ -23,4 +22,6 @@ public class RouteRequest {
     @NotNull
     @Positive
     private Integer estimatedDuration;
+
+    private Long busId;
 }

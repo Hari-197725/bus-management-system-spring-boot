@@ -1,7 +1,7 @@
-package com.project.bus_reservation.buses.entity;
+package com.project.bus_reservation.bus.entity;
 
-import com.project.bus_reservation.buses.enums.BusStatus;
-import com.project.bus_reservation.buses.enums.BusType;
+import com.project.bus_reservation.bus.enums.BusStatus;
+import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;

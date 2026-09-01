@@ -1,4 +1,4 @@
-package com.project.bus_reservation.buses.enums;
+package com.project.bus_reservation.bus.enums;
 
 import lombok.Getter;
 

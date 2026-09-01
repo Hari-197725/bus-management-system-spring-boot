@@ -1,6 +1,6 @@
-package com.project.bus_reservation.buses.repository;
+package com.project.bus_reservation.bus.repository;
 
-import com.project.bus_reservation.buses.entity.Bus;
+import com.project.bus_reservation.bus.entity.Bus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

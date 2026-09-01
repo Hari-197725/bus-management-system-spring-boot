@@ -1,8 +1,8 @@
 package com.project.bus_reservation.bustransfer.service;
 
 import com.project.bus_reservation.bustransfer.dto.request.BusTransferUpdateRequest;
-import com.project.bus_reservation.buses.entity.Bus;
-import com.project.bus_reservation.buses.mapper.BusMapper;
+import com.project.bus_reservation.bus.entity.Bus;
+import com.project.bus_reservation.bus.mapper.BusMapper;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;

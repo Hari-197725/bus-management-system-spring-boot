@@ -1,6 +1,6 @@
-package com.project.bus_reservation.buses.dto.request;
+package com.project.bus_reservation.bus.dto.request;
 
-import com.project.bus_reservation.buses.enums.BusType;
+import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.seats.enums.SeatType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -27,6 +27,8 @@ public class BusCreateRequest {
     @Min(18)
     @Max(30)
     private Integer totalSeats;
+
+    private Long routeId;
 
     @NotNull
     private List<SeatRequest> seats;
