@@ -45,15 +45,16 @@ public class BusMapper {
     }
 
     public static BusResponse toBusResponse(Bus bus) {
-        OperatorResponse operatorResponse = OperatorMapper.toResponse(bus.getOperator());
+        Operator operator = bus.getOperator();
+        OperatorResponse operatorResponse = OperatorMapper.toResponse(operator);
 
         List<BusResponse.SeatResponse> seatResponses = bus.getSeats()
                 .stream()
                 .map(BusMapper::toSeatResponse)
                 .toList();
 
-        RouteResponse routeResponse = RouteMapper.toRouteResponse(bus.getRoute());
-
+        Route route = bus.getRoute();
+        RouteResponse routeResponse = RouteMapper.toRouteResponse(route);
 
         return new BusResponse(
                 bus.getId(),
