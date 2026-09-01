@@ -27,7 +27,10 @@ public class BusMapper {
         bus.setTotalSeats(busCreateRequest.getTotalSeats());
         bus.setStatus(BusStatus.ACTIVE);
         bus.setOperator(operator);
-        bus.setRoute(route);
+
+        if (route != null) {
+            bus.setRoute(route);
+        }
 
         List<Seat> seats = busCreateRequest.getSeats().stream()
                 .map(seatReq -> {
@@ -54,7 +57,10 @@ public class BusMapper {
                 .toList();
 
         Route route = bus.getRoute();
-        RouteResponse routeResponse = RouteMapper.toRouteResponse(route);
+        RouteResponse routeResponse = null;
+        if (route != null) {
+            routeResponse = RouteMapper.toRouteResponse(route);
+        }
 
         return new BusResponse(
                 bus.getId(),

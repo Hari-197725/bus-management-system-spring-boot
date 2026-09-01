@@ -31,7 +31,6 @@ public class RouteService {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-
         List<Bus> busList = operator.getBuses();
         Bus _bus = null;
         boolean isNotAvailable = true;

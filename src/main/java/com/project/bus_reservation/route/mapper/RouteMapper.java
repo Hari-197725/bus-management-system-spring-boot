@@ -28,6 +28,7 @@ public class RouteMapper {
         Long operatorId = OperatorMapper.toResponse(route.getOperator()).getId();
         Long busId = BusMapper.toBusResponse(route.getBus()).getId();
 
+
         return new RouteResponse(route.getId(),
                 route.getSource(),
                 route.getDestination(),

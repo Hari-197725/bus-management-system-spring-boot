@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +39,18 @@ public class BusService {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
         List<Route> routeList = operator.getRoutes();
-        Route _route= null;
-        for(Route route : routeList){
-            if(route.getId().equals(busCreateRequest.getRouteId())){
-               _route = route;
-               break;
-            }else {
-                throw new ResponseStatusException(BAD_REQUEST, "Route id not found with in operator: " + busCreateRequest.getRouteId());
+        Route _route = null;
+        boolean isAvailable = false;
+        for (Route route : routeList) {
+            if (route.getId().equals(busCreateRequest.getRouteId())) {
+                _route = route;
+                isAvailable = true;
+                break;
             }
+        }
+
+        if (isAvailable) {
+            throw new ResponseStatusException(BAD_REQUEST, "Route id not found with in operator: " + busCreateRequest.getRouteId());
         }
 
         Bus bus = BusMapper.toBusEntity(operator, _route, busCreateRequest);
@@ -56,8 +61,8 @@ public class BusService {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        List<BusResponse> busResponses = new ArrayList<>();
         List<Bus> buses = operator.getBuses();
+        List<BusResponse> busResponses = new ArrayList<>();
         for (Bus bus : buses) {
             busResponses.add(BusMapper.toBusResponse(bus));
         }

@@ -1,8 +1,7 @@
-package com.project.bus_reservation.users.dto.response;
+package com.project.bus_reservation.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @AllArgsConstructor
 @Getter

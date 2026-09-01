@@ -1,7 +1,7 @@
-package com.project.bus_reservation.users.entity;
+package com.project.bus_reservation.user.entity;
 
 import com.project.bus_reservation.models.Booking;
-import com.project.bus_reservation.users.dto.request.UserRequest;
+import com.project.bus_reservation.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
