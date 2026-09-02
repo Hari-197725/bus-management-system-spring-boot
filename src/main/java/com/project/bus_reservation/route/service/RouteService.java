@@ -1,6 +1,7 @@
 package com.project.bus_reservation.route.service;
 
 import com.project.bus_reservation.bus.entity.Bus;
+import com.project.bus_reservation.bus.repository.BusesRepository;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.route.dto.request.RouteCreateRequest;
@@ -26,38 +27,28 @@ public class RouteService {
     @Autowired
     private RouteRepository routeRepository;
 
+    @Autowired
+    private BusesRepository busesRepository;
+
     public RouteResponse createRoute(Long operatorId, RouteCreateRequest routeCreateRequest) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
         List<Bus> busList = operator.getBuses();
-        Bus _bus = null;
-        boolean isNotAvailable = true;
-        for (Bus bus : busList) {
-            if (bus.getId().equals(routeCreateRequest.getBusId())) {
-                _bus = bus;
-                isNotAvailable = false;
-                break;
-            }
+        if (routeCreateRequest.getBusId() != null && (busList.isEmpty() || busList.stream().noneMatch(bus -> bus.getId().equals(routeCreateRequest.getBusId())))) {
+            throw new ResponseStatusException(BAD_REQUEST, "Invalid bus id");
         }
 
-            if (isNotAvailable) {
-                throw new ResponseStatusException(BAD_REQUEST, "Bus id not found with in operator: " + routeCreateRequest.getBusId());
-            }
+        // Consider bus id available
+        Bus bus = null;
+        if (routeCreateRequest.getBusId() != null) {
+            bus = busesRepository.findById(routeCreateRequest.getBusId()).orElse(null);
+        }
 
-        Route route = RouteMapper.toRouteEntity(operator, _bus, routeCreateRequest);
-        return RouteMapper.toRouteResponse(routeRepository.save(route));
-
-//        This is not the right way to find a particular thing from list tell about the edge cases to hari
-//        for (Bus bus : busList) {
-//            if (bus.getId().equals(routeCreateRequest.getBusId())) {
-//                _bus = bus;
-//            } else {
-//                throw new ResponseStatusException(BAD_REQUEST, "Bus id not found with in operator: " + routeCreateRequest.getBusId());
-//            }
-//        }
-
-//        Ask hari how here _bus is not gonna be null if case the busList can be null or not.
+        // without busId
+        Route route = RouteMapper.toRouteEntity(operator, bus, routeCreateRequest);
+        Route _route = routeRepository.save(route);
+        return RouteMapper.toRouteResponse(_route);
     }
 
     public List<RouteResponse> getAllRoutes(Long operatorId) {

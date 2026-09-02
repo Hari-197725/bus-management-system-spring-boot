@@ -40,7 +40,7 @@ public class Route {
     @JoinColumn(nullable = false, name = "operator_id")
     private Operator operator;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "bus_id")
     private Bus bus;
 

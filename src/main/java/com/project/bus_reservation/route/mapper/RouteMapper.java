@@ -19,15 +19,13 @@ public class RouteMapper {
         route.setDistance(routeCreateRequest.getDistance());
         route.setEstimatedDuration(routeCreateRequest.getEstimatedDuration());
         route.setOperator(operator);
-        route.setBus(bus);
-
+//        route.setBus(bus);
         return route;
     }
 
     public static RouteResponse toRouteResponse(Route route) {
-        Long operatorId = OperatorMapper.toResponse(route.getOperator()).getId();
-        Long busId = BusMapper.toBusResponse(route.getBus()).getId();
-
+        Long operatorId = route.getOperator().getId();
+        Long busId = route.getBus() != null ? route.getBus().getId() : null;
 
         return new RouteResponse(route.getId(),
                 route.getSource(),
