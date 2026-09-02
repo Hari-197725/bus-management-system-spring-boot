@@ -20,7 +20,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class RouteService {
-
     @Autowired
     private OperatorRepository operatorRepository;
 

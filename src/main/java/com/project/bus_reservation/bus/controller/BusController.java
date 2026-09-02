@@ -36,7 +36,7 @@ public class BusController {
 
     @GetMapping("/{busId}/route")
     public ResponseEntity<RouteResponse> getRouteByBusId(@PathVariable Long operatorId, @PathVariable Long busId) {
-        return new ResponseEntity<>(busService.getAllRoutesByBusId(operatorId, busId), HttpStatus.OK);
+        return new ResponseEntity<>(busService.getAllRouteByBusId(operatorId, busId), HttpStatus.OK);
     }
 
 

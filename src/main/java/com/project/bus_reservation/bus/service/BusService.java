@@ -16,12 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 public class BusService {
@@ -40,16 +38,17 @@ public class BusService {
 
         List<Route> routeList = operator.getRoutes();
         Route _route = null;
-        boolean isAvailable = false;
+        boolean isNotAvailable = true;
+
         for (Route route : routeList) {
             if (route.getId().equals(busCreateRequest.getRouteId())) {
                 _route = route;
-                isAvailable = true;
+                isNotAvailable = false;
                 break;
             }
         }
 
-        if (isAvailable) {
+        if (isNotAvailable) {
             throw new ResponseStatusException(BAD_REQUEST, "Route id not found with in operator: " + busCreateRequest.getRouteId());
         }
 
@@ -74,33 +73,51 @@ public class BusService {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        BusResponse busResponse = null;
         List<Bus> buses = operator.getBuses();
+        BusResponse busResponse = null;
+        boolean isNotAvailable = true;
+
         for (Bus bus : buses) {
             if (bus.getId().equals(busId)) {
                 busResponse = BusMapper.toBusResponse(bus);
+                isNotAvailable = false;
+                break;
             }
+        }
+
+        if (isNotAvailable) {
+            throw new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId);
         }
 
         return busResponse;
-
     }
 
-    public RouteResponse getAllRoutesByBusId(Long operatorId, Long busId) {
+    public RouteResponse getAllRouteByBusId(Long operatorId, Long busId) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-
         List<Bus> buses = operator.getBuses();
+        Bus _bus = null;
+        boolean isNotAvailable = true;
         for (Bus bus : buses) {
             if (bus.getId().equals(busId)) {
-                return RouteMapper.toRouteResponse(bus.getRoute());
+                _bus = bus;
+                isNotAvailable = false;
+                break;
             }
         }
 
-        return null;
-    }
+        if (isNotAvailable) {
+            throw new ResponseStatusException(NOT_FOUND, "Bus id " + busId + " not found with operator id: " + operatorId);
+        }
 
+        Route route = _bus.getRoute();
+        if (route != null) {
+            return RouteMapper.toRouteResponse(route);
+        } else {
+            throw new ResponseStatusException(NO_CONTENT, "Route not found with bus id: " + busId);
+        }
+    }
 
     @Transactional
     public void deleteBusById(Long operatorId, Long busId) {
