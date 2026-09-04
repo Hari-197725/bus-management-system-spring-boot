@@ -29,8 +29,15 @@ public class OperatorController {
         return new ResponseEntity<>(operatorService.getAllOperators(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<OperatorResponse> getOperatorById(@PathVariable Long id) {
-        return new ResponseEntity<>(operatorService.getOperatorById(id), HttpStatus.OK);
+    @GetMapping("/{operatorId}")
+    public ResponseEntity<OperatorResponse> getOperatorById(@PathVariable Long operatorId) {
+        return new ResponseEntity<>(operatorService.getOperatorById(operatorId), HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{operatorId}")
+    public ResponseEntity<Void> deleteOperatorById (@PathVariable Long operatorId){
+        operatorService.deleteOperatorById(operatorId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

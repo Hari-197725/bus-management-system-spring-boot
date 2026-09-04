@@ -121,18 +121,6 @@ public class BusService {
 
     @Transactional
     public void deleteBusById(Long operatorId, Long busId) {
-//        This kind of approach is not work 'cause the bus entity has relation with other entity too.
-
-//        Operator operator = operatorRepository.findById(operatorId)
-//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
-//
-//        List<Bus> busList = operator.getBuses();
-//        for (Bus bus : busList) {
-//            if (bus.getId().equals(busId)) {
-//                busesRepository.delete(bus);
-//            }
-//        }
-
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
