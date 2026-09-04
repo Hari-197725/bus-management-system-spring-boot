@@ -64,6 +64,29 @@ public class RouteService {
         return routeResponses;
     }
 
+    public RouteResponse getRouteById(Long operatorId, Long routeId){
+        Operator operator = operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+
+        List<Route> routeList = operator.getRoutes();
+        RouteResponse routeResponse = null;
+        boolean isNotAvailable = true;
+
+        for(Route route : routeList){
+            if(route.getId().equals(routeId)){
+                routeResponse = RouteMapper.toRouteResponse(route);
+                isNotAvailable = false;
+                break;
+            }
+        }
+
+        if(isNotAvailable){
+            throw new ResponseStatusException(NOT_FOUND, "Route if not found with operator id: " + routeId);
+        }
+
+        return routeResponse;
+    }
+
     public void deleteRouteById(Long operatorId, Long routeId) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId)); // Checking if the operator exist.

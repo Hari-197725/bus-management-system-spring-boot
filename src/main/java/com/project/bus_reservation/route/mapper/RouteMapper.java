@@ -1,9 +1,7 @@
 package com.project.bus_reservation.route.mapper;
 
 import com.project.bus_reservation.bus.entity.Bus;
-import com.project.bus_reservation.bus.mapper.BusMapper;
 import com.project.bus_reservation.operator.entity.Operator;
-import com.project.bus_reservation.operator.mapper.OperatorMapper;
 import com.project.bus_reservation.route.dto.request.RouteCreateRequest;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import com.project.bus_reservation.route.entity.Route;

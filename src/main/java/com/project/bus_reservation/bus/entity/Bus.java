@@ -57,7 +57,7 @@ public class Bus {
     private Integer totalSeats;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, updatable = true)
+    @Column(nullable = false)
     private BusStatus status;
 
     @Column(nullable = false, updatable = false)

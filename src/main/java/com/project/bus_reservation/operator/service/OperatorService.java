@@ -15,16 +15,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class OperatorService {
-
     @Autowired
     private OperatorRepository operatorRepository;
 
-    @Autowired
-    private OperatorMapper operatorMapper;
-
-    public OperatorResponse createOperator(OperatorRequest request) {
+    public void createOperator(OperatorRequest request) {
         Operator operator = OperatorMapper.toEntity(request);
-        return OperatorMapper.toResponse(operatorRepository.save(operator));
+        OperatorMapper.toResponse(operatorRepository.save(operator));
     }
 
     public List<OperatorResponse> getAllOperators() {

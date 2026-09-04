@@ -20,8 +20,9 @@ public class BusController {
     private BusService busService;
 
     @PostMapping
-    public ResponseEntity<BusResponse> createBus(@PathVariable Long operatorId, @Valid @RequestBody BusCreateRequest busCreateRequest) {
-        return new ResponseEntity<>(busService.createBus(operatorId, busCreateRequest), HttpStatus.CREATED);
+    public ResponseEntity<Void> createBus(@PathVariable Long operatorId, @Valid @RequestBody BusCreateRequest busCreateRequest) {
+        busService.createBus(operatorId, busCreateRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping

@@ -19,8 +19,9 @@ public class OperatorController {
     private OperatorService operatorService;
 
     @PostMapping
-    public ResponseEntity<OperatorResponse> createOperator(@Valid @RequestBody OperatorRequest operatorRequest) {
-        return new ResponseEntity<>(operatorService.createOperator(operatorRequest), HttpStatus.CREATED);
+    public ResponseEntity<Void> createOperator(@Valid @RequestBody OperatorRequest operatorRequest) {
+        operatorService.createOperator(operatorRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping

@@ -32,7 +32,7 @@ public class BusService {
     @Autowired
     private RouteRepository routeRepository;
 
-    public BusResponse createBus(Long operatorId, BusCreateRequest busCreateRequest) {
+    public void createBus(Long operatorId, BusCreateRequest busCreateRequest) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
@@ -53,7 +53,7 @@ public class BusService {
         }
 
         Bus bus = BusMapper.toBusEntity(operator, _route, busCreateRequest);
-        return BusMapper.toBusResponse(busesRepository.save(bus));
+        busesRepository.save(bus);
     }
 
     public List<BusResponse> getAllBuses(Long operatorId) {
@@ -121,16 +121,34 @@ public class BusService {
 
     @Transactional
     public void deleteBusById(Long operatorId, Long busId) {
-        Bus bus = busesRepository.findByIdAndOperatorId(busId, operatorId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + busId + " for operator: " + operatorId));
+//        This kind of approach is not work 'cause the bus entity has relation with other entity too.
 
-        Route route = bus.getRoute();
-        if (route != null) {
-            bus.setRoute(null);
-            routeRepository.delete(route);
+//        Operator operator = operatorRepository.findById(operatorId)
+//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+//
+//        List<Bus> busList = operator.getBuses();
+//        for (Bus bus : busList) {
+//            if (bus.getId().equals(busId)) {
+//                busesRepository.delete(bus);
+//            }
+//        }
+
+        Operator operator = operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+
+        List<Bus> busList = operator.getBuses();
+        Bus busFounded = busList.stream().filter(bus -> bus.getId().equals(busId)).findFirst()
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + busId));
+
+        Route route = busFounded.getRoute();
+
+        if(route!=null){
+            busFounded.setRoute(null);
+            route.setBus(null);
         }
 
-        bus.getSeats().clear();
-        busesRepository.delete(bus);
+        busFounded.getSeats().clear();
+        busList.remove(busFounded);
+        busesRepository.delete(busFounded);
     }
 }

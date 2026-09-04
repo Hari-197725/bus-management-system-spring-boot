@@ -27,6 +27,11 @@ public class RouteController {
         return new ResponseEntity<>(routeService.getAllRoutes(operatorId), HttpStatus.OK);
     }
 
+    @GetMapping("/{routeId}")
+    public ResponseEntity<RouteResponse> getRouteById(@PathVariable Long operatorId, @PathVariable Long routeId){
+        return new ResponseEntity<>(routeService.getRouteById(operatorId, routeId), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{routeId}")
     public ResponseEntity<Void> deleteRouteById(@PathVariable Long operatorId, @PathVariable Long routeId) {
         routeService.deleteRouteById(operatorId, routeId);
