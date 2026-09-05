@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRequest {
+public class UserCreateRequest {
 
     @NotBlank
     private String name;
@@ -15,5 +15,5 @@ public class UserRequest {
     private String email;
 
     @NotBlank
-    private String phone;
+    private String phoneNumber;
 }

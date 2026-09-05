@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/operator/{operatorId}/bus")
 public class BusController {
-
     @Autowired
     private BusService busService;
 

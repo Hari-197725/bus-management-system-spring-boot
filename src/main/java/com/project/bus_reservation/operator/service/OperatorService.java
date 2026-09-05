@@ -2,7 +2,7 @@ package com.project.bus_reservation.operator.service;
 
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bus.repository.BusesRepository;
-import com.project.bus_reservation.operator.dto.request.OperatorRequest;
+import com.project.bus_reservation.operator.dto.request.OperatorCreateRequest;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.mapper.OperatorMapper;
@@ -29,22 +29,22 @@ public class OperatorService {
     @Autowired
     private RouteRepository routeRepository;
 
-    public void createOperator(OperatorRequest request) {
-        Operator operator = OperatorMapper.toEntity(request);
-        OperatorMapper.toResponse(operatorRepository.save(operator));
+    public void createOperator(OperatorCreateRequest operatorCreateRequest) {
+        Operator operator = OperatorMapper.toOperatorEntity(operatorCreateRequest);
+        operatorRepository.save(operator);
     }
 
     public List<OperatorResponse> getAllOperators() {
         return operatorRepository.findAll().stream()
-                .map(OperatorMapper::toResponse)
+                .map(OperatorMapper::toOperatorResponse)
                 .toList();
     }
 
-    public OperatorResponse getOperatorById(Long id) {
-        Operator operator = operatorRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + id));
+    public OperatorResponse getOperatorById(Long operatorId) {
+        Operator operator = operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        return OperatorMapper.toResponse(operator);
+        return OperatorMapper.toOperatorResponse(operator);
     }
 
     @Transactional

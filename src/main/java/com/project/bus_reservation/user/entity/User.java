@@ -1,7 +1,5 @@
 package com.project.bus_reservation.user.entity;
 
-import com.project.bus_reservation.models.Booking;
-import com.project.bus_reservation.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 // @Data generates more code than a JPA entity usually needs. Some of that generated code can cause unexpected problems.
@@ -23,19 +20,19 @@ import java.util.List;
 @Entity
 //@Data
 @Getter
+@Setter
 // @Table(name = "users") is optional if the table name matches the entity name.
 // Use @Table(name = "...") when you want to explicitly specify the database table name.
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
 @Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id // @Id already implies the primary key, so the @Column settings are unnecessary here.
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Booking> bookings;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -63,15 +60,15 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
-    @Builder
-    private User(String email, String name, String phoneNumber) { // This is the constructor of this class.
-        this.email = email;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-    }
+//    @Builder
+//    private User(String email, String name, String phoneNumber) { // This is the constructor of this class.
+//        this.email = email;
+//        this.name = name;
+//        this.phoneNumber = phoneNumber;
+//    }
 
-    public void updateUser(UserRequest userRequest) {
-        this.name = userRequest.getName() != null ? userRequest.getName() : this.name;
-        this.phoneNumber = userRequest.getPhone() != null ? userRequest.getPhone() : this.phoneNumber;
-    }
+//    public void updateUser(UserRequest userRequest) {
+//        this.name = userRequest.getName() != null ? userRequest.getName() : this.name;
+//        this.phoneNumber = userRequest.getPhone() != null ? userRequest.getPhone() : this.phoneNumber;
+//    }
 }

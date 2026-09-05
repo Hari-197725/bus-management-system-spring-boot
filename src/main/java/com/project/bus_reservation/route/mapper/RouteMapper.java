@@ -17,7 +17,7 @@ public class RouteMapper {
         route.setDistance(routeCreateRequest.getDistance());
         route.setEstimatedDuration(routeCreateRequest.getEstimatedDuration());
         route.setOperator(operator);
-//        route.setBus(bus);
+        route.setBus(bus);
         return route;
     }
 

@@ -49,7 +49,7 @@ public class BusMapper {
 
     public static BusResponse toBusResponse(Bus bus) {
         Operator operator = bus.getOperator();
-        OperatorResponse operatorResponse = OperatorMapper.toResponse(operator);
+        OperatorResponse operatorResponse = OperatorMapper.toOperatorResponse(operator);
 
         List<BusResponse.SeatResponse> seatResponses = bus.getSeats()
                 .stream()

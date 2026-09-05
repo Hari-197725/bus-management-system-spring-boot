@@ -36,20 +36,22 @@ public class BusService {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        List<Route> routeList = operator.getRoutes();
         Route _route = null;
-        boolean isNotAvailable = true;
+        if (busCreateRequest.getRouteId() != null) {
+            List<Route> routeList = operator.getRoutes();
+            boolean isNotAvailable = true;
 
-        for (Route route : routeList) {
-            if (route.getId().equals(busCreateRequest.getRouteId())) {
-                _route = route;
-                isNotAvailable = false;
-                break;
+            for (Route route : routeList) {
+                if (route.getId().equals(busCreateRequest.getRouteId())) {
+                    _route = route;
+                    isNotAvailable = false;
+                    break;
+                }
             }
-        }
 
-        if (isNotAvailable) {
-            throw new ResponseStatusException(BAD_REQUEST, "Route id not found with in operator: " + busCreateRequest.getRouteId());
+            if (isNotAvailable) {
+                throw new ResponseStatusException(BAD_REQUEST, "Route id not found with in operator: " + busCreateRequest.getRouteId());
+            }
         }
 
         Bus bus = BusMapper.toBusEntity(operator, _route, busCreateRequest);
@@ -125,18 +127,18 @@ public class BusService {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
         List<Bus> busList = operator.getBuses();
-        Bus busFounded = busList.stream().filter(bus -> bus.getId().equals(busId)).findFirst()
+        Bus _bus = busList.stream().filter(bus -> bus.getId().equals(busId)).findFirst()
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + busId));
 
-        Route route = busFounded.getRoute();
+        Route route = _bus.getRoute();
 
-        if(route!=null){
-            busFounded.setRoute(null);
+        if (route != null) {
+            _bus.setRoute(null);
             route.setBus(null);
         }
 
-        busFounded.getSeats().clear();
-        busList.remove(busFounded);
-        busesRepository.delete(busFounded);
+        _bus.getSeats().clear();
+        busList.remove(_bus);
+        busesRepository.delete(_bus);
     }
 }

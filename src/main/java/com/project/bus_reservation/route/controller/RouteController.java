@@ -18,17 +18,18 @@ public class RouteController {
     private RouteService routeService;
 
     @PostMapping
-    public ResponseEntity<RouteResponse> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
-        return new ResponseEntity<>(routeService.createRoute(operatorId, routeCreateRequest), HttpStatus.CREATED);
+    public ResponseEntity<Void> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
+        routeService.createRoute(operatorId, routeCreateRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<RouteResponse>> getAllRoutes(@PathVariable Long operatorId){
+    public ResponseEntity<List<RouteResponse>> getAllRoutes(@PathVariable Long operatorId) {
         return new ResponseEntity<>(routeService.getAllRoutes(operatorId), HttpStatus.OK);
     }
 
     @GetMapping("/{routeId}")
-    public ResponseEntity<RouteResponse> getRouteById(@PathVariable Long operatorId, @PathVariable Long routeId){
+    public ResponseEntity<RouteResponse> getRouteById(@PathVariable Long operatorId, @PathVariable Long routeId) {
         return new ResponseEntity<>(routeService.getRouteById(operatorId, routeId), HttpStatus.OK);
     }
 

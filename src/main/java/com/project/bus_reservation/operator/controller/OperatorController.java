@@ -1,6 +1,6 @@
 package com.project.bus_reservation.operator.controller;
 
-import com.project.bus_reservation.operator.dto.request.OperatorRequest;
+import com.project.bus_reservation.operator.dto.request.OperatorCreateRequest;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.operator.service.OperatorService;
 import jakarta.validation.Valid;
@@ -14,13 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/operator")
 public class OperatorController {
-
     @Autowired
     private OperatorService operatorService;
 
     @PostMapping
-    public ResponseEntity<Void> createOperator(@Valid @RequestBody OperatorRequest operatorRequest) {
-        operatorService.createOperator(operatorRequest);
+    public ResponseEntity<Void> createOperator(@Valid @RequestBody OperatorCreateRequest operatorCreateRequest) {
+        operatorService.createOperator(operatorCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

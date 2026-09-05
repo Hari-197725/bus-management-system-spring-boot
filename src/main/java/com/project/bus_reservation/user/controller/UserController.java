@@ -1,6 +1,6 @@
 package com.project.bus_reservation.user.controller;
 
-import com.project.bus_reservation.user.dto.request.UserRequest;
+import com.project.bus_reservation.user.dto.request.UserCreateRequest;
 import com.project.bus_reservation.user.dto.response.UserResponse;
 import com.project.bus_reservation.user.service.UserService;
 import jakarta.validation.Valid;
@@ -14,11 +14,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
-//    Normal mapping method
+    @PostMapping
+    public ResponseEntity<Void> createUsers(@Valid @RequestBody UserCreateRequest userCreateRequest) {
+        userService.createUsers(userCreateRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getUsersById(userId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long userId) {
+        userService.deleteUsersById(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
+
+//Normal mapping method
+
 //    @PostMapping("/create")
 //    public ResponseEntity<Users> createUsers(@Valid @RequestBody Users users) {
 //        return new ResponseEntity<>(userService.createUsers(users), HttpStatus.CREATED);
@@ -40,32 +63,3 @@ public class UserController {
 //    public void deleteUsersById(@PathVariable Long id) {
 //        userService.deleteUsersById(id);
 //    }
-
-    @PostMapping
-    public ResponseEntity<Void> createUsers(@Valid @RequestBody UserRequest userRequest) {
-        userService.createUsers(userRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUserById(@PathVariable Long id, @RequestBody UserRequest userRequest) {
-        return new ResponseEntity<>(userService.updateUsersById(id, userRequest), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
-        userService.deleteUsersById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-}

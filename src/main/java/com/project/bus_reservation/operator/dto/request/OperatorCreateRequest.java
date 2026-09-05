@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class OperatorRequest {
+public class OperatorCreateRequest {
 
     @NotBlank
     private String operatorName;
