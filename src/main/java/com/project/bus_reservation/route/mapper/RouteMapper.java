@@ -10,20 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class RouteMapper {
 
-    public static Route toRouteEntity(Operator operator, Bus bus, RouteCreateRequest routeCreateRequest) {
+    public static Route toRouteEntity(Operator operator, RouteCreateRequest routeCreateRequest) {
         Route route = new Route();
         route.setSource(routeCreateRequest.getSource());
         route.setDestination(routeCreateRequest.getDestination());
         route.setDistance(routeCreateRequest.getDistance());
         route.setEstimatedDuration(routeCreateRequest.getEstimatedDuration());
         route.setOperator(operator);
-        route.setBus(bus);
         return route;
     }
 
     public static RouteResponse toRouteResponse(Route route) {
         Long operatorId = route.getOperator().getId();
-        Long busId = route.getBus() != null ? route.getBus().getId() : null;
 
         return new RouteResponse(route.getId(),
                 route.getSource(),
@@ -31,7 +29,6 @@ public class RouteMapper {
                 route.getDistance(),
                 route.getEstimatedDuration(),
                 operatorId,
-                busId,
                 route.getCreatedAt(),
                 route.getModifiedAt()
         );

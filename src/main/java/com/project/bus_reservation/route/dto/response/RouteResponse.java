@@ -20,7 +20,6 @@ public class RouteResponse {
     private double distance;
     private Integer estimatedDuration;
     private Long operatorId;
-    @Nullable private Long busId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

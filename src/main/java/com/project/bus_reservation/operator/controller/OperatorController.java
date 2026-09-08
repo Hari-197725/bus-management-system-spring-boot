@@ -34,9 +34,9 @@ public class OperatorController {
     }
 
 
-    @DeleteMapping("/{operatorId}")
-    public ResponseEntity<Void> deleteOperatorById (@PathVariable Long operatorId){
-        operatorService.deleteOperatorById(operatorId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping("/{operatorId}")
+//    public ResponseEntity<Void> deleteOperatorById (@PathVariable Long operatorId){
+//        operatorService.deleteOperatorById(operatorId);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }

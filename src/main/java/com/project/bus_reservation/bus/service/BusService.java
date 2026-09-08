@@ -4,7 +4,7 @@ import com.project.bus_reservation.bus.dto.request.BusCreateRequest;
 import com.project.bus_reservation.bus.dto.response.BusResponse;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bus.mapper.BusMapper;
-import com.project.bus_reservation.bus.repository.BusesRepository;
+import com.project.bus_reservation.bus.repository.BusRepository;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
@@ -24,7 +24,7 @@ import static org.springframework.http.HttpStatus.*;
 @Service
 public class BusService {
     @Autowired
-    private BusesRepository busesRepository;
+    private BusRepository busRepository;
 
     @Autowired
     private OperatorRepository operatorRepository;
@@ -55,7 +55,7 @@ public class BusService {
         }
 
         Bus bus = BusMapper.toBusEntity(operator, _route, busCreateRequest);
-        busesRepository.save(bus);
+        busRepository.save(bus);
     }
 
     public List<BusResponse> getAllBuses(Long operatorId) {
@@ -101,6 +101,7 @@ public class BusService {
         List<Bus> buses = operator.getBuses();
         Bus _bus = null;
         boolean isNotAvailable = true;
+
         for (Bus bus : buses) {
             if (bus.getId().equals(busId)) {
                 _bus = bus;
@@ -134,11 +135,11 @@ public class BusService {
 
         if (route != null) {
             _bus.setRoute(null);
-            route.setBus(null);
+            route.setBuses(null);
         }
 
         _bus.getSeats().clear();
         busList.remove(_bus);
-        busesRepository.delete(_bus);
+        busRepository.delete(_bus);
     }
 }

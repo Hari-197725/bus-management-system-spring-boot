@@ -39,7 +39,6 @@ public class BusController {
         return new ResponseEntity<>(busService.getAllRouteByBusId(operatorId, busId), HttpStatus.OK);
     }
 
-
 //    @PatchMapping("/{busId}")
 //    public ResponseEntity<Void> updateBusByBusId(@PathVariable Long operatorId, @PathVariable Long busId, @Valid @RequestBody BusTransferUpdateRequest busTransferUpdateRequest) {
 //        busService.updateBusByBusId(operatorId, busId, busTransferUpd

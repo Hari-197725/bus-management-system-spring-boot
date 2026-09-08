@@ -22,6 +22,4 @@ public class RouteCreateRequest {
     @NotNull
     @Positive
     private Integer estimatedDuration;
-
-    private Long busId;
 }

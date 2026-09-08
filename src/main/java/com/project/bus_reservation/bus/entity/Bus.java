@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "buses")
 public class Bus {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -46,11 +48,12 @@ public class Bus {
     @JoinColumn(nullable = false, name = "operator_id")
     private Operator operator;
 
+    @ManyToOne(fetch =FetchType.LAZY)
+    @JoinColumn(name = "route_id")
+    private Route route;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
     private List<Seat> seats = new ArrayList<>();
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
-    private Route route;
 
     @Min(18)
     @Column(nullable = false)

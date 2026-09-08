@@ -10,12 +10,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "routes")
+@AllArgsConstructor
+@Table(name = "routes", uniqueConstraints = {@UniqueConstraint(columnNames = {"operator_id", "source", "destination"})})
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -40,9 +43,8 @@ public class Route {
     @JoinColumn(nullable = false, name = "operator_id")
     private Operator operator;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "bus_id")
-    private Bus bus;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "route", orphanRemoval = true)
+    private List<Bus> buses = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

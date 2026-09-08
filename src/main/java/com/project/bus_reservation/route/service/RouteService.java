@@ -1,7 +1,7 @@
 package com.project.bus_reservation.route.service;
 
 import com.project.bus_reservation.bus.entity.Bus;
-import com.project.bus_reservation.bus.repository.BusesRepository;
+import com.project.bus_reservation.bus.repository.BusRepository;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.route.dto.request.RouteCreateRequest;
@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -28,26 +27,13 @@ public class RouteService {
     private RouteRepository routeRepository;
 
     @Autowired
-    private BusesRepository busesRepository;
+    private BusRepository busRepository;
 
     public void createRoute(Long operatorId, RouteCreateRequest routeCreateRequest) {
         Operator operator = operatorRepository.findById(operatorId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 
-        List<Bus> busList = operator.getBuses();
-        if (routeCreateRequest.getBusId() != null && (busList.isEmpty() || busList.stream()
-                .noneMatch(bus -> bus.getId().equals(routeCreateRequest.getBusId())))) {
-            throw new ResponseStatusException(BAD_REQUEST, "Invalid bus id");
-        }
-
-        // Consider bus id available
-        Bus bus = null;
-        if (routeCreateRequest.getBusId() != null) {
-            bus = busesRepository.findById(routeCreateRequest.getBusId()).orElse(null);
-        }
-
-        // without busId
-        Route route = RouteMapper.toRouteEntity(operator, bus, routeCreateRequest);
+        Route route = RouteMapper.toRouteEntity(operator, routeCreateRequest);
         routeRepository.save(route);
     }
 
@@ -107,10 +93,9 @@ public class RouteService {
             throw new ResponseStatusException(NOT_FOUND, "Route id " + routeId + "not found with in operator id: " + operatorId);
         }
 
-        Bus bus = _route.getBus();
+        List<Bus> bus = _route.getBuses();
         if (bus != null) {
-            bus.setRoute(null);
-            _route.setBus(null);
+            _route.setBuses(null);
         }
 
         Operator operator1 = _route.getOperator();
