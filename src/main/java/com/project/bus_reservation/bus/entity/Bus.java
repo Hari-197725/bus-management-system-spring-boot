@@ -2,6 +2,7 @@ package com.project.bus_reservation.bus.entity;
 
 import com.project.bus_reservation.bus.enums.BusStatus;
 import com.project.bus_reservation.bus.enums.BusType;
+import com.project.bus_reservation.bustrip.entity.BusTrip;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
@@ -44,17 +45,6 @@ public class Bus {
     @Column(nullable = false)
     private BusType busType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "operator_id")
-    private Operator operator;
-
-    @ManyToOne(fetch =FetchType.LAZY)
-    @JoinColumn(name = "route_id")
-    private Route route;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
-    private List<Seat> seats = new ArrayList<>();
-
     @Min(18)
     @Column(nullable = false)
     private Integer totalSeats;
@@ -70,4 +60,18 @@ public class Bus {
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "operator_id")
+    private Operator operator;
+
+    @ManyToOne(fetch =FetchType.LAZY)
+    @JoinColumn(name = "route_id")
+    private Route route;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
+    private List<Seat> seats = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus")
+    private List<BusTrip> busTrips = new ArrayList<>();
 }

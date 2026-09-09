@@ -1,5 +1,6 @@
 package com.project.bus_reservation.user.entity;
 
+import com.project.bus_reservation.booking.entity.Booking;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 // @Data generates more code than a JPA entity usually needs. Some of that generated code can cause unexpected problems.
@@ -59,6 +62,9 @@ public class User {
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private List<Booking> bookings = new ArrayList<>();
 
 //    @Builder
 //    private User(String email, String name, String phoneNumber) { // This is the constructor of this class.

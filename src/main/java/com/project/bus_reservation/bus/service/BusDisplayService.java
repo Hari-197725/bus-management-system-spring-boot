@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -19,14 +20,16 @@ public class BusDisplayService {
     BusRepository busRepository;
 
     public List<BusResponse> getBusesFromTo(String from, String to) {
-        List<Bus> busList = busRepository.findAll();
+        Optional<List<Bus>> busList = busRepository.findBySourceAndDestination(from, to);
         List<BusResponse> busResponseList = new ArrayList<>();
 
-        for (Bus bus : busList) {
-            if (bus.getRoute() != null && bus.getRoute().getSource().equals(from) && bus.getRoute().getDestination().equals(to)) {
+        if (busList.isPresent()) {
+            List<Bus> buses = busList.get();
+            for (Bus bus : buses) {
                 busResponseList.add(BusMapper.toBusResponse(bus));
             }
         }
+
         return busResponseList;
     }
 }

@@ -1,6 +1,7 @@
 package com.project.bus_reservation.route.entity;
 
 import com.project.bus_reservation.bus.entity.Bus;
+import com.project.bus_reservation.bustrip.entity.BusTrip;
 import com.project.bus_reservation.operator.entity.Operator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -39,13 +40,6 @@ public class Route {
     @Column(nullable = false)
     private Integer estimatedDuration;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "operator_id")
-    private Operator operator;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "route", orphanRemoval = true)
-    private List<Bus> buses = new ArrayList<>();
-
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -53,4 +47,14 @@ public class Route {
     @Column(name = "modified_at", nullable = false)
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "operator_id")
+    private Operator operator;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "route", orphanRemoval = true)
+    private List<Bus> buses = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "route")
+    private List<BusTrip> busTrips = new ArrayList<>();
 }
