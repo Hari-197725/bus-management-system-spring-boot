@@ -1,6 +1,7 @@
 package com.project.bus_reservation.user.entity;
 
 import com.project.bus_reservation.booking.entity.Booking;
+import com.project.bus_reservation.passenger.entity.Passenger;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -65,6 +66,9 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Passenger> passengers = new ArrayList<>();
 
 //    @Builder
 //    private User(String email, String name, String phoneNumber) { // This is the constructor of this class.

@@ -2,6 +2,7 @@ package com.project.bus_reservation.passenger.entity;
 
 import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
 import com.project.bus_reservation.passenger.enums.Gender;
+import com.project.bus_reservation.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,10 @@ public class Passenger {
     @Size(max = 20)
     @Column(name = "name", nullable = true)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
     private List<BookingDetail> bookingDetails = new ArrayList<>();

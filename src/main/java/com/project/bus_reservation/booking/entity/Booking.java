@@ -30,7 +30,7 @@ public class Booking {
     @Column(name = "booking_date", nullable = false, updatable = false)
     private LocalDate bookingDate;
 
-    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2, updatable = true)
+    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
