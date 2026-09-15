@@ -37,7 +37,4 @@ public class Operator {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operator")
     private List<Route> routes = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "operator")
-    private List<BusTrip> busTrips = new ArrayList<>();
 }

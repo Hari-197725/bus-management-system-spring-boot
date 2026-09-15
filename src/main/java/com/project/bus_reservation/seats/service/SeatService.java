@@ -24,8 +24,6 @@ public class SeatService {
             seatResponses.add(BusMapper.toSeatResponse(seat));
         }
 
-
-
         return seatResponses;
     }
 }

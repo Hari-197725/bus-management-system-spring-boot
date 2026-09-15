@@ -32,8 +32,4 @@ public class BookingDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bus_trip_id", nullable = false)
-    private BusTrip busTrip;
 }

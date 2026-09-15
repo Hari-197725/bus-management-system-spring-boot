@@ -6,7 +6,6 @@ import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.user.dto.response.UserResponse;
 import com.project.bus_reservation.user.entity.User;
 import com.project.bus_reservation.user.mapper.UserMapper;
-import org.apache.tomcat.websocket.server.WsWriteTimeout;
 import org.springframework.stereotype.Component;
 
 @Component

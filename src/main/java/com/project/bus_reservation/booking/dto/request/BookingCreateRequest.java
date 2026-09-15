@@ -1,17 +1,21 @@
 package com.project.bus_reservation.booking.dto.request;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 public class BookingCreateRequest {
-    @NotNull
-    @Positive
-    private BigDecimal totalAmount;
+    private BigDecimal amount;
+    private Long routeId;
+    private Long busId;
+    private Integer seatCount;
+    private List<passengerCreateRequest> passengers;
 
-    @NotNull
-    private Long busTripId;
+    @Getter
+    public static class passengerCreateRequest {
+        private Long passengerId;
+        private Long seatId;
+    }
 }

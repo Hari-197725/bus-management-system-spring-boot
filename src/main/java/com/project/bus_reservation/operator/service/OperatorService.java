@@ -9,6 +9,7 @@ import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.route.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -44,23 +45,32 @@ public class OperatorService {
         return OperatorMapper.toOperatorResponse(operator);
     }
 
-//    @Transactional
-//    public void deleteOperatorById(Long operatorId) {
-////        Manual method with detail steps
+    @Transactional
+    public void deleteOperatorById(Long operatorId) {
+        int deletedRows = operatorRepository.deleteOperatorById(operatorId);
+        if(deletedRows==0){
+            throw new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId);
+        }
+    }
+}
+
+
+//@Transactional
+//public void deleteOperatorById(Long operatorId) {
+////      This is also work but its a Manual method with detail steps.
 //        Operator operator = operatorRepository.findById(operatorId)
 //                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
 //
 ////        Delete buses
 //        List<Bus> busList = operator.getBuses();
 //        for (Bus bus : busList) {
+////                remove seats relationship
 //            if (bus.getSeats() != null) {
-////                remove seats
 //                bus.getSeats().clear();
 //            }
 //
 ////            remove route relationship
-//            Route route = bus.getRoute();
-//            if (route != null) {
+//            if (bus.getroute() != null) {
 //                bus.setRoute(null);
 //            }
 //
@@ -78,13 +88,4 @@ public class OperatorService {
 //
 ////        Finally delete operator
 //        operatorRepository.delete(operator);
-
-
-//        inbuilt optimized way
-
-//        Operator operator = operatorRepository.findById(operatorId)
-//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
-//
-//        operatorRepository.delete(operator);
-//        operatorRepository.deleteById(operatorId);
-    }
+//}

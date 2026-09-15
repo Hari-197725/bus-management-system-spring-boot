@@ -10,7 +10,6 @@ import java.util.List;
 
 @Getter
 public class BusCreateRequest {
-
     @NotNull
     @Positive
     @Min(6)

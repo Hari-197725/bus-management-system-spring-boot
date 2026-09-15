@@ -7,14 +7,13 @@ import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ManyToAny;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,6 +62,7 @@ public class Bus {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "operator_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Operator operator;
 
     @ManyToOne(fetch =FetchType.LAZY)

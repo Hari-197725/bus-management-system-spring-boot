@@ -19,9 +19,6 @@ public class UserService {
     @Autowired
     private UsersRepository usersRepository;
 
-    @Autowired
-    private UserMapper userMapper;
-
     public void createUsers(UserCreateRequest userCreateRequest) {
         usersRepository.save(UserMapper.toUserEntity(userCreateRequest));
     }
@@ -43,10 +40,7 @@ public class UserService {
     }
 
     public void deleteUsersById(Long userId) {
-        User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
-
-        usersRepository.delete(user);
+        usersRepository.deleteById(userId);
     }
 }
 
