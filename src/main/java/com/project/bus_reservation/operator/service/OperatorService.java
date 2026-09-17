@@ -45,7 +45,6 @@ public class OperatorService {
         return OperatorMapper.toOperatorResponse(operator);
     }
 
-    @Transactional
     public void deleteOperatorById(Long operatorId) {
         int deletedRows = operatorRepository.deleteOperatorById(operatorId);
         if(deletedRows==0){

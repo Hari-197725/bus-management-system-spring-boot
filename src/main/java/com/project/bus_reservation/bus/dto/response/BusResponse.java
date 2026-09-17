@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class BusResponse {
 
@@ -32,10 +31,8 @@ public class BusResponse {
     private LocalDateTime updatedAt;
 
     @Getter
-    @Setter
     @AllArgsConstructor
     public static class SeatResponse {
-
         private Long id;
         private Integer seatNumber;
         private SeatType seatType;

@@ -1,6 +1,7 @@
 package com.project.bus_reservation.booking.service;
 
 import com.project.bus_reservation.booking.dto.request.BookingCreateRequest;
+import com.project.bus_reservation.booking.dto.response.BookingResponse;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.booking.mapper.BookingMapper;
 import com.project.bus_reservation.booking.repository.BookingRepository;
@@ -59,7 +60,7 @@ public class BookingService {
 
         Bus _bus = bus.get();
         Booking booking = BookingMapper.toBookingEntity(user, bookingCreateRequest);
-        BusTrip busTrip = BookingMapper.toBusTrip(booking, _bus);
+        BusTrip busTrip = BookingMapper.toBusTripEntity(booking, _bus);
 
         List<BookingDetail> bookingDetails = new ArrayList<>();
         for (BookingCreateRequest.passengerCreateRequest passengerReq : passengerList) {
@@ -70,7 +71,7 @@ public class BookingService {
                 throw new ResponseStatusException(NOT_FOUND, "Passenger or Seat not found");
             }
 
-            BookingDetail bookingDetail = BookingMapper.toBookingDetails(booking, passenger.get(), seat.get());
+            BookingDetail bookingDetail = BookingMapper.toBookingDetailsEntity(booking, passenger.get(), seat.get());
             bookingDetails.add(bookingDetail);
         }
 
@@ -78,5 +79,21 @@ public class BookingService {
         booking.setBusTrip(busTrip);
         bookingRepository.save(booking);
     }
+
+    public List<BookingResponse> getAllBookings(Long userId){
+        User user = usersRepository.findById(userId)
+                .orElseThrow(()-> new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
+
+        List<Booking> bookingList  = user.getBookings();
+        List<BookingResponse> bookingResponseList = new ArrayList<>();
+        for(Booking booking : bookingList){
+            bookingResponseList.add(BookingMapper.toBookingResponse(booking));
+        }
+
+        return bookingResponseList;
+    }
+
+
+
 
 }

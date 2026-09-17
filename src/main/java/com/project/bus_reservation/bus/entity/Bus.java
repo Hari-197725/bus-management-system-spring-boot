@@ -65,8 +65,9 @@ public class Bus {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Operator operator;
 
-    @ManyToOne(fetch =FetchType.LAZY)
-    @JoinColumn(name = "route_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "route_id", foreignKey = @ForeignKey(name = "fk_bus_route_id"))
     private Route route;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)

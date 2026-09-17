@@ -34,12 +34,13 @@ public class BusTrip {
     private LocalDateTime arrivalTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "bus_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "bus_id", foreignKey = @ForeignKey(name = "fk_bus_trip_bus_id"))
     private Bus bus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "route_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "route_id", foreignKey = @ForeignKey(name = "fk_bus_trip_route_id"))
     private Route route;
 
     @OneToOne(mappedBy = "busTrip")
