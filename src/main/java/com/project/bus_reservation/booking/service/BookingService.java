@@ -4,6 +4,7 @@ import com.project.bus_reservation.booking.dto.request.BookingCreateRequest;
 import com.project.bus_reservation.booking.dto.response.BookingResponse;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.booking.mapper.BookingMapper;
+import com.project.bus_reservation.booking.projection.BookingProjection;
 import com.project.bus_reservation.booking.repository.BookingRepository;
 import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
 import com.project.bus_reservation.bus.entity.Bus;
@@ -20,11 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class BookingService {
@@ -80,20 +81,27 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public List<BookingResponse> getAllBookings(Long userId){
-        User user = usersRepository.findById(userId)
-                .orElseThrow(()-> new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
+    public List<BookingResponse> getAllBookings(Long userId) {
+        usersRepository.findById(userId).orElseThrow(() ->
+                new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
 
-        List<Booking> bookingList  = user.getBookings();
-        List<BookingResponse> bookingResponseList = new ArrayList<>();
-        for(Booking booking : bookingList){
-            bookingResponseList.add(BookingMapper.toBookingResponse(booking));
+        List<BookingProjection> projections = bookingRepository.findBookingsByUserId(userId);
+
+        Map<Long, List<BookingProjection>> groupedBookings = projections.stream()
+                .collect(Collectors.groupingBy(
+                        BookingProjection::getBookingId,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
+
+        List<BookingResponse> responseList = new ArrayList<>();
+
+        for (List<BookingProjection> bookingRows : groupedBookings.values()) {
+            BookingProjection firstRow = bookingRows.get(0);
+            responseList.add(BookingMapper.toBookingResponse(bookingRows));
         }
 
-        return bookingResponseList;
+        return responseList;
     }
-
-
-
 
 }

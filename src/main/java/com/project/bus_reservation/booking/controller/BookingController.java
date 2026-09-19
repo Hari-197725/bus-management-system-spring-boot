@@ -2,7 +2,6 @@ package com.project.bus_reservation.booking.controller;
 
 import com.project.bus_reservation.booking.dto.request.BookingCreateRequest;
 import com.project.bus_reservation.booking.dto.response.BookingResponse;
-import com.project.bus_reservation.booking.repository.BookingRepository;
 import com.project.bus_reservation.booking.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
