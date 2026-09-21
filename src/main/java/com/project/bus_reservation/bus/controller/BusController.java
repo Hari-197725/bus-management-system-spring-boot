@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/v1/operator/{operatorId}/bus")
 public class BusController {
     @Autowired
-    private BusService busService;
+    BusService busService;
 
     @PostMapping
     public ResponseEntity<Void> createBus(@PathVariable Long operatorId, @Valid @RequestBody BusCreateRequest busCreateRequest) {

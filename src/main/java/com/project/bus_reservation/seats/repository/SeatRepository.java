@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
-    @Query(value ="select * from seats where id = :seatId and bus_id = :busId", nativeQuery = true)
-    Optional<Seat> findBySeatAndBus(@Param("seatId") Long seatId, @Param("busId") Long busId);
+    @Query(value ="select * from seats where id = :seatId and bus_id = :busId and status = 'AVAILABLE'", nativeQuery = true)
+    Optional<Seat> findBySeatAndBusId(@Param("seatId") Long seatId, @Param("busId") Long busId);
 }

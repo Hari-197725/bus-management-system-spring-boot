@@ -17,7 +17,7 @@ public interface BusRepository extends JpaRepository<Bus, Long> {
     Optional<List<Bus>> findBySourceAndDestination(@Param("source") String source, @Param("destination") String destination);
 
     @Query(value = "select * from buses where id = :busId and route_id = :routeId", nativeQuery = true)
-    Optional<Bus> checkBusAndRouteExist(@Param("busId") Long busId, @Param("routeId") Long routeId);
+    Optional<Bus> findBusByRouteId(@Param("busId") Long busId, @Param("routeId") Long routeId);
 
     @Query(value = "select * from buses where operator_id = :operatorId and status = 'ACTIVE'", nativeQuery = true)
     Optional<List<Bus>> findAllBusesByOperatorId(@Param("operatorId") Long operatorId);

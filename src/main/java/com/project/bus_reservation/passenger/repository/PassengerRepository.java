@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     @Query(value = "select passengers.* from passengers where passengers.user_id = :userId and passengers.id = :passengerId;", nativeQuery = true)
-    Optional<Passenger> findByUserAndPassenger(@Param("userId") Long userId, @Param("passengerId") Long passengerId);
+    Optional<Passenger> findPassengerByUserId(@Param("userId") Long userId, @Param("passengerId") Long passengerId);
 }
