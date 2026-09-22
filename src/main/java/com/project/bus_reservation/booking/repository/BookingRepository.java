@@ -28,8 +28,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "booking_details.passenger_id INNER JOIN seats ON seats.id = booking_details.seat_id INNER JOIN routes ON routes.id = bus_trips.route_id INNER JOIN buses " +
             "ON buses.id = bus_trips.bus_id INNER JOIN operators ON operators.id = buses.operator_id INNER JOIN users ON users.id = bookings.user_id WHERE users.id = :userId " +
             "and bookings.id = :bookingId", nativeQuery = true)
-   List<BookingProjection> findBookingByBookingId(@Param("userId") Long userId, @Param("bookingId") Long bookingId);
+    List<BookingProjection> findBookingByBookingId(@Param("userId") Long userId, @Param("bookingId") Long bookingId);
 
     @Query(value = "select * from bookings where user_id = :userId and id = :bookingId;", nativeQuery = true)
-    
+   Optional<Booking> findBookingByUserId(@Param("userId") Long userId, @Param("bookingId") Long bookingId);
+
 }
