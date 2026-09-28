@@ -1,5 +1,6 @@
 package com.project.bus_reservation.passenger.service;
 
+import com.project.bus_reservation.exception.NotFoundException;
 import com.project.bus_reservation.passenger.dto.request.PassengerCreateRequest;
 import com.project.bus_reservation.passenger.dto.response.PassengerResponse;
 import com.project.bus_reservation.passenger.entity.Passenger;
@@ -27,14 +28,14 @@ public class PassengerService {
 
     public void createPassenger(Long userId, PassengerCreateRequest passengerCreateRequest) {
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found with id; " + userId));
+                .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id; " + userId));
 
         passengerRepository.save(PassengerMapper.toPassengerEntity(user, passengerCreateRequest));
     }
 
     public List<PassengerResponse> getAllPassengerByUserId(Long userId) {
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
+                .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
 
         List<Passenger> passengerList = user.getPassengers();
         List<PassengerResponse> passengerResponseList = new ArrayList<>();

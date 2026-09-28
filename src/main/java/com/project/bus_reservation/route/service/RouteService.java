@@ -2,6 +2,7 @@ package com.project.bus_reservation.route.service;
 
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bus.repository.BusRepository;
+import com.project.bus_reservation.exception.NotFoundException;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.route.dto.request.RouteCreateRequest;
@@ -26,12 +27,9 @@ public class RouteService {
     @Autowired
     private RouteRepository routeRepository;
 
-    @Autowired
-    private BusRepository busRepository;
-
     public void createRoute(Long operatorId, RouteCreateRequest routeCreateRequest) {
         Operator operator = operatorRepository.findById(operatorId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
 
         Route route = RouteMapper.toRouteEntity(operator, routeCreateRequest);
         routeRepository.save(route);
@@ -39,7 +37,7 @@ public class RouteService {
 
     public List<RouteResponse> getAllRoutes(Long operatorId) {
         Operator operator = operatorRepository.findById(operatorId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
+                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
 
         List<RouteResponse> routeResponses = new ArrayList<>();
         List<Route> routes = operator.getRoutes();
@@ -51,8 +49,11 @@ public class RouteService {
     }
 
     public RouteResponse getRouteById(Long operatorId, Long routeId) {
+        operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
+
         Route route = routeRepository.findRouteByOperatorId(operatorId, routeId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Route not found with in operator id: " + operatorId));
+                .orElseThrow(() -> new NotFoundException("ROUTE_NOT_FOUND", "Route with id " + routeId + " not found for operator with id " + operatorId));
 
         return RouteMapper.toRouteResponse(route);
     }

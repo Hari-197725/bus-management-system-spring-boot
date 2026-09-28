@@ -10,6 +10,8 @@ import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bus.repository.BusRepository;
 import com.project.bus_reservation.bustrip.entity.BusTrip;
+import com.project.bus_reservation.exception.BadRequestException;
+import com.project.bus_reservation.exception.NotFoundException;
 import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.passenger.repository.PassengerRepository;
 import com.project.bus_reservation.seats.entity.Seat;
@@ -48,16 +50,18 @@ public class BookingService {
     @Transactional
     public void createBooking(Long userId, BookingCreateRequest bookingCreateRequest) {
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
+                .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
 
         List<BookingCreateRequest.passengerCreateRequest> passengerList = bookingCreateRequest.getPassengers();
         if (bookingCreateRequest.getSeatCount() != passengerList.size()) {
-            throw new ResponseStatusException(BAD_REQUEST, "Seat count is mismatched with passenger");
+            throw new BadRequestException("SEAT_PASSENGER_COUNT_MISMATCH", "Seat count " + bookingCreateRequest.getSeatCount() +
+                    " does not match passenger count " + passengerList.size());
         }
 
         Optional<Bus> bus = busRepository.findBusByRouteId(bookingCreateRequest.getBusId(), bookingCreateRequest.getRouteId());
         if (bus.isEmpty()) {
-            throw new ResponseStatusException(BAD_REQUEST, "There is no bus in this id: " + bookingCreateRequest.getBusId());
+            throw new NotFoundException("BUS_NOT_FOUND", "Bus with id " + bookingCreateRequest.getBusId() + " not found for route with id "
+                    + bookingCreateRequest.getRouteId());
         }
 
         Bus _bus = bus.get();
@@ -68,19 +72,19 @@ public class BookingService {
 
         for (BookingCreateRequest.passengerCreateRequest passengerReq : passengerList) {
             Passenger passenger = passengerRepository.findPassengerByUserId(userId, passengerReq.getPassengerId())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Passenger not found with id: " + passengerReq.getPassengerId()));
+                    .orElseThrow(() -> new NotFoundException("PASSENGER_NOT_FOUND", "Passenger with id " + passengerReq.getPassengerId() +
+                            " not found for user id " + user));
 
             Seat seat = seatRepository.findBySeatAndBusId(passengerReq.getSeatId(), _bus.getId())
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Seat not found with id: " + passengerReq.getSeatId()));
+                    .orElseThrow(() -> new NotFoundException("SEAT_NOT_FOUND", "Seat with id " + passengerReq.getSeatId() +
+                            " not found for bus id " + _bus.getId()));
 
             if (seat.getSeatStatus() == SeatStatus.BOOKED) {
-                throw new ResponseStatusException(BAD_REQUEST, "Seat already booked" + passengerReq.getSeatId());
+                throw new BadRequestException("SEAT_ALREADY_BOOKED", "Seat with id " + passengerReq.getSeatId() + " is already booked");
             }
 
             seat.setSeatStatus(SeatStatus.BOOKED);
-
-            BookingDetail bookingDetail = BookingMapper.toBookingDetailsEntity(booking, passenger, seat);
-            bookingDetails.add(bookingDetail);
+            bookingDetails.add(BookingMapper.toBookingDetailsEntity(booking, passenger, seat));
         }
 
         booking.setBookingDetails(bookingDetails);
@@ -90,7 +94,7 @@ public class BookingService {
 
     public List<BookingResponse> getAllBookings(Long userId) {
         usersRepository.findById(userId).orElseThrow(() ->
-                new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
+                new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
 
         List<BookingProjection> projections = bookingRepository.findBookingsByUserId(userId);
 
@@ -112,7 +116,7 @@ public class BookingService {
     }
 
     public BookingResponse getBookingByBookingId(Long userId, Long bookingId) {
-        usersRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "User not found with id: " + userId));
+        usersRepository.findById(userId).orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
         List<BookingProjection> projections = bookingRepository.findBookingByBookingId(userId, bookingId);
 
         return BookingMapper.toBookingResponse(projections);

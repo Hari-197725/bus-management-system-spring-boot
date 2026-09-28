@@ -28,8 +28,8 @@ import java.util.List;
 // @Table(name = "users") is optional if the table name matches the entity name.
 // Use @Table(name = "...") when you want to explicitly specify the database table name.
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
-@Table(name = "users")
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -51,7 +51,7 @@ public class User {
     private String email;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber; //Spring Boot (via Hibernate's default physical naming strategy) converts camelCase to snake_case.
     // So you don't need mention phoneNumber to @Column(name = "phone_number") unless you've changed the naming strategy.

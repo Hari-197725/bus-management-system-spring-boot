@@ -1,6 +1,7 @@
 package com.project.bus_reservation.user.controller;
 
 import com.project.bus_reservation.user.dto.request.UserCreateRequest;
+import com.project.bus_reservation.user.dto.request.UserUpdateRequest;
 import com.project.bus_reservation.user.dto.response.UserResponse;
 import com.project.bus_reservation.user.service.UserService;
 import jakarta.validation.Valid;
@@ -33,33 +34,15 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsersById(userId), HttpStatus.OK);
     }
 
+    @PatchMapping("/{userId}")
+    public ResponseEntity<Void> updateUserByUserId(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserByUserId(userId, userUpdateRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long userId) {
         userService.deleteUsersById(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-
-//Normal mapping method
-
-//    @PostMapping("/create")
-//    public ResponseEntity<Users> createUsers(@Valid @RequestBody Users users) {
-//        return new ResponseEntity<>(userService.createUsers(users), HttpStatus.CREATED);
-//    }
-
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<User> getUsersById(@PathVariable Long id) {
-//        return new ResponseEntity<>(userService.getUsersById(id), HttpStatus.OK);
-//    }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<User> updateUsersById(@PathVariable Long id, @RequestBody User users) {
-//        return new ResponseEntity<>(userService.updateUsersById(users), HttpStatus.OK);
-//    }
-
-
-//    @DeleteMapping("/{id}")
-//    public void deleteUsersById(@PathVariable Long id) {
-//        userService.deleteUsersById(id);
-//    }
