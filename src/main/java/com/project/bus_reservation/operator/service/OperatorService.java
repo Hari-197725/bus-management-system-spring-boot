@@ -1,5 +1,6 @@
 package com.project.bus_reservation.operator.service;
 
+import com.project.bus_reservation.exception.ConflictException;
 import com.project.bus_reservation.exception.NotFoundException;
 import com.project.bus_reservation.operator.dto.request.OperatorCreateRequest;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
@@ -8,11 +9,8 @@ import com.project.bus_reservation.operator.mapper.OperatorMapper;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class OperatorService {
@@ -20,6 +18,9 @@ public class OperatorService {
     private OperatorRepository operatorRepository;
 
     public void createOperator(OperatorCreateRequest operatorCreateRequest) {
+        if (operatorRepository.existsByOperatorName(operatorCreateRequest.getOperatorName())) {
+            throw new ConflictException("OPERATOR_NAME_ALREADY_EXISTS", "Operator name already exists");
+        }
         operatorRepository.save(OperatorMapper.toOperatorEntity(operatorCreateRequest));
     }
 
@@ -35,47 +36,4 @@ public class OperatorService {
 
         return OperatorMapper.toOperatorResponse(operator);
     }
-
-    public void deleteOperatorById(Long operatorId) {
-        int deletedRows = operatorRepository.deleteOperatorById(operatorId);
-        if (deletedRows == 0) {
-            throw new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId);
-        }
-    }
 }
-
-
-//@Transactional
-//public void deleteOperatorById(Long operatorId) {
-/// /      This is also work but its a Manual method with detail steps.
-//        Operator operator = operatorRepository.findById(operatorId)
-//                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId));
-//
-/// /        Delete buses
-//        List<Bus> busList = operator.getBuses();
-//        for (Bus bus : busList) {
-////                remove seats relationship
-//            if (bus.getSeats() != null) {
-//                bus.getSeats().clear();
-//            }
-//
-////            remove route relationship
-//            if (bus.getroute() != null) {
-//                bus.setRoute(null);
-//            }
-//
-////          Delete bus
-//            busesRepository.delete(bus);
-//        }
-//
-////            Delete routes
-//        List<Route> routeList = operator.getRoutes();
-//
-//        for (Route route : routeList) {
-//            route.setBus(null);
-//            routeRepository.delete(route);
-//        }
-//
-////        Finally delete operator
-//        operatorRepository.delete(operator);
-//}

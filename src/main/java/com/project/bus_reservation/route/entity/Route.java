@@ -28,6 +28,7 @@ public class Route {
     private Long id;
 
     @NotBlank
+    @Column(name = "source", nullable = false)
     private String source;
 
     @NotBlank

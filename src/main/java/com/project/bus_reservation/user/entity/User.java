@@ -47,7 +47,7 @@ public class User {
 
     @NotBlank
     @Email
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @NotBlank
@@ -64,7 +64,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

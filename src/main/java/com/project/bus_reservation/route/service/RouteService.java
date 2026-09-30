@@ -1,7 +1,5 @@
 package com.project.bus_reservation.route.service;
 
-import com.project.bus_reservation.bus.entity.Bus;
-import com.project.bus_reservation.bus.repository.BusRepository;
 import com.project.bus_reservation.exception.NotFoundException;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.operator.repository.OperatorRepository;
@@ -12,12 +10,9 @@ import com.project.bus_reservation.route.mapper.RouteMapper;
 import com.project.bus_reservation.route.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class RouteService {
@@ -56,12 +51,5 @@ public class RouteService {
                 .orElseThrow(() -> new NotFoundException("ROUTE_NOT_FOUND", "Route with id " + routeId + " not found for operator with id " + operatorId));
 
         return RouteMapper.toRouteResponse(route);
-    }
-
-    public void deleteRouteById(Long operatorId, Long routeId) {
-        int deletedRows = routeRepository.deleteRouteByOperatorId(routeId, operatorId);
-        if (deletedRows == 0) {
-            throw new ResponseStatusException(NOT_FOUND, "Route not found with in operator id: " + operatorId);
-        }
     }
 }

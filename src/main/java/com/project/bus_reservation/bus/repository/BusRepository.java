@@ -24,11 +24,6 @@ public interface BusRepository extends JpaRepository<Bus, Long> {
     @Query(value = "select * from buses where operator_id = :operatorId and status = 'ACTIVE'", nativeQuery = true)
     Optional<List<Bus>> findAllBusesByOperatorId(@Param("operatorId") Long operatorId);
 
-    @Query(value = "select * from buses where operator_id = :operatorId and id = :busId and staus = 'ACTIVE'", nativeQuery = true)
+    @Query(value = "select * from buses where operator_id = :operatorId and id = :busId and status = 'ACTIVE'", nativeQuery = true)
     Optional<Bus> findBusByOperatorId(@Param("operatorId") Long operatorId, @Param("busId") Long busId);
-
-    @Transactional
-    @Modifying
-    @Query(value = "delete from buses where id = :busId and operator_id = :operatorId", nativeQuery = true)
-    int deleteBusByOperatorId(@Param("busId") Long busId, @Param("operatorId") Long operatorId);
 }

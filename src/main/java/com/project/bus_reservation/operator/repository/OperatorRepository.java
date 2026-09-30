@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface OperatorRepository extends JpaRepository<Operator, Long> {
-    @Modifying
-    @Query(value = "delete from operators where id = :operatorId", nativeQuery = true)
-     int deleteOperatorById(@Param("operatorId") Long operatorId);
+    @Query(value = "select exists (select 1 from operators where operator_name = :operatorName)", nativeQuery = true)
+    boolean existsByOperatorName (@Param("operatorName")String operatorName);
 }

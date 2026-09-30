@@ -38,11 +38,4 @@ public class BusController {
     public ResponseEntity<RouteResponse> getRouteByBusId(@PathVariable Long operatorId, @PathVariable Long busId) {
         return new ResponseEntity<>(busService.getRouteByBusId(operatorId, busId), HttpStatus.OK);
     }
-
-
-    @DeleteMapping("/{busId}")
-    public ResponseEntity<Void> deleteBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
-        busService.deleteBusById(operatorId, busId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }

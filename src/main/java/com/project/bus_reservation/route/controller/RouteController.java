@@ -32,10 +32,4 @@ public class RouteController {
     public ResponseEntity<RouteResponse> getRouteById(@PathVariable Long operatorId, @PathVariable Long routeId) {
         return new ResponseEntity<>(routeService.getRouteById(operatorId, routeId), HttpStatus.OK);
     }
-
-    @DeleteMapping("/{routeId}")
-    public ResponseEntity<Void> deleteRouteById(@PathVariable Long operatorId, @PathVariable Long routeId) {
-        routeService.deleteRouteById(operatorId, routeId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }

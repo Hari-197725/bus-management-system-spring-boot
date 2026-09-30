@@ -48,6 +48,9 @@ public class BusService {
     }
 
     public List<BusResponse> getAllBuses(Long operatorId) {
+        operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
+
         List<Bus> buses = busRepository.findAllBusesByOperatorId(operatorId)
                 .orElseThrow(() -> new NotFoundException("BUS_NOT_FOUND", "No Buses found for operator with id: " + operatorId));
 
@@ -60,6 +63,9 @@ public class BusService {
     }
 
     public BusResponse getBusById(Long operatorId, Long busId) {
+        operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
+
         Optional<Bus> bus = busRepository.findBusByOperatorId(operatorId, busId);
         if (bus.isEmpty()) {
             throw new NotFoundException("BUS_NOT_FOUND", "Bus not found for operator id: " + operatorId);
@@ -69,6 +75,9 @@ public class BusService {
     }
 
     public RouteResponse getRouteByBusId(Long operatorId, Long busId) {
+        operatorRepository.findById(operatorId)
+                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
+
         Bus bus = busRepository.findBusByOperatorId(operatorId, busId)
                 .orElseThrow(() -> new NotFoundException("BUS_NOT_FOUND", "Bus with id " + busId + " not found for operator id: " + operatorId));
 
@@ -76,13 +85,6 @@ public class BusService {
             return RouteMapper.toRouteResponse(bus.getRoute());
         } else {
             throw new NotFoundException("ROUTE_NOT_FOUND", "Route not found for Bus id: " + busId);
-        }
-    }
-
-    public void deleteBusById(Long operatorId, Long busId) {
-        int deletedRows = busRepository.deleteBusByOperatorId(busId, operatorId);
-        if (deletedRows == 0) {
-            throw new ResponseStatusException(NOT_FOUND, "Operator not found with id: " + operatorId);
         }
     }
 }

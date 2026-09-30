@@ -33,19 +33,19 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 public class BookingService {
     @Autowired
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    private UsersRepository usersRepository;
 
     @Autowired
-    PassengerRepository passengerRepository;
+    private PassengerRepository passengerRepository;
 
     @Autowired
-    BusRepository busRepository;
+    private BusRepository busRepository;
 
     @Autowired
-    SeatRepository seatRepository;
+    private SeatRepository seatRepository;
 
     @Transactional
     public void createBooking(Long userId, BookingCreateRequest bookingCreateRequest) {

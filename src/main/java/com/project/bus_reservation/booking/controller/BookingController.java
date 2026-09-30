@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/user/{userId}/booking")
 public class BookingController {
     @Autowired
-    BookingService bookingService;
+    private BookingService bookingService;
 
     @PostMapping
     public ResponseEntity<Void> createBooking(@PathVariable Long userId, @Valid @RequestBody BookingCreateRequest bookingCreateRequest) {

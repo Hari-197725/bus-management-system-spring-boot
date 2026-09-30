@@ -28,5 +28,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public  ResponseEntity<ErrorResponse> handleConflict(ConflictException conflictException){
+        ErrorResponse errorResponse = new ErrorResponse(
+                conflictException.getErrorCode(),
+                conflictException.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 
 }
