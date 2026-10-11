@@ -17,7 +17,7 @@ public class RouteCreateRequest {
 
     @NotNull
     @Positive
-    private double distance;
+    private Double distance;
 
     @NotNull
     @Positive
