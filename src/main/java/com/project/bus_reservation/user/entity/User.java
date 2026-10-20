@@ -1,5 +1,7 @@
 package com.project.bus_reservation.user.entity;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.passenger.entity.Passenger;
 import jakarta.persistence.*;
@@ -11,6 +13,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.lang.annotation.Documented;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +33,12 @@ import java.util.List;
 // Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
+@Document(collectionName = "buses")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id // @Id already implies the primary key, so the @Column settings are unnecessary here.
+    @DocumentId // Ready by Firebase
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;

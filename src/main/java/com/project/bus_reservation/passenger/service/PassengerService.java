@@ -7,16 +7,12 @@ import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.passenger.mapper.PassengerMapper;
 import com.project.bus_reservation.passenger.repository.PassengerRepository;
 import com.project.bus_reservation.user.entity.User;
-import com.project.bus_reservation.user.repository.UsersRepository;
-import org.aspectj.weaver.ast.Not;
+import com.project.bus_reservation.user.repository.UserPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.*;
 
 @Service
 public class PassengerService {
@@ -24,17 +20,17 @@ public class PassengerService {
     PassengerRepository passengerRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    UserPostgresRepository userPostgresRepository;
 
     public void createPassenger(Long userId, PassengerCreateRequest passengerCreateRequest) {
-        User user = usersRepository.findById(userId)
+        User user = userPostgresRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id; " + userId));
 
         passengerRepository.save(PassengerMapper.toPassengerEntity(user, passengerCreateRequest));
     }
 
     public List<PassengerResponse> getAllPassengerByUserId(Long userId) {
-        User user = usersRepository.findById(userId)
+        User user = userPostgresRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
 
         List<Passenger> passengerList = user.getPassengers();

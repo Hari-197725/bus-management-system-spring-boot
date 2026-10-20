@@ -4,6 +4,8 @@ import com.project.bus_reservation.user.dto.request.UserCreateRequest;
 import com.project.bus_reservation.user.dto.request.UserUpdateRequest;
 import com.project.bus_reservation.user.dto.response.UserResponse;
 import com.project.bus_reservation.user.service.UserService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,10 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "New User create successfully")
+    })
 
     @PostMapping
     public ResponseEntity<Void> createUsers(@Valid @RequestBody UserCreateRequest userCreateRequest) {

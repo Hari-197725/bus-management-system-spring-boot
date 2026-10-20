@@ -18,17 +18,13 @@ import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.repository.SeatRepository;
 import com.project.bus_reservation.user.entity.User;
-import com.project.bus_reservation.user.repository.UsersRepository;
+import com.project.bus_reservation.user.repository.UserPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class BookingService {
@@ -36,7 +32,7 @@ public class BookingService {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserPostgresRepository userPostgresRepository;
 
     @Autowired
     private PassengerRepository passengerRepository;
@@ -49,7 +45,7 @@ public class BookingService {
 
     @Transactional
     public void createBooking(Long userId, BookingCreateRequest bookingCreateRequest) {
-        User user = usersRepository.findById(userId)
+        User user = userPostgresRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
 
         List<BookingCreateRequest.passengerCreateRequest> passengerList = bookingCreateRequest.getPassengers();
@@ -93,7 +89,7 @@ public class BookingService {
     }
 
     public List<BookingResponse> getAllBookings(Long userId) {
-        usersRepository.findById(userId).orElseThrow(() ->
+        userPostgresRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
 
         List<BookingProjection> projections = bookingRepository.findBookingsByUserId(userId);
@@ -116,7 +112,7 @@ public class BookingService {
     }
 
     public BookingResponse getBookingByBookingId(Long userId, Long bookingId) {
-        usersRepository.findById(userId).orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
+        userPostgresRepository.findById(userId).orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
         List<BookingProjection> projections = bookingRepository.findBookingByBookingId(userId, bookingId);
 
         return BookingMapper.toBookingResponse(projections);
