@@ -1,4 +1,4 @@
-package com.project.bus_reservation.exception;
+package com.project.bus_reservation.exception.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ErrorResponse {
-    private String errorCode;
+    private String Code;
     private String message;
 }

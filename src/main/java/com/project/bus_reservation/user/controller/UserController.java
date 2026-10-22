@@ -4,6 +4,8 @@ import com.project.bus_reservation.user.dto.request.UserCreateRequest;
 import com.project.bus_reservation.user.dto.request.UserUpdateRequest;
 import com.project.bus_reservation.user.dto.response.UserResponse;
 import com.project.bus_reservation.user.service.UserService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "400"),
+        @ApiResponse(responseCode = "404"),
+        @ApiResponse(responseCode = "409"),
+        @ApiResponse(responseCode = "500")
+})
+
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @ApiResponse(responseCode = "201", description = "User created successfully")
 
     @PostMapping
     public ResponseEntity<Void> createUsers(@Valid @RequestBody UserCreateRequest userCreateRequest) {
@@ -24,16 +35,20 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved all users")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
+
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved user details")
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.getUsersById(userId), HttpStatus.OK);
     }
 
+    @ApiResponse(responseCode = "204", description = "User update successfully")
     @PatchMapping("/{userId}")
     public ResponseEntity<Void> updateUserByUserId(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserByUserId(userId, userUpdateRequest);

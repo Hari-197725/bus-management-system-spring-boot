@@ -1,0 +1,22 @@
+package com.project.bus_reservation.exception.enums;
+
+import lombok.Getter;
+
+@Getter
+public enum ErrorCode {
+
+    USER_NOT_FOUND,
+    BUS_NOT_FOUND,
+    BOOKING_NOT_FOUND,
+    BUS_TRIP_NOT_FOUND,
+    PASSENGER_NOT_FOUND,
+    SEAT_NOT_FOUND,
+    SEAT_ALREADY_BOOKED,
+    SEAT_PASSENGER_COUNT_MISMATCH,
+    OPERATOR_ALREADY_EXISTS,
+    ROUTE_NOT_FOUND,
+    PHONE_NUMBER_ALREADY_EXISTS,
+    OPERATOR_NOT_FOUND,
+    INVALID_REQUEST,
+    INTERNAL_SERVER_ERROR;
+}

@@ -4,16 +4,14 @@ import com.project.bus_reservation.bus.dto.response.BusResponse;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bus.mapper.BusMapper;
 import com.project.bus_reservation.bus.repository.BusRepository;
+import com.project.bus_reservation.exception.custom.NotFoundException;
+import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.seats.entity.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class BusSeatsService {
@@ -22,14 +20,11 @@ public class BusSeatsService {
     BusRepository busRepository;
 
     public List<BusResponse.SeatResponse> getSeatsByBusId(Long busId) {
-        Optional<Bus> bus = busRepository.findById(busId);
-        Bus _bus = null;
-        if (bus.isPresent()) {
-            _bus = bus.get();
-        }
+        Bus bus = busRepository.findById(busId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId));
 
-        List<Seat> seats = _bus.getSeats();
         List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
+        List<Seat> seats = bus.getSeats();
         for (Seat seat : seats) {
             seatResponses.add(BusMapper.toSeatResponse(seat));
         }
@@ -38,7 +33,8 @@ public class BusSeatsService {
     }
 
     public BusResponse.SeatResponse getSeatBySeatId(Long busId, Long seatId) {
-        Bus bus = busRepository.findById(busId).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Bus not found with id: " + busId));
+        Bus bus = busRepository.findById(busId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId));
 
         List<Seat> seats = bus.getSeats();
         BusResponse.SeatResponse seatResponse = null;

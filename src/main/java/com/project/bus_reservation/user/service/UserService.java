@@ -1,7 +1,8 @@
 package com.project.bus_reservation.user.service;
 
-import com.project.bus_reservation.exception.ConflictException;
-import com.project.bus_reservation.exception.NotFoundException;
+import com.project.bus_reservation.exception.custom.ConflictException;
+import com.project.bus_reservation.exception.custom.NotFoundException;
+import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.user.dto.request.UserCreateRequest;
 import com.project.bus_reservation.user.dto.request.UserUpdateRequest;
 import com.project.bus_reservation.user.dto.response.UserResponse;
@@ -21,7 +22,7 @@ public class UserService {
 
     public void createUsers(UserCreateRequest userCreateRequest) {
         if (usersRepository.existsByPhoneNumber(userCreateRequest.getPhoneNumber())) {
-            throw new ConflictException("PHONE_NUMBER_ALREADY_EXISTS", "Phone number already exists");
+            throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
         }
         usersRepository.save(UserMapper.toUserEntity(userCreateRequest));
     }
@@ -39,13 +40,13 @@ public class UserService {
 
     public UserResponse getUsersById(Long userId) {
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId));
         return UserMapper.toUserResponse(user);
     }
 
     public void updateUserByUserId(Long userId, UserUpdateRequest userUpdateRequest) {
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("USER_NOT_FOUND", "User not found with id: " + userId));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId));
 
         usersRepository.save(UserMapper.toUpdateUserEntity(user, userUpdateRequest));
     }

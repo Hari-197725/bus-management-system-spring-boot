@@ -1,7 +1,8 @@
 package com.project.bus_reservation.operator.service;
 
-import com.project.bus_reservation.exception.ConflictException;
-import com.project.bus_reservation.exception.NotFoundException;
+import com.project.bus_reservation.exception.custom.ConflictException;
+import com.project.bus_reservation.exception.custom.NotFoundException;
+import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.operator.dto.request.OperatorCreateRequest;
 import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.operator.entity.Operator;
@@ -19,7 +20,7 @@ public class OperatorService {
 
     public void createOperator(OperatorCreateRequest operatorCreateRequest) {
         if (operatorRepository.existsByOperatorName(operatorCreateRequest.getOperatorName())) {
-            throw new ConflictException("OPERATOR_NAME_ALREADY_EXISTS", "Operator name already exists");
+            throw new ConflictException(ErrorCode.OPERATOR_ALREADY_EXISTS, "Operator name already exists");
         }
         operatorRepository.save(OperatorMapper.toOperatorEntity(operatorCreateRequest));
     }
@@ -32,7 +33,7 @@ public class OperatorService {
 
     public OperatorResponse getOperatorById(Long operatorId) {
         Operator operator = operatorRepository.findById(operatorId)
-                .orElseThrow(() -> new NotFoundException("OPERATOR_NOT_FOUND", "Operator not found with id: " + operatorId));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId));
 
         return OperatorMapper.toOperatorResponse(operator);
     }
