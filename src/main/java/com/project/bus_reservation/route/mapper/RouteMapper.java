@@ -21,9 +21,9 @@ public class RouteMapper {
     }
 
     public static RouteResponse toRouteResponse(Route route) {
-        Long operatorId = route.getOperator().getId();
+        Long operatorId = route.getOperator() != null ? route.getOperator().getNumericId() : null;
 
-        return new RouteResponse(route.getId(),
+        return new RouteResponse(route.getNumericId(),
                 route.getSource(),
                 route.getDestination(),
                 route.getDistance(),

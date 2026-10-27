@@ -12,42 +12,57 @@ import com.project.bus_reservation.user.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
-    UsersRepository usersRepository;
+    private UsersRepository usersRepository;
 
     public void createUsers(UserCreateRequest userCreateRequest) {
-        if (usersRepository.existsByPhoneNumber(userCreateRequest.getPhoneNumber())) {
+        if (usersRepository.findByPhoneNumber(userCreateRequest.getPhoneNumber()).block() != null) {
             throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
         }
-        usersRepository.save(UserMapper.toUserEntity(userCreateRequest));
+        User user = UserMapper.toUserEntity(userCreateRequest);
+        if (user.getId() == null) {
+            user.setId(String.valueOf(System.currentTimeMillis()));
+            user.setCreatedAt(LocalDateTime.now().toString());
+        }
+        user.setUpdatedAt(LocalDateTime.now().toString());
+        usersRepository.save(user).block();
     }
 
     public List<UserResponse> getAllUsers() {
-        List<User> userList = usersRepository.findAll();
+        List<User> userList = usersRepository.findAll().collectList().block();
         List<UserResponse> userResponseList = new ArrayList<>();
 
-        for (User user : userList) {
-            userResponseList.add(UserMapper.toUserResponse(user));
+        if (userList != null) {
+            for (User user : userList) {
+                userResponseList.add(UserMapper.toUserResponse(user));
+            }
         }
 
         return userResponseList;
     }
 
     public UserResponse getUsersById(Long userId) {
-        User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId));
+        User user = usersRepository.findById(String.valueOf(userId)).block();
+        if (user == null) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+        }
         return UserMapper.toUserResponse(user);
     }
 
     public void updateUserByUserId(Long userId, UserUpdateRequest userUpdateRequest) {
-        User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId));
+        User user = usersRepository.findById(String.valueOf(userId)).block();
+        if (user == null) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+        }
 
-        usersRepository.save(UserMapper.toUpdateUserEntity(user, userUpdateRequest));
+        User updatedUser = UserMapper.toUpdateUserEntity(user, userUpdateRequest);
+        updatedUser.setUpdatedAt(LocalDateTime.now().toString());
+        usersRepository.save(updatedUser).block();
     }
 }

@@ -1,13 +1,9 @@
 package com.project.bus_reservation.passenger.repository;
 
+import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
 import com.project.bus_reservation.passenger.entity.Passenger;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
-public interface PassengerRepository extends JpaRepository<Passenger, Long> {
-    @Query(value = "select passengers.* from passengers where passengers.user_id = :userId and passengers.id = :passengerId;", nativeQuery = true)
-    Optional<Passenger> findPassengerByUserId(@Param("userId") Long userId, @Param("passengerId") Long passengerId);
+@Repository
+public interface PassengerRepository extends FirestoreReactiveRepository<Passenger> {
 }

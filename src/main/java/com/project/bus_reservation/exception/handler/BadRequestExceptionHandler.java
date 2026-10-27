@@ -11,7 +11,7 @@ public class BadRequestExceptionHandler implements ExceptionHandlerStrategy {
         BadRequestException badRequestException = (BadRequestException) exception;
 
         ErrorResponse errorResponse = new ErrorResponse(
-                badRequestException.getCode(),
+                badRequestException.getCode().name(),
                 badRequestException.getMessage()
         );
 

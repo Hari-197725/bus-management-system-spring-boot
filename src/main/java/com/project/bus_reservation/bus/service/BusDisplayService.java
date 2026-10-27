@@ -9,21 +9,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BusDisplayService {
     @Autowired
-    BusRepository busRepository;
+    private BusRepository busRepository;
 
     public List<BusResponse> getBusesFromTo(String from, String to) {
-        Optional<List<Bus>> busList = busRepository.findBySourceAndDestination(from, to);
+        List<Bus> allBuses = busRepository.findAll().collectList().block();
         List<BusResponse> busResponseList = new ArrayList<>();
 
-        if (busList.isPresent()) {
-            List<Bus> buses = busList.get();
-            for (Bus bus : buses) {
-                busResponseList.add(BusMapper.toBusResponse(bus));
+        if (allBuses != null) {
+            for (Bus bus : allBuses) {
+                if (bus.getRoute() != null
+                        && from.equalsIgnoreCase(bus.getRoute().getSource())
+                        && to.equalsIgnoreCase(bus.getRoute().getDestination())) {
+                    busResponseList.add(BusMapper.toBusResponse(bus));
+                }
             }
         }
 

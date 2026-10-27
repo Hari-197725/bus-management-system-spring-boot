@@ -29,8 +29,9 @@ public class ExceptionResponseBuilder {
             return handlerStrategy.handle(exception);
         }
 
+        exception.printStackTrace();
         ErrorResponse errorResponse = new ErrorResponse(
-                "INTERNAL_SERVER_ERROR", "An unexpected error occurred"
+                "INTERNAL_SERVER_ERROR", exception.getMessage() != null ? exception.getMessage() : "An unexpected error occurred"
         );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);

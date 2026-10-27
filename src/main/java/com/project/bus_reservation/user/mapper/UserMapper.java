@@ -31,6 +31,6 @@ public class UserMapper {
     }
 
     public static UserResponse toUserResponse(User user) {
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber());
+        return new UserResponse(user.getNumericId(), user.getName(), user.getEmail(), user.getPhoneNumber());
     }
 }

@@ -1,78 +1,75 @@
 package com.project.bus_reservation.bus.entity;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
+import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.bus.enums.BusStatus;
 import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.bustrip.entity.BusTrip;
 import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
-import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-import org.hibernate.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collectionName = "buses")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "buses")
 public class Bus {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    @DocumentId
+    private String id;
 
     @NotNull
     @Positive
-    @Min(6)
-    @Column(nullable = false, updatable = false, unique = true, length = 6)
     private Integer busNumber;
 
     @NotBlank
-    @Column(nullable = false)
     private String busName;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private BusType busType;
 
     @Min(18)
-    @Column(nullable = false)
     private Integer totalSeats;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private BusStatus status;
 
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 
-    @Column(nullable = false)
-    @UpdateTimestamp
-    private LocalDateTime modifiedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "operator_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Operator operator;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "route_id", foreignKey = @ForeignKey(name = "fk_bus_route_id"))
     private Route route;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus", orphanRemoval = true)
     private List<Seat> seats = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bus")
     private List<BusTrip> busTrips = new ArrayList<>();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Exclude
+    public Long getNumericId() {
+        try {
+            return id != null ? Long.parseLong(id) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @Exclude
+    public void setNumericId(Long numericId) {
+        this.id = numericId != null ? String.valueOf(numericId) : null;
+    }
 }

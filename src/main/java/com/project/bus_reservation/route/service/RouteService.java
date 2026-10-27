@@ -12,6 +12,7 @@ import com.project.bus_reservation.route.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,32 +25,49 @@ public class RouteService {
     private RouteRepository routeRepository;
 
     public void createRoute(Long operatorId, RouteCreateRequest routeCreateRequest) {
-        Operator operator = operatorRepository.findById(operatorId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId));
+        Operator operator = operatorRepository.findById(String.valueOf(operatorId)).block();
+        if (operator == null) {
+            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
+        }
 
         Route route = RouteMapper.toRouteEntity(operator, routeCreateRequest);
-        routeRepository.save(route);
+        if (route.getId() == null) {
+            route.setId(String.valueOf(System.currentTimeMillis()));
+            route.setCreatedAt(LocalDateTime.now());
+        }
+        route.setModifiedAt(LocalDateTime.now());
+        routeRepository.save(route).block();
     }
 
     public List<RouteResponse> getAllRoutes(Long operatorId) {
-        Operator operator = operatorRepository.findById(operatorId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId));
+        Operator operator = operatorRepository.findById(String.valueOf(operatorId)).block();
+        if (operator == null) {
+            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
+        }
 
+        List<Route> allRoutes = routeRepository.findAll().collectList().block();
         List<RouteResponse> routeResponses = new ArrayList<>();
-        List<Route> routes = operator.getRoutes();
-        for (Route route : routes) {
-            routeResponses.add(RouteMapper.toRouteResponse(route));
+        if (allRoutes != null) {
+            for (Route route : allRoutes) {
+                if (route.getOperator() != null && operatorId.equals(route.getOperator().getNumericId())) {
+                    routeResponses.add(RouteMapper.toRouteResponse(route));
+                }
+            }
         }
 
         return routeResponses;
     }
 
     public RouteResponse getRouteById(Long operatorId, Long routeId) {
-        operatorRepository.findById(operatorId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId));
+        Operator operator = operatorRepository.findById(String.valueOf(operatorId)).block();
+        if (operator == null) {
+            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
+        }
 
-        Route route = routeRepository.findRouteByOperatorId(operatorId, routeId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route with id " + routeId + " not found for operator with id " + operatorId));
+        Route route = routeRepository.findById(String.valueOf(routeId)).block();
+        if (route == null || route.getOperator() == null || !operatorId.equals(route.getOperator().getNumericId())) {
+            throw new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route with id " + routeId + " not found for operator with id " + operatorId);
+        }
 
         return RouteMapper.toRouteResponse(route);
     }
