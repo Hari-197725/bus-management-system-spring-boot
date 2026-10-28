@@ -32,3 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 **/src/main/resources/application.properties
+
+### secreat key ###
+src/main/resources/firebase-service-account.json
