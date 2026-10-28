@@ -2,6 +2,7 @@ package com.project.bus_reservation.exception.builder;
 
 import com.project.bus_reservation.exception.custom.BadRequestException;
 import com.project.bus_reservation.exception.custom.ConflictException;
+import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.exception.response.ErrorResponse;
 import com.project.bus_reservation.exception.custom.NotFoundException;
 import com.project.bus_reservation.exception.handler.BadRequestExceptionHandler;
@@ -30,7 +31,7 @@ public class ExceptionResponseBuilder {
         }
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "INTERNAL_SERVER_ERROR", "An unexpected error occurred"
+                ErrorCode.INTERNAL_SERVER_ERROR, "An unexpected error occurred"
         );
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
