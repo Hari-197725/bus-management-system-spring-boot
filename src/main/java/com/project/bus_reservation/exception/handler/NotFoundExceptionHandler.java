@@ -11,7 +11,7 @@ public class NotFoundExceptionHandler implements ExceptionHandlerStrategy {
         NotFoundException notFoundException = (NotFoundException) exception;
 
         ErrorResponse errorResponse = new ErrorResponse(
-                notFoundException.getCode().name(),
+                notFoundException.getCode(),
                 notFoundException.getMessage()
         );
 
