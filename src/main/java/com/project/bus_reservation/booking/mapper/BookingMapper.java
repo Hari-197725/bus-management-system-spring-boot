@@ -9,10 +9,7 @@ import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bustrip.entity.BusTrip;
 import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.seats.entity.Seat;
-import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.user.entity.User;
-import jakarta.validation.constraints.NotNull;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -77,33 +74,5 @@ public class BookingMapper {
                 details
         );
     }
-
-//    public static BookingResponse toBookingResponse(BookingProjection bookingProjection) {
-//        BookingResponse.BusTripResponse busTripResponse = new BookingResponse.BusTripResponse(
-//                bookingProjection.getDepartureTime(),
-//                bookingProjection.getArrivalTime(),
-//                bookingProjection.getBusName(),
-//                bookingProjection.getBusType(),
-//                bookingProjection.getOperatorName(),
-//                bookingProjection.getSource(),
-//                bookingProjection.getDestination(),
-//                bookingProjection.getEstimatedDuration()
-//        );
-//        BookingResponse.BookingDetailResponse bookingDetailResponse = new BookingResponse.BookingDetailResponse(
-//                bookingProjection.getPassengerAge(),
-//                bookingProjection.getPassengerGender(),
-//                bookingProjection.getPassengerName(),
-//                bookingProjection.getSeatNumber()
-//        );
-//
-//        return new BookingResponse(
-//                bookingProjection.getBookingId(),
-//                bookingProjection.getBookingDate(),
-//                bookingProjection.getAmount(),
-//                bookingProjection.getUserName(),
-//                busTripResponse,
-//                List.of(bookingDetailResponse)
-//        );
-//    }
 
 }

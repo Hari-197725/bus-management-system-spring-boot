@@ -39,14 +39,6 @@ public class Passenger {
 
     private List<BookingDetail> bookingDetails = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Exclude
     public Long getNumericId() {
         try {

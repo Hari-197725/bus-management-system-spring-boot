@@ -9,7 +9,4 @@ import lombok.Getter;
 public class ErrorResponse {
     private ErrorCode Code;
     private String message;
-
-//    public ErrorResponse(ErrorCode code, String message) {
-//    }
 }

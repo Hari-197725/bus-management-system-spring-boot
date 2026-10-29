@@ -51,14 +51,6 @@ public class Bus {
     private List<Seat> seats = new ArrayList<>();
     private List<BusTrip> busTrips = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Exclude
     public Long getNumericId() {
         try {

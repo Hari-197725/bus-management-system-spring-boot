@@ -27,14 +27,6 @@ public class Operator {
     private List<Bus> buses = new ArrayList<>();
     private List<Route> routes = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Exclude
     public Long getNumericId() {
         try {

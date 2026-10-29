@@ -43,14 +43,6 @@ public class User {
     private List<Booking> bookings = new ArrayList<>();
     private List<Passenger> passengers = new ArrayList<>();
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Exclude
     public Long getNumericId() {
         try {
