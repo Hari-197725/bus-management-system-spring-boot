@@ -1,14 +1,13 @@
 package com.project.bus_reservation.user.repository;
 
+import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
 import com.project.bus_reservation.user.entity.User;
-import jakarta.validation.Valid;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, Long> {
-    @Query(value = "SELECT EXISTS (SELECT 1 FROM users WHERE phone_number = :phoneNumber)", nativeQuery = true)
-    boolean existsByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+public interface UsersRepository extends FirestoreReactiveRepository<User> {
+    Mono<User> findByPhoneNumber(String phoneNumber);
+    Mono<User> findByFirebaseUid(String firebaseUid);
+    Mono<User> findByEmail(String email);
 }

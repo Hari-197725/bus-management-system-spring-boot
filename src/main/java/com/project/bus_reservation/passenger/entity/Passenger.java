@@ -1,51 +1,63 @@
 package com.project.bus_reservation.passenger.entity;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
+import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
 import com.project.bus_reservation.passenger.enums.Gender;
 import com.project.bus_reservation.user.entity.User;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collectionName = "passengers")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "passengers")
 public class Passenger {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    @DocumentId
+    private String id;
 
     @Min(3)
     @Max(100)
     @NotNull
-    @Column(name = "age", nullable = false)
     private Integer age;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false, updatable = false)
     private Gender gender;
 
     @NotBlank
     @Size(max = 20)
-    @Column(name = "name", nullable = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
     private List<BookingDetail> bookingDetails = new ArrayList<>();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Exclude
+    public Long getNumericId() {
+        try {
+            return id != null ? Long.parseLong(id) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @Exclude
+    public void setNumericId(Long numericId) {
+        this.id = numericId != null ? String.valueOf(numericId) : null;
+    }
 }

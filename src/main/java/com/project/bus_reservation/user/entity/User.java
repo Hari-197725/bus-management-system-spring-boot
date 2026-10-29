@@ -1,84 +1,67 @@
 package com.project.bus_reservation.user.entity;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
+import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.passenger.entity.Passenger;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// @Data generates more code than a JPA entity usually needs. Some of that generated code can cause unexpected problems.
-// Lombok automatically generates: @Getters @Setters @toString() @equals() @hashCode() @Required constructor (if needed).
-// Usually, we only need: @Getters @Setters @No-args constructor. So for this problem we can use @getter, @setter and so on. But
-// if you want all the other operation and also you are gonna use DTO then should use @Data. @Data is safe for DTOs because
-// DTOs are simple data containers and don't have JPA/Hibernate behaviour. Rule: @Entity → Avoid @Data; DTO → Use @Data.
-@Entity
-//@Data
+@Document(collectionName = "users")
 @Getter
 @Setter
-// @Table(name = "users") is optional if the table name matches the entity name.
-// Use @Table(name = "...") when you want to explicitly specify the database table name.
-// Rule: Same table name → @Table optional; Different table name → Use @Table(name = "...").
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    @Id // @Id already implies the primary key, so the @Column settings are unnecessary here.
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+    @DocumentId
+    private String id;
 
     @NotBlank
     @Size(min = 2, max = 100)
-    @Column(nullable = false)
-//    JPA already derives the column name from the field name in many cases. You only need to specify name when you want
-//    the database column to be different from the Java field name. ex: @Column(name = "name") private String user_name.
     private String name;
 
     @NotBlank
     @Email
-    @Column(nullable = false)
     private String email;
 
     @NotBlank
-    @Column(nullable = false, unique = true, updatable = false)
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits.")
-    private String phoneNumber; //Spring Boot (via Hibernate's default physical naming strategy) converts camelCase to snake_case.
-    // So you don't need mention phoneNumber to @Column(name = "phone_number") unless you've changed the naming strategy.
+    private String phoneNumber;
 
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp  //Automatically insert the time and date when new column created.
-    private LocalDateTime createdAt;
+    private String firebaseUid;
 
-    @Column(nullable = false)
-    @UpdateTimestamp
-    private LocalDateTime modifiedAt;
+    private String createdAt;
+    private String updatedAt;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Passenger> passengers = new ArrayList<>();
 
-//    @Builder
-//    private User(String email, String name, String phoneNumber) { // This is the constructor of this class.
-//        this.email = email;
-//        this.name = name;
-//        this.phoneNumber = phoneNumber;
-//    }
+    public String getId() {
+        return id;
+    }
 
-//    public void updateUser(UserRequest userRequest) {
-//        this.name = userRequest.getName() != null ? userRequest.getName() : this.name;
-//        this.phoneNumber = userRequest.getPhone() != null ? userRequest.getPhone() : this.phoneNumber;
-//    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Exclude
+    public Long getNumericId() {
+        try {
+            return id != null ? Long.parseLong(id) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @Exclude
+    public void setNumericId(Long numericId) {
+        this.id = numericId != null ? String.valueOf(numericId) : null;
+    }
 }

@@ -1,14 +1,11 @@
 package com.project.bus_reservation.operator.repository;
 
+import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
 import com.project.bus_reservation.operator.entity.Operator;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
-public interface OperatorRepository extends JpaRepository<Operator, Long> {
-    @Query(value = "select exists (select 1 from operators where operator_name = :operatorName)", nativeQuery = true)
-    boolean existsByOperatorName (@Param("operatorName")String operatorName);
+@Repository
+public interface OperatorRepository extends FirestoreReactiveRepository<Operator> {
+    Mono<Operator> findByOperatorName(String operatorName);
 }

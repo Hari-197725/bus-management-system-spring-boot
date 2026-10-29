@@ -9,40 +9,52 @@ import com.project.bus_reservation.passenger.mapper.PassengerMapper;
 import com.project.bus_reservation.passenger.repository.PassengerRepository;
 import com.project.bus_reservation.user.entity.User;
 import com.project.bus_reservation.user.repository.UsersRepository;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
-
 @Service
 public class PassengerService {
     @Autowired
-    PassengerRepository passengerRepository;
+    private PassengerRepository passengerRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    private UsersRepository usersRepository;
 
     public void createPassenger(Long userId, PassengerCreateRequest passengerCreateRequest) {
-        User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id; " + userId));
+        User user = usersRepository.findById(String.valueOf(userId)).block();
+        if (user == null) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+        }
 
-        passengerRepository.save(PassengerMapper.toPassengerEntity(user, passengerCreateRequest));
+        Passenger passenger = PassengerMapper.toPassengerEntity(user, passengerCreateRequest);
+        if (passenger.getId() == null) {
+            passenger.setId(String.valueOf(System.currentTimeMillis()));
+        }
+        passengerRepository.save(passenger).block();
+
+        if (user.getPassengers() == null) {
+            user.setPassengers(new ArrayList<>());
+        }
+        user.getPassengers().add(passenger);
+        usersRepository.save(user).block();
     }
 
     public List<PassengerResponse> getAllPassengerByUserId(Long userId) {
-        User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId));
+        User user = usersRepository.findById(String.valueOf(userId)).block();
+        if (user == null) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+        }
 
         List<Passenger> passengerList = user.getPassengers();
         List<PassengerResponse> passengerResponseList = new ArrayList<>();
 
-        for (Passenger passenger : passengerList) {
-            passengerResponseList.add(PassengerMapper.toPassengerResponse(user, passenger));
+        if (passengerList != null) {
+            for (Passenger passenger : passengerList) {
+                passengerResponseList.add(PassengerMapper.toPassengerResponse(user, passenger));
+            }
         }
 
         return passengerResponseList;

@@ -14,14 +14,16 @@ import java.util.List;
 public class SeatService {
 
     @Autowired
-    SeatRepository seatRepository;
+    private SeatRepository seatRepository;
 
     public List<BusResponse.SeatResponse> getAllSeatsFromAllBus() {
-        List<Seat> seats = seatRepository.findAll();
+        List<Seat> seats = seatRepository.findAll().collectList().block();
         List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
 
-        for (Seat seat : seats) {
-            seatResponses.add(BusMapper.toSeatResponse(seat));
+        if (seats != null) {
+            for (Seat seat : seats) {
+                seatResponses.add(BusMapper.toSeatResponse(seat));
+            }
         }
 
         return seatResponses;

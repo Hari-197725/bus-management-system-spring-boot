@@ -1,35 +1,44 @@
 package com.project.bus_reservation.bookingdetail.entity;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
+import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.booking.entity.Booking;
-import com.project.bus_reservation.bus.entity.Bus;
-import com.project.bus_reservation.bustrip.entity.BusTrip;
-import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.passenger.entity.Passenger;
-import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
-import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+@Document(collectionName = "booking_details")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "booking_details")
 public class BookingDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", nullable = false)
+    @DocumentId
+    private String id;
     private Booking booking;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "passenger_id", nullable = false)
     private Passenger passenger;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Exclude
+    public Long getNumericId() {
+        try {
+            return id != null ? Long.parseLong(id) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @Exclude
+    public void setNumericId(Long numericId) {
+        this.id = numericId != null ? String.valueOf(numericId) : null;
+    }
 }

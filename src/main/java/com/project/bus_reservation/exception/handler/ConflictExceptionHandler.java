@@ -11,7 +11,7 @@ public class ConflictExceptionHandler implements ExceptionHandlerStrategy {
         ConflictException conflictException = (ConflictException) exception;
 
         ErrorResponse errorResponse = new ErrorResponse(
-                conflictException.getCode(),
+                conflictException.getCode().name(),
                 conflictException.getMessage()
         );
 

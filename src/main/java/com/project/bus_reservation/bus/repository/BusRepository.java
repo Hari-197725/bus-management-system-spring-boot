@@ -1,29 +1,9 @@
 package com.project.bus_reservation.bus.repository;
 
+import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
 import com.project.bus_reservation.bus.entity.Bus;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface BusRepository extends JpaRepository<Bus, Long> {
-
-    @Query(value = "select * from buses inner join routes on routes.id = buses.route_id inner join operators on " +
-            "operators.id = buses.operator_id where routes.source = :source and routes.destination = :destination", nativeQuery = true)
-    Optional<List<Bus>> findBySourceAndDestination(@Param("source") String source, @Param("destination") String destination);
-
-    @Query(value = "select * from buses where id = :busId and route_id = :routeId", nativeQuery = true)
-    Optional<Bus> findBusByRouteId(@Param("busId") Long busId, @Param("routeId") Long routeId);
-
-    @Query(value = "select * from buses where operator_id = :operatorId and status = 'ACTIVE'", nativeQuery = true)
-    Optional<List<Bus>> findAllBusesByOperatorId(@Param("operatorId") Long operatorId);
-
-    @Query(value = "select * from buses where operator_id = :operatorId and id = :busId and status = 'ACTIVE'", nativeQuery = true)
-    Optional<Bus> findBusByOperatorId(@Param("operatorId") Long operatorId, @Param("busId") Long busId);
+public interface BusRepository extends FirestoreReactiveRepository<Bus> {
 }

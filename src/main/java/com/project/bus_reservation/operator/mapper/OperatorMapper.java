@@ -10,7 +10,7 @@ public class OperatorMapper {
 
     public static OperatorResponse toOperatorResponse(Operator operator) {
         return new OperatorResponse(
-                operator.getId(),
+                operator.getNumericId(),
                 operator.getOperatorName(),
                 operator.getJoinedAt()
         );

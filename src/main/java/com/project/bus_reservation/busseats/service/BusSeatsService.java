@@ -17,32 +17,40 @@ import java.util.List;
 public class BusSeatsService {
 
     @Autowired
-    BusRepository busRepository;
+    private BusRepository busRepository;
 
     public List<BusResponse.SeatResponse> getSeatsByBusId(Long busId) {
-        Bus bus = busRepository.findById(busId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId));
+        Bus bus = busRepository.findById(String.valueOf(busId)).block();
+        if (bus == null) {
+            throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId);
+        }
 
         List<BusResponse.SeatResponse> seatResponses = new ArrayList<>();
         List<Seat> seats = bus.getSeats();
-        for (Seat seat : seats) {
-            seatResponses.add(BusMapper.toSeatResponse(seat));
+        if (seats != null) {
+            for (Seat seat : seats) {
+                seatResponses.add(BusMapper.toSeatResponse(seat));
+            }
         }
 
         return seatResponses;
     }
 
     public BusResponse.SeatResponse getSeatBySeatId(Long busId, Long seatId) {
-        Bus bus = busRepository.findById(busId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId));
+        Bus bus = busRepository.findById(String.valueOf(busId)).block();
+        if (bus == null) {
+            throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId);
+        }
 
         List<Seat> seats = bus.getSeats();
         BusResponse.SeatResponse seatResponse = null;
 
-        for (Seat seat : seats) {
-            if (seat.getId().equals(seatId)) {
-                seatResponse = BusMapper.toSeatResponse(seat);
-                break;
+        if (seats != null) {
+            for (Seat seat : seats) {
+                if (seat.getNumericId() != null && seat.getNumericId().equals(seatId)) {
+                    seatResponse = BusMapper.toSeatResponse(seat);
+                    break;
+                }
             }
         }
 

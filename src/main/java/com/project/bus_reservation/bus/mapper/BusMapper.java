@@ -63,7 +63,7 @@ public class BusMapper {
         }
 
         return new BusResponse(
-                bus.getId(),
+                bus.getNumericId(),
                 bus.getBusNumber(),
                 bus.getBusName(),
                 bus.getBusType(),
@@ -78,7 +78,7 @@ public class BusMapper {
     }
 
     public static BusResponse.SeatResponse toSeatResponse(Seat seat) {
-        return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
+        return new BusResponse.SeatResponse(seat.getNumericId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
     public static Bus updateBusTransfer(Operator transferOperator, Bus bus) {

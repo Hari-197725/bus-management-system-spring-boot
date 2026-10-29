@@ -1,64 +1,66 @@
 package com.project.bus_reservation.route.entity;
 
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
+import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bustrip.entity.BusTrip;
 import com.project.bus_reservation.operator.entity.Operator;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collectionName = "routes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "routes", uniqueConstraints = {@UniqueConstraint(columnNames = {"operator_id", "source", "destination"})})
 public class Route {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    @DocumentId
+    private String id;
 
     @NotBlank
-    @Column(name = "source", nullable = false)
     private String source;
 
     @NotBlank
-    @Column(name = "destination", nullable = false)
     private String destination;
 
     @Positive
-    @Column(name = "distance", nullable = false)
     private double distance;
 
     @Positive
-    @Column(nullable = false)
     private Integer estimatedDuration;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 
-    @Column(name = "modified_at", nullable = false)
-    @UpdateTimestamp
-    private LocalDateTime modifiedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(nullable = false, name = "operator_id")
     private Operator operator;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "route", orphanRemoval = true)
     private List<Bus> buses = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "route")
     private List<BusTrip> busTrips = new ArrayList<>();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Exclude
+    public Long getNumericId() {
+        try {
+            return id != null ? Long.parseLong(id) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @Exclude
+    public void setNumericId(Long numericId) {
+        this.id = numericId != null ? String.valueOf(numericId) : null;
+    }
 }
