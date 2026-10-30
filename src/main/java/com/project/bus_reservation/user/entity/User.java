@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @DocumentId
-    private String id;
+    private String firebaseUid;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -35,33 +37,10 @@ public class User {
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber;
 
-    private String firebaseUid;
+    private LocalDateTime createdAt;
 
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     private List<Booking> bookings = new ArrayList<>();
     private List<Passenger> passengers = new ArrayList<>();
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Exclude
-    public Long getNumericId() {
-        try {
-            return id != null ? Long.parseLong(id) : null;
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    @Exclude
-    public void setNumericId(Long numericId) {
-        this.id = numericId != null ? String.valueOf(numericId) : null;
-    }
 }

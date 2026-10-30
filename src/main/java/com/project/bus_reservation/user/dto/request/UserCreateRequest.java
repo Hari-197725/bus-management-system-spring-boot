@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCreateRequest {
+    private String firebaseUid;
+
     @NotBlank
     private String name;
 

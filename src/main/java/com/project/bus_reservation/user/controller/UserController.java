@@ -43,15 +43,15 @@ public class UserController {
 
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved user details")
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
-        return new ResponseEntity<>(userService.getUsersById(userId), HttpStatus.OK);
+    @GetMapping("/{firebaseUid}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable String firebaseUid) {
+        return new ResponseEntity<>(userService.getUsersById(firebaseUid), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "204", description = "User update successfully")
-    @PatchMapping("/{userId}")
-    public ResponseEntity<Void> updateUserByUserId(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
-        userService.updateUserByUserId(userId, userUpdateRequest);
+    @PatchMapping("/{firebaseUid}")
+    public ResponseEntity<Void> updateUserByFirebaseUid(@PathVariable String firebaseUid, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserByFirebaseUid(firebaseUid, userUpdateRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

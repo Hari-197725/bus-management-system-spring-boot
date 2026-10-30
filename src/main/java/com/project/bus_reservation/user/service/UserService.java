@@ -12,7 +12,6 @@ import com.project.bus_reservation.user.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +24,8 @@ public class UserService {
         if (usersRepository.findByPhoneNumber(userCreateRequest.getPhoneNumber()).block() != null) {
             throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
         }
+
         User user = UserMapper.toUserEntity(userCreateRequest);
-        if (user.getId() == null) {
-            user.setId(String.valueOf(System.currentTimeMillis()));
-            user.setCreatedAt(LocalDateTime.now().toString());
-        }
-        user.setUpdatedAt(LocalDateTime.now().toString());
         usersRepository.save(user).block();
     }
 
@@ -47,22 +42,21 @@ public class UserService {
         return userResponseList;
     }
 
-    public UserResponse getUsersById(Long userId) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public UserResponse getUsersById(String firebaseUid) {
+        User user = usersRepository.findById(firebaseUid).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
         }
         return UserMapper.toUserResponse(user);
     }
 
-    public void updateUserByUserId(Long userId, UserUpdateRequest userUpdateRequest) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public void updateUserByFirebaseUid(String firebaseUid, UserUpdateRequest userUpdateRequest) {
+        User user = usersRepository.findById(firebaseUid).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
         }
 
         User updatedUser = UserMapper.toUpdateUserEntity(user, userUpdateRequest);
-        updatedUser.setUpdatedAt(LocalDateTime.now().toString());
         usersRepository.save(updatedUser).block();
     }
 }
