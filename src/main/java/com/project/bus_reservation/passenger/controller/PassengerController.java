@@ -27,14 +27,14 @@ public class PassengerController {
 
     @ApiResponse(responseCode = "201", description = "Passenger created successfully")
     @PostMapping
-    public ResponseEntity<Void> createPassenger(@PathVariable Long userId, @Valid @RequestBody PassengerCreateRequest passengerCreateRequest) {
+    public ResponseEntity<Void> createPassenger(@PathVariable String userId, @Valid @RequestBody PassengerCreateRequest passengerCreateRequest) {
         passengerService.createPassenger(userId, passengerCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all passengers")
     @GetMapping
-    public ResponseEntity<List<PassengerResponse>> getAllPassengerByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<PassengerResponse>> getAllPassengerByUserId(@PathVariable String userId) {
         return new ResponseEntity<>(passengerService.getAllPassengerByUserId(userId), HttpStatus.OK);
     }
 }

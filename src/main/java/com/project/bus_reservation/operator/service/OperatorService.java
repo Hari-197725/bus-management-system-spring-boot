@@ -11,7 +11,6 @@ import com.project.bus_reservation.operator.repository.OperatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,11 +23,8 @@ public class OperatorService {
         if (operatorRepository.findByOperatorName(operatorCreateRequest.getOperatorName()).block() != null) {
             throw new ConflictException(ErrorCode.OPERATOR_ALREADY_EXISTS, "Operator name already exists");
         }
+
         Operator operator = OperatorMapper.toOperatorEntity(operatorCreateRequest);
-        if (operator.getId() == null) {
-            operator.setId(String.valueOf(System.currentTimeMillis()));
-            operator.setJoinedAt(LocalDateTime.now());
-        }
         operatorRepository.save(operator).block();
     }
 
@@ -37,15 +33,16 @@ public class OperatorService {
         if (list == null) {
             return Collections.emptyList();
         }
+
         return list.stream()
                 .map(OperatorMapper::toOperatorResponse)
                 .toList();
     }
 
-    public OperatorResponse getOperatorById(Long operatorId) {
-        Operator operator = operatorRepository.findById(String.valueOf(operatorId)).block();
+    public OperatorResponse getOperatorById(String operatorFirebaseUid) {
+        Operator operator = operatorRepository.findById(operatorFirebaseUid).block();
         if (operator == null) {
-            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
+            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorFirebaseUid);
         }
 
         return OperatorMapper.toOperatorResponse(operator);

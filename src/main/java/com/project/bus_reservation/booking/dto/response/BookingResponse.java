@@ -5,7 +5,6 @@ import com.project.bus_reservation.passenger.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,9 +12,9 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class BookingResponse {
-    private Long id;
+    private String firebaseUid;
     private LocalDate bookingDate;
-    private BigDecimal amount;
+    private Double amount;
     private String userName;
     private BusTripResponse busTripResponse;
     private List<BookingDetailResponse> bookingDetailResponses;

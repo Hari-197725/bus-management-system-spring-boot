@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -24,6 +25,7 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setAmount(bookingCreateRequest.getAmount());
         booking.setUser(user);
+        booking.setBookingDate(LocalDate.now());
         return booking;
     }
 

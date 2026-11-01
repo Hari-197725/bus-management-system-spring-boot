@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class OperatorResponse {
 
-    private Long id;
+    private String operatorId;
     private String operatorName;
     private LocalDateTime joinedAt;
 }

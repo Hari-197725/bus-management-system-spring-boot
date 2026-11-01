@@ -3,16 +3,16 @@ package com.project.bus_reservation.booking.projection;
 import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.passenger.enums.Gender;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface BookingProjection {
-    Long getBookingId();
+    String getBookingId();
 
     LocalDate getBookingDate();
 
-    BigDecimal getAmount();
+    Double getAmount();
 
     String getUserName();
 

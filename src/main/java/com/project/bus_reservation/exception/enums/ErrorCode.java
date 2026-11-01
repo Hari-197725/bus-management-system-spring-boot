@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     USER_NOT_FOUND,
+    USER_ALREADY_EXISTS,
     BUS_NOT_FOUND,
     BOOKING_NOT_FOUND,
     BUS_TRIP_NOT_FOUND,

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PassengerResponse {
-    private Long id;
+    private String passengerId;
     private Integer age;
     private Gender gender;
     private String name;

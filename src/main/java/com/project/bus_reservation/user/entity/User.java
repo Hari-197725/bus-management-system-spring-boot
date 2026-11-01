@@ -1,7 +1,6 @@
 package com.project.bus_reservation.user.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
-import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.passenger.entity.Passenger;
@@ -9,8 +8,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,5 +43,6 @@ public class User {
     private LocalDateTime updatedAt;
 
     private List<Booking> bookings = new ArrayList<>();
+
     private List<Passenger> passengers = new ArrayList<>();
 }

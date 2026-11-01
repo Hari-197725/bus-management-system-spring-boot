@@ -5,20 +5,24 @@ import com.project.bus_reservation.operator.dto.response.OperatorResponse;
 import com.project.bus_reservation.operator.entity.Operator;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class OperatorMapper {
 
+    public static Operator toOperatorEntity(OperatorCreateRequest operatorCreateRequest) {
+        Operator operator = new Operator();
+        operator.setOperatorName(operatorCreateRequest.getOperatorName());
+        operator.setJoinedAt(LocalDateTime.now());
+        return operator;
+    }
+
     public static OperatorResponse toOperatorResponse(Operator operator) {
         return new OperatorResponse(
-                operator.getNumericId(),
+                operator.getFirebaseUid(),
                 operator.getOperatorName(),
                 operator.getJoinedAt()
         );
     }
 
-    public static Operator toOperatorEntity(OperatorCreateRequest operatorCreateRequest) {
-        Operator operator = new Operator();
-        operator.setOperatorName(operatorCreateRequest.getOperatorName());
-        return operator;
-    }
 }

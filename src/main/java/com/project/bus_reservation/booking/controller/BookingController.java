@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/{userId}/booking")
+@RequestMapping("/api/v1/user/{firebaseUid}/booking")
 @ApiResponses(value = {
         @ApiResponse(responseCode = "400"),
         @ApiResponse(responseCode = "404"),
@@ -27,21 +27,21 @@ public class BookingController {
 
     @ApiResponse(responseCode = "201", description = "Booking created successfully")
     @PostMapping
-    public ResponseEntity<Void> createBooking(@PathVariable Long userId, @Valid @RequestBody BookingCreateRequest bookingCreateRequest) {
-        bookingService.createBooking(userId, bookingCreateRequest);
+    public ResponseEntity<Void> createBooking(@PathVariable String firebaseUid, @Valid @RequestBody BookingCreateRequest bookingCreateRequest) {
+        bookingService.createBooking(firebaseUid, bookingCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all bookings")
     @GetMapping
-    public ResponseEntity<List<BookingResponse>> getAllBookings(@PathVariable Long userId) {
-        return new ResponseEntity<>(bookingService.getAllBookings(userId), HttpStatus.OK);
+    public ResponseEntity<List<BookingResponse>> getAllBookings(@PathVariable String firebaseUid) {
+        return new ResponseEntity<>(bookingService.getAllBookings(firebaseUid), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved booking details")
     @GetMapping("/{bookingId}")
-    public ResponseEntity<BookingResponse> getBookingByBookingId(@PathVariable Long userId, @PathVariable Long bookingId) {
-        return new ResponseEntity<>(bookingService.getBookingByBookingId(userId, bookingId), HttpStatus.OK);
+    public ResponseEntity<BookingResponse> getBookingByBookingId(@PathVariable String firebaseUid, @PathVariable String bookingId) {
+        return new ResponseEntity<>(bookingService.getBookingByBookingId(firebaseUid, bookingId), HttpStatus.OK);
     }
 
 }

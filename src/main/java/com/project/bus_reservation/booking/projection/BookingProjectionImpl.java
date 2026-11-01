@@ -4,7 +4,7 @@ import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.passenger.enums.Gender;
 import lombok.*;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class BookingProjectionImpl implements BookingProjection {
-    private Long bookingId;
+    private String bookingId;
     private LocalDate bookingDate;
-    private BigDecimal amount;
+    private Double amount;
     private String userName;
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;

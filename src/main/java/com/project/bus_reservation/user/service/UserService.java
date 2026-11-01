@@ -21,6 +21,9 @@ public class UserService {
     private UsersRepository usersRepository;
 
     public void createUsers(UserCreateRequest userCreateRequest) {
+        if (usersRepository.findById(userCreateRequest.getFirebaseUid()).block() != null) {
+            throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS, "User already exists with firebaseUid: " + userCreateRequest.getFirebaseUid());
+        }
         if (usersRepository.findByPhoneNumber(userCreateRequest.getPhoneNumber()).block() != null) {
             throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
         }
@@ -42,7 +45,7 @@ public class UserService {
         return userResponseList;
     }
 
-    public UserResponse getUsersById(String firebaseUid) {
+    public UserResponse getUserByFirebaseUid(String firebaseUid) {
         User user = usersRepository.findById(firebaseUid).block();
         if (user == null) {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);

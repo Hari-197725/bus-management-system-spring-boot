@@ -44,8 +44,8 @@ public class UserController {
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved user details")
     @GetMapping("/{firebaseUid}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable String firebaseUid) {
-        return new ResponseEntity<>(userService.getUsersById(firebaseUid), HttpStatus.OK);
+    public ResponseEntity<UserResponse> getUserByFirebaseUid(@PathVariable String firebaseUid) {
+        return new ResponseEntity<>(userService.getUserByFirebaseUid(firebaseUid), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "204", description = "User update successfully")

@@ -45,10 +45,10 @@ public class BookingService {
     @Autowired
     private SeatRepository seatRepository;
 
-    public void createBooking(Long userId, BookingCreateRequest bookingCreateRequest) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public void createBooking(String firebaseUid, BookingCreateRequest bookingCreateRequest) {
+        User user = usersRepository.findById(firebaseUid).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
         }
 
         List<BookingCreateRequest.passengerCreateRequest> passengerList = bookingCreateRequest.getPassengers();
@@ -64,8 +64,8 @@ public class BookingService {
         }
 
         Booking booking = BookingMapper.toBookingEntity(user, bookingCreateRequest);
-        if (booking.getId() == null) {
-            booking.setId(String.valueOf(System.currentTimeMillis()));
+        if (booking.getFirebaseUid() == null) {
+            booking.setFirebaseUid(UUID.randomUUID().toString());
         }
 
         BusTrip busTrip = BookingMapper.toBusTripEntity(booking, bus);
@@ -77,9 +77,9 @@ public class BookingService {
 
         for (BookingCreateRequest.passengerCreateRequest passengerReq : passengerList) {
             Passenger passenger = passengerRepository.findById(String.valueOf(passengerReq.getPassengerId())).block();
-            if (passenger == null || passenger.getUser() == null || !userId.equals(passenger.getUser().getNumericId())) {
+            if (passenger == null || passenger.getUser() == null || !firebaseUid.equals(passenger.getUser().getFirebaseUid())) {
                 throw new NotFoundException(ErrorCode.PASSENGER_NOT_FOUND, "Passenger with id " + passengerReq.getPassengerId() +
-                        " not found for user id " + user);
+                        " not found for user " + firebaseUid);
             }
 
             Seat seat = null;
@@ -97,7 +97,7 @@ public class BookingService {
 
             if (seat == null) {
                 throw new NotFoundException(ErrorCode.SEAT_NOT_FOUND, "Seat with id " + passengerReq.getSeatId() +
-                        " not found for bus id " + bus.getNumericId());
+                        " not found for bus id " + bus.getFirebaseUid());
             }
 
             if (seat.getSeatStatus() == SeatStatus.BOOKED) {
@@ -119,10 +119,10 @@ public class BookingService {
         bookingRepository.save(booking).block();
     }
 
-    public List<BookingResponse> getAllBookings(Long userId) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public List<BookingResponse> getAllBookings(String firebaseUid) {
+        User user = usersRepository.findById(firebaseUid).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
         }
 
         List<Booking> allBookings = bookingRepository.findAll().collectList().block();
@@ -130,13 +130,13 @@ public class BookingService {
 
         if (allBookings != null) {
             for (Booking b : allBookings) {
-                if (b.getUser() != null && userId.equals(b.getUser().getNumericId())) {
+                if (b.getUser() != null && firebaseUid.equals(b.getUser().getFirebaseUid())) {
                     projections.addAll(toProjections(b));
                 }
             }
         }
 
-        Map<Long, List<BookingProjection>> groupedBookings = projections.stream()
+        Map<String, List<BookingProjection>> groupedBookings = projections.stream()
                 .collect(Collectors.groupingBy(
                         BookingProjection::getBookingId,
                         LinkedHashMap::new,
@@ -151,14 +151,14 @@ public class BookingService {
         return responseList;
     }
 
-    public BookingResponse getBookingByBookingId(Long userId, Long bookingId) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public BookingResponse getBookingByBookingId(String firebaseUid, String bookingId) {
+        User user = usersRepository.findById(firebaseUid).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
         }
 
-        Booking booking = bookingRepository.findById(String.valueOf(bookingId)).block();
-        if (booking == null || booking.getUser() == null || !userId.equals(booking.getUser().getNumericId())) {
+        Booking booking = bookingRepository.findById(bookingId).block();
+        if (booking == null || booking.getUser() == null || !firebaseUid.equals(booking.getUser().getFirebaseUid())) {
             throw new NotFoundException(ErrorCode.BOOKING_NOT_FOUND, "Booking not found with id: " + bookingId);
         }
 
@@ -178,7 +178,7 @@ public class BookingService {
                 Seat s = detail.getSeat();
 
                 BookingProjectionImpl proj = BookingProjectionImpl.builder()
-                        .bookingId(b.getNumericId())
+                        .bookingId(b.getFirebaseUid())
                         .bookingDate(b.getBookingDate())
                         .amount(b.getAmount())
                         .userName(b.getUser() != null ? b.getUser().getName() : null)
@@ -200,7 +200,7 @@ public class BookingService {
             }
         } else {
             BookingProjectionImpl proj = BookingProjectionImpl.builder()
-                    .bookingId(b.getNumericId())
+                    .bookingId(b.getFirebaseUid())
                     .bookingDate(b.getBookingDate())
                     .amount(b.getAmount())
                     .userName(b.getUser() != null ? b.getUser().getName() : null)

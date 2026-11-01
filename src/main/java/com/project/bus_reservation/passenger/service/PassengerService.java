@@ -23,15 +23,15 @@ public class PassengerService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public void createPassenger(Long userId, PassengerCreateRequest passengerCreateRequest) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public void createPassenger(String userId, PassengerCreateRequest passengerCreateRequest) {
+        User user = usersRepository.findById(userId).block();
         if (user == null) {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
 
         Passenger passenger = PassengerMapper.toPassengerEntity(user, passengerCreateRequest);
-        if (passenger.getId() == null) {
-            passenger.setId(String.valueOf(System.currentTimeMillis()));
+        if (passenger.getFirebaseUid() == null) {
+            passenger.setFirebaseUid(String.valueOf(System.currentTimeMillis()));
         }
         passengerRepository.save(passenger).block();
 
@@ -42,8 +42,8 @@ public class PassengerService {
         usersRepository.save(user).block();
     }
 
-    public List<PassengerResponse> getAllPassengerByUserId(Long userId) {
-        User user = usersRepository.findById(String.valueOf(userId)).block();
+    public List<PassengerResponse> getAllPassengerByUserId(String userId) {
+        User user = usersRepository.findById(userId).block();
         if (user == null) {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
