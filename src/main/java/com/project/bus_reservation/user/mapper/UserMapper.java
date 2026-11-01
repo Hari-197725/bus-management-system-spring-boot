@@ -7,13 +7,14 @@ import com.project.bus_reservation.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 public class UserMapper {
 
     public static User toUserEntity(UserCreateRequest userCreateRequest) {
         User user = new User();
-        user.setFirebaseUid(userCreateRequest.getFirebaseUid());
+        user.setId(UUID.randomUUID().toString());
         user.setName(userCreateRequest.getName());
         user.setEmail(userCreateRequest.getEmail());
         user.setPhoneNumber(userCreateRequest.getPhoneNumber());
@@ -30,6 +31,6 @@ public class UserMapper {
     }
 
     public static UserResponse toUserResponse(User user) {
-        return new UserResponse(user.getFirebaseUid(), user.getName(), user.getEmail(), user.getPhoneNumber());
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber());
     }
 }

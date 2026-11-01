@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class BookingResponse {
-    private String firebaseUid;
+    private String bookingId;
     private LocalDate bookingDate;
     private Double amount;
     private String userName;

@@ -39,8 +39,8 @@ public class OperatorController {
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved operator details")
-    @GetMapping("/{operatorFirebaseUid}")
-    public ResponseEntity<OperatorResponse> getOperatorById(@PathVariable String operatorFirebaseUid) {
-        return new ResponseEntity<>(operatorService.getOperatorById(operatorFirebaseUid), HttpStatus.OK);
+    @GetMapping("/{operatorId}")
+    public ResponseEntity<OperatorResponse> getOperatorById(@PathVariable String operatorId) {
+        return new ResponseEntity<>(operatorService.getOperatorById(operatorId), HttpStatus.OK);
     }
 }

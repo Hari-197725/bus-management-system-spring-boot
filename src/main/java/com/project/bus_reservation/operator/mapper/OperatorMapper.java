@@ -19,7 +19,7 @@ public class OperatorMapper {
 
     public static OperatorResponse toOperatorResponse(Operator operator) {
         return new OperatorResponse(
-                operator.getFirebaseUid(),
+                operator.getId(),
                 operator.getOperatorName(),
                 operator.getJoinedAt()
         );

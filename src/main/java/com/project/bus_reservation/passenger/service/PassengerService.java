@@ -30,8 +30,8 @@ public class PassengerService {
         }
 
         Passenger passenger = PassengerMapper.toPassengerEntity(user, passengerCreateRequest);
-        if (passenger.getFirebaseUid() == null) {
-            passenger.setFirebaseUid(String.valueOf(System.currentTimeMillis()));
+        if (passenger.getId() == null) {
+            passenger.setId(String.valueOf(System.currentTimeMillis()));
         }
         passengerRepository.save(passenger).block();
 

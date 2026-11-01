@@ -21,11 +21,11 @@ public class UserService {
     private UsersRepository usersRepository;
 
     public void createUsers(UserCreateRequest userCreateRequest) {
-        if (usersRepository.findById(userCreateRequest.getFirebaseUid()).block() != null) {
-            throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS, "User already exists with firebaseUid: " + userCreateRequest.getFirebaseUid());
-        }
         if (usersRepository.findByPhoneNumber(userCreateRequest.getPhoneNumber()).block() != null) {
             throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
+        }
+        if (usersRepository.findByEmail(userCreateRequest.getEmail()).block() != null) {
+            throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS, "Email already exists: " + userCreateRequest.getEmail());
         }
 
         User user = UserMapper.toUserEntity(userCreateRequest);
@@ -45,18 +45,18 @@ public class UserService {
         return userResponseList;
     }
 
-    public UserResponse getUserByFirebaseUid(String firebaseUid) {
-        User user = usersRepository.findById(firebaseUid).block();
+    public UserResponse getUserById(String userId) {
+        User user = usersRepository.findById(userId).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
         return UserMapper.toUserResponse(user);
     }
 
-    public void updateUserByFirebaseUid(String firebaseUid, UserUpdateRequest userUpdateRequest) {
-        User user = usersRepository.findById(firebaseUid).block();
+    public void updateUserById(String userId, UserUpdateRequest userUpdateRequest) {
+        User user = usersRepository.findById(userId).block();
         if (user == null) {
-            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with firebaseUid: " + firebaseUid);
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
 
         User updatedUser = UserMapper.toUpdateUserEntity(user, userUpdateRequest);

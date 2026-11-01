@@ -1,6 +1,7 @@
 package com.project.bus_reservation.operator.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.route.entity.Route;
@@ -20,9 +21,24 @@ import java.util.List;
 @NoArgsConstructor
 public class Operator {
     @DocumentId
-    private String firebaseUid;
+    private String id;
     private String operatorName;
     private LocalDateTime joinedAt;
     private List<Bus> buses = new ArrayList<>();
     private List<Route> routes = new ArrayList<>();
+
+
+    @Exclude
+    public Long getNumericId() {
+        try {
+            return id != null ? Long.parseLong(id) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    @Exclude
+    public void setNumericId(Long numericId) {
+        this.id = numericId != null ? String.valueOf(numericId) : null;
+    }
 }

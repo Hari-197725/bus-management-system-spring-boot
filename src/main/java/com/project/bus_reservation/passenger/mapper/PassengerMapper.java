@@ -23,7 +23,7 @@ public class PassengerMapper {
 
     public static PassengerResponse toPassengerResponse(User user, Passenger passenger) {
         UserResponse userResponse = UserMapper.toUserResponse(user);
-        return new PassengerResponse(passenger.getFirebaseUid(),
+        return new PassengerResponse(passenger.getId(),
                 passenger.getAge(),
                 passenger.getGender(),
                 passenger.getName(),

@@ -39,10 +39,10 @@ public class OperatorService {
                 .toList();
     }
 
-    public OperatorResponse getOperatorById(String operatorFirebaseUid) {
-        Operator operator = operatorRepository.findById(operatorFirebaseUid).block();
+    public OperatorResponse getOperatorById(String operatorId) {
+        Operator operator = operatorRepository.findById(operatorId).block();
         if (operator == null) {
-            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorFirebaseUid);
+            throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
         }
 
         return OperatorMapper.toOperatorResponse(operator);

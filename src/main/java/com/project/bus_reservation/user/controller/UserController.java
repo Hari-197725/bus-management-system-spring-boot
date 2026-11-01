@@ -28,7 +28,6 @@ public class UserController {
     private UserService userService;
 
     @ApiResponse(responseCode = "201", description = "User created successfully")
-
     @PostMapping
     public ResponseEntity<Void> createUsers(@Valid @RequestBody UserCreateRequest userCreateRequest) {
         userService.createUsers(userCreateRequest);
@@ -41,17 +40,16 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-
     @ApiResponse(responseCode = "200", description = "Successfully retrieved user details")
-    @GetMapping("/{firebaseUid}")
-    public ResponseEntity<UserResponse> getUserByFirebaseUid(@PathVariable String firebaseUid) {
-        return new ResponseEntity<>(userService.getUserByFirebaseUid(firebaseUid), HttpStatus.OK);
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable String userId) {
+        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "204", description = "User update successfully")
-    @PatchMapping("/{firebaseUid}")
-    public ResponseEntity<Void> updateUserByFirebaseUid(@PathVariable String firebaseUid, @RequestBody UserUpdateRequest userUpdateRequest) {
-        userService.updateUserByFirebaseUid(firebaseUid, userUpdateRequest);
+    @PatchMapping("/{userId}")
+    public ResponseEntity<Void> updateUserById(@PathVariable String userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserById(userId, userUpdateRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -8,6 +8,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface UsersRepository extends FirestoreReactiveRepository<User> {
     Mono<User> findByPhoneNumber(String phoneNumber);
-    Mono<User> findByFirebaseUid(String firebaseUid);
     Mono<User> findByEmail(String email);
 }

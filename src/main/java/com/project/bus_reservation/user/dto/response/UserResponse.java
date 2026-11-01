@@ -11,8 +11,16 @@ import lombok.Setter;
 @Setter
 public class UserResponse {
 
-    private String firebaseUid;
+    private String userId;
     private String name;
     private String email;
     private String phone;
+
+    public String getId() {
+        return userId;
+    }
+
+    public void setId(String id) {
+        this.userId = id;
+    }
 }
