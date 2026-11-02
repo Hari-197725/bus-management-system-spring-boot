@@ -9,15 +9,15 @@ import java.util.List;
 @NotNull
 public class BookingCreateRequest {
     private Double amount;
-    private Long routeId;
-    private Long busId;
+    private String routeId;
+    private String busId;
     private Integer seatCount;
     private List<passengerCreateRequest> passengers;
 
     @Getter
     @NotNull
     public static class passengerCreateRequest {
-        private Long passengerId;
-        private Long seatId;
+        private String passengerId;
+        private String seatId;
     }
 }

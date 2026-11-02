@@ -29,13 +29,13 @@ public class BusSeatsController {
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved seats for the bus")
     @GetMapping
-    public ResponseEntity<List<BusResponse.SeatResponse>> getSeatsByBusId(@PathVariable Long busId) {
+    public ResponseEntity<List<BusResponse.SeatResponse>> getSeatsByBusId(@PathVariable String busId) {
         return new ResponseEntity<>(busSeatsService.getSeatsByBusId(busId), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved seat details")
     @GetMapping("/{seatId}")
-    public ResponseEntity<BusResponse.SeatResponse> getSeatBySeatId(@PathVariable Long busId, @PathVariable Long seatId) {
+    public ResponseEntity<BusResponse.SeatResponse> getSeatBySeatId(@PathVariable String busId, @PathVariable String seatId) {
         return new ResponseEntity<>(busSeatsService.getSeatBySeatId(busId, seatId), HttpStatus.OK);
     }
 }

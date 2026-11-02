@@ -28,26 +28,26 @@ public class BusController {
 
     @ApiResponse(responseCode = "201", description = "Bus created successfully")
     @PostMapping
-    public ResponseEntity<Void> createBus(@PathVariable Long operatorId, @Valid @RequestBody BusCreateRequest busCreateRequest) {
+    public ResponseEntity<Void> createBus(@PathVariable String operatorId, @Valid @RequestBody BusCreateRequest busCreateRequest) {
         busService.createBus(operatorId, busCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all buses")
     @GetMapping
-    public ResponseEntity<List<BusResponse>> getAllBuses(@PathVariable Long operatorId) {
+    public ResponseEntity<List<BusResponse>> getAllBuses(@PathVariable String operatorId) {
         return new ResponseEntity<>(busService.getAllBuses(operatorId), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved bus details")
     @GetMapping("/{busId}")
-    public ResponseEntity<BusResponse> getBusById(@PathVariable Long operatorId, @PathVariable Long busId) {
+    public ResponseEntity<BusResponse> getBusById(@PathVariable String operatorId, @PathVariable String busId) {
         return new ResponseEntity<>(busService.getBusById(operatorId, busId), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved route for the bus")
     @GetMapping("/{busId}/route")
-    public ResponseEntity<RouteResponse> getRouteByBusId(@PathVariable Long operatorId, @PathVariable Long busId) {
+    public ResponseEntity<RouteResponse> getRouteByBusId(@PathVariable String operatorId, @PathVariable String busId) {
         return new ResponseEntity<>(busService.getRouteByBusId(operatorId, busId), HttpStatus.OK);
     }
 }

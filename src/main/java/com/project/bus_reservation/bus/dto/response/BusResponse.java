@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BusResponse {
 
-    private Long id;
+    private String id;
     private Integer busNo;
     private String busName;
     private BusType busType;
@@ -37,7 +37,7 @@ public class BusResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class SeatResponse {
-        private Long id;
+        private String id;
         private Integer seatNumber;
         private SeatType seatType;
         private SeatStatus seatStatus;

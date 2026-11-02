@@ -19,8 +19,8 @@ public class BusSeatsService {
     @Autowired
     private BusRepository busRepository;
 
-    public List<BusResponse.SeatResponse> getSeatsByBusId(Long busId) {
-        Bus bus = busRepository.findById(String.valueOf(busId)).block();
+    public List<BusResponse.SeatResponse> getSeatsByBusId(String busId) {
+        Bus bus = busRepository.findById(busId).block();
         if (bus == null) {
             throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId);
         }
@@ -36,8 +36,8 @@ public class BusSeatsService {
         return seatResponses;
     }
 
-    public BusResponse.SeatResponse getSeatBySeatId(Long busId, Long seatId) {
-        Bus bus = busRepository.findById(String.valueOf(busId)).block();
+    public BusResponse.SeatResponse getSeatBySeatId(String busId, String seatId) {
+        Bus bus = busRepository.findById(busId).block();
         if (bus == null) {
             throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId);
         }
@@ -47,7 +47,7 @@ public class BusSeatsService {
 
         if (seats != null) {
             for (Seat seat : seats) {
-                if (seat.getNumericId() != null && seat.getNumericId().equals(seatId)) {
+                if (seat.getId() != null && seat.getId().equals(seatId)) {
                     seatResponse = BusMapper.toSeatResponse(seat);
                     break;
                 }

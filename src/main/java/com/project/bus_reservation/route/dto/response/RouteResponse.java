@@ -1,6 +1,5 @@
 package com.project.bus_reservation.route.dto.response;
 
-import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +13,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RouteResponse {
 
-    private Long id;
+    private String id;
     private String source;
     private String destination;
     private double distance;
     private Integer estimatedDuration;
-    private Long operatorId;
+    private String operatorId;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 }

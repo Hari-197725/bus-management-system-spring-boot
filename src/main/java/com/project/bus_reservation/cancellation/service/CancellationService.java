@@ -8,7 +8,6 @@ import com.project.bus_reservation.cancellation.dto.request.CancellationRequest;
 import com.project.bus_reservation.exception.custom.NotFoundException;
 import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.seats.entity.Seat;
-import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.repository.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,9 @@ public class CancellationService {
     @Autowired
     private SeatRepository seatRepository;
 
-    public void cancelBookingByBookingId(Long userId, Long bookingId, CancellationRequest cancellationRequest) {
-        Booking booking = bookingRepository.findById(String.valueOf(bookingId)).block();
-        if (booking == null || booking.getUser() == null || !userId.equals(booking.getUser().getNumericId())) {
+    public void cancelBookingByBookingId(String userId, String bookingId, CancellationRequest cancellationRequest) {
+        Booking booking = bookingRepository.findById(bookingId).block();
+        if (booking == null || booking.getUser() == null || !userId.equals(booking.getUser().getId())) {
             throw new NotFoundException(ErrorCode.BOOKING_NOT_FOUND, "Booking not found with id: " + bookingId);
         }
 
@@ -39,10 +38,10 @@ public class CancellationService {
                     for (BookingDetail bookingDetail : bookingDetailList) {
                         if (bookingDetail.getSeat() != null && seatNo.equals(bookingDetail.getSeat().getSeatNumber())) {
                             Seat seat = bookingDetail.getSeat();
-                            seat.setSeatStatus(SeatStatus.AVAILABLE);
+                            seat.markAsAvailable();
                             seatRepository.save(seat).block();
                             if (bookingDetail.getId() != null) {
-                                bookingDetailRepository.deleteById(String.valueOf(bookingDetail.getId())).block();
+                                bookingDetailRepository.deleteById(bookingDetail.getId()).block();
                             }
                             break;
                         }
@@ -50,9 +49,9 @@ public class CancellationService {
                 }
             }
         } else {
-            bookingDetailRepository.deleteById(String.valueOf(bookingId)).block();
+            bookingDetailRepository.deleteById(bookingId).block();
         }
 
-        bookingRepository.deleteById(String.valueOf(bookingId)).block();
+        bookingRepository.deleteById(bookingId).block();
     }
 }

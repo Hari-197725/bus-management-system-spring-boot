@@ -8,11 +8,14 @@ import com.project.bus_reservation.user.entity.User;
 import com.project.bus_reservation.user.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class PassengerMapper {
 
     public static Passenger toPassengerEntity(User user, PassengerCreateRequest passengerCreateRequest) {
         Passenger passenger = new Passenger();
+        passenger.setId(UUID.randomUUID().toString());
         passenger.setAge(passengerCreateRequest.getAge());
         passenger.setGender(passengerCreateRequest.getGender());
         passenger.setName(passengerCreateRequest.getName());

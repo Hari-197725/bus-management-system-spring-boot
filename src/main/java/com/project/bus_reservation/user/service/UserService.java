@@ -24,6 +24,7 @@ public class UserService {
         if (usersRepository.findByPhoneNumber(userCreateRequest.getPhoneNumber()).block() != null) {
             throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
         }
+
         if (usersRepository.findByEmail(userCreateRequest.getEmail()).block() != null) {
             throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS, "Email already exists: " + userCreateRequest.getEmail());
         }

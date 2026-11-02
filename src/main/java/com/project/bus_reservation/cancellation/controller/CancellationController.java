@@ -23,7 +23,7 @@ public class CancellationController {
 
     @ApiResponse(responseCode = "204", description = "Booking cancelled successfully")
     @DeleteMapping
-    public ResponseEntity<Void> cancelBookingByBookingId(@PathVariable Long userId, @PathVariable Long bookingId, @RequestBody CancellationRequest cancellationRequest){
+    public ResponseEntity<Void> cancelBookingByBookingId(@PathVariable String userId, @PathVariable String bookingId, @RequestBody CancellationRequest cancellationRequest){
         cancellationService.cancelBookingByBookingId(userId, bookingId, cancellationRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -27,20 +27,20 @@ public class RouteController {
 
     @ApiResponse(responseCode = "201", description = "Route created successfully")
     @PostMapping
-    public ResponseEntity<Void> createRoute(@PathVariable Long operatorId, @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
+    public ResponseEntity<Void> createRoute(@PathVariable String operatorId, @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
         routeService.createRoute(operatorId, routeCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all routes")
     @GetMapping
-    public ResponseEntity<List<RouteResponse>> getAllRoutes(@PathVariable Long operatorId) {
+    public ResponseEntity<List<RouteResponse>> getAllRoutes(@PathVariable String operatorId) {
         return new ResponseEntity<>(routeService.getAllRoutes(operatorId), HttpStatus.OK);
     }
 
     @ApiResponse(responseCode = "200", description = "Successfully retrieved route details")
     @GetMapping("/{routeId}")
-    public ResponseEntity<RouteResponse> getRouteById(@PathVariable Long operatorId, @PathVariable Long routeId) {
+    public ResponseEntity<RouteResponse> getRouteById(@PathVariable String operatorId, @PathVariable String routeId) {
         return new ResponseEntity<>(routeService.getRouteById(operatorId, routeId), HttpStatus.OK);
     }
 }

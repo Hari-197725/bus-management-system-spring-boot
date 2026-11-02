@@ -15,12 +15,4 @@ public class UserResponse {
     private String name;
     private String email;
     private String phone;
-
-    public String getId() {
-        return userId;
-    }
-
-    public void setId(String id) {
-        this.userId = id;
-    }
 }

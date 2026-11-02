@@ -1,7 +1,6 @@
 package com.project.bus_reservation.user.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
-import com.google.cloud.firestore.annotation.Exclude;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.passenger.entity.Passenger;
@@ -47,18 +46,10 @@ public class User {
 
     private List<Passenger> passengers = new ArrayList<>();
 
-
-    @Exclude
-    public Long getNumericId() {
-        try {
-            return id != null ? Long.parseLong(id) : null;
-        } catch (NumberFormatException e) {
-            return null;
+    public void addPassenger(Passenger passenger) {
+        if (this.passengers == null) {
+            this.passengers = new ArrayList<>();
         }
-    }
-
-    @Exclude
-    public void setNumericId(Long numericId) {
-        this.id = numericId != null ? String.valueOf(numericId) : null;
+        this.passengers.add(passenger);
     }
 }

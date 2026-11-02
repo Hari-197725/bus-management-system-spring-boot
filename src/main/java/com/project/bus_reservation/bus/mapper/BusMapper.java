@@ -14,18 +14,23 @@ import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class BusMapper {
 
     public static Bus toBusEntity(Operator operator, Route route, BusCreateRequest busCreateRequest) {
         Bus bus = new Bus();
+        bus.setId(UUID.randomUUID().toString());
         bus.setBusNumber(busCreateRequest.getBusNumber());
         bus.setBusName(busCreateRequest.getBusName());
         bus.setBusType(busCreateRequest.getBusType());
         bus.setTotalSeats(busCreateRequest.getTotalSeats());
         bus.setStatus(BusStatus.ACTIVE);
+        bus.setCreatedAt(LocalDateTime.now());
+        bus.setModifiedAt(LocalDateTime.now());
         bus.setOperator(operator);
 
         if (route != null) {
@@ -35,6 +40,7 @@ public class BusMapper {
         List<Seat> seats = busCreateRequest.getSeats().stream()
                 .map(seatReq -> {
                     Seat seat = new Seat();
+                    seat.setId(UUID.randomUUID().toString());
                     seat.setSeatNumber(seatReq.getSeatNumber());
                     seat.setSeatType(seatReq.getSeatType());
                     seat.setSeatStatus(SeatStatus.AVAILABLE);
@@ -63,7 +69,7 @@ public class BusMapper {
         }
 
         return new BusResponse(
-                bus.getNumericId(),
+                bus.getId(),
                 bus.getBusNumber(),
                 bus.getBusName(),
                 bus.getBusType(),
@@ -78,7 +84,7 @@ public class BusMapper {
     }
 
     public static BusResponse.SeatResponse toSeatResponse(Seat seat) {
-        return new BusResponse.SeatResponse(seat.getNumericId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
+        return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
     public static Bus updateBusTransfer(Operator transferOperator, Bus bus) {

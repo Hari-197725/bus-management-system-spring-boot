@@ -6,12 +6,14 @@ import com.project.bus_reservation.operator.entity.Operator;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 public class OperatorMapper {
 
     public static Operator toOperatorEntity(OperatorCreateRequest operatorCreateRequest) {
         Operator operator = new Operator();
+        operator.setId(UUID.randomUUID().toString());
         operator.setOperatorName(operatorCreateRequest.getOperatorName());
         operator.setJoinedAt(LocalDateTime.now());
         return operator;

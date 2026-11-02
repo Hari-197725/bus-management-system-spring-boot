@@ -30,15 +30,9 @@ public class PassengerService {
         }
 
         Passenger passenger = PassengerMapper.toPassengerEntity(user, passengerCreateRequest);
-        if (passenger.getId() == null) {
-            passenger.setId(String.valueOf(System.currentTimeMillis()));
-        }
         passengerRepository.save(passenger).block();
 
-        if (user.getPassengers() == null) {
-            user.setPassengers(new ArrayList<>());
-        }
-        user.getPassengers().add(passenger);
+        user.addPassenger(passenger);
         usersRepository.save(user).block();
     }
 

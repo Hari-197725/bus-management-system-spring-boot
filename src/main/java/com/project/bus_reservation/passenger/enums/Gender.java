@@ -1,5 +1,8 @@
 package com.project.bus_reservation.passenger.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Gender {
     MALE(1), FEMALE(2), OTHER(3);
 

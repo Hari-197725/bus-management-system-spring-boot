@@ -26,7 +26,7 @@ public class BusCreateRequest {
     @Max(30)
     private Integer totalSeats;
 
-    private Long routeId;
+    private String routeId;
 
     @NotNull
     private List<SeatRequest> seats;
