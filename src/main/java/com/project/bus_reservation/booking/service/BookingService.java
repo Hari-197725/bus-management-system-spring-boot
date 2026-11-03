@@ -68,7 +68,7 @@ public class BookingService {
 
         for (BookingCreateRequest.passengerCreateRequest passengerReq : passengerList) {
             Passenger passenger = passengerRepository.findById(passengerReq.getPassengerId()).block();
-            if (passenger == null || passenger.getUser() == null || !userId.equals(passenger.getUser().getId())) {
+            if (passenger == null || passenger.getUserId() == null || !userId.equals(passenger.getUserId())) {
                 throw new NotFoundException(ErrorCode.PASSENGER_NOT_FOUND, "Passenger with id " + passengerReq.getPassengerId() +
                         " not found for user " + userId);
             }

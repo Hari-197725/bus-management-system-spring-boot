@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import com.google.cloud.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class Booking {
     @DocumentId
     private String id;
-    private LocalDate bookingDate;
+    private Timestamp bookingDate;
     private Double amount;
     private User user;
     private BusTrip busTrip;

@@ -13,13 +13,13 @@ import java.util.UUID;
 @Component
 public class PassengerMapper {
 
-    public static Passenger toPassengerEntity(User user, PassengerCreateRequest passengerCreateRequest) {
+    public static Passenger toPassengerEntity(String userId, PassengerCreateRequest passengerCreateRequest) {
         Passenger passenger = new Passenger();
         passenger.setId(UUID.randomUUID().toString());
         passenger.setAge(passengerCreateRequest.getAge());
         passenger.setGender(passengerCreateRequest.getGender());
         passenger.setName(passengerCreateRequest.getName());
-        passenger.setUser(user);
+        passenger.setUserId(userId);
 
         return passenger;
     }

@@ -39,7 +39,7 @@ public class BusService {
         Route route = null;
         if (busCreateRequest.getRouteId() != null) {
             Route r = routeRepository.findById(busCreateRequest.getRouteId()).block();
-            if (r == null || r.getOperator() == null || !operatorId.equals(r.getOperator().getId())) {
+            if (r == null || r.getOperatorId() == null || !operatorId.equals(r.getOperatorId())) {
                 throw new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route id " + busCreateRequest.getRouteId() + " not found for operator: " + operatorId);
             }
             route = r;

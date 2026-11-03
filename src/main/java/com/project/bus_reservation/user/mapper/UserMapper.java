@@ -6,7 +6,9 @@ import com.project.bus_reservation.user.dto.response.UserResponse;
 import com.project.bus_reservation.user.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import com.google.cloud.Timestamp;
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
 @Component
@@ -18,15 +20,15 @@ public class UserMapper {
         user.setName(userCreateRequest.getName());
         user.setEmail(userCreateRequest.getEmail());
         user.setPhoneNumber(userCreateRequest.getPhoneNumber());
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
+        user.setCreatedAt(Timestamp.now());
+        user.setUpdatedAt(Timestamp.now());
         return user;
     }
 
     public static User toUpdateUserEntity(User user, UserUpdateRequest userUpdateRequest) {
         user.setName(userUpdateRequest.getName());
         user.setEmail(userUpdateRequest.getEmail());
-        user.setUpdatedAt(LocalDateTime.now());
+        user.setUpdatedAt(Timestamp.now());
         return user;
     }
 

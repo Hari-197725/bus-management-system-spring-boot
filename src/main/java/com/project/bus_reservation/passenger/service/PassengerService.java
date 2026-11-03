@@ -29,11 +29,8 @@ public class PassengerService {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
 
-        Passenger passenger = PassengerMapper.toPassengerEntity(user, passengerCreateRequest);
+        Passenger passenger = PassengerMapper.toPassengerEntity(userId, passengerCreateRequest);
         passengerRepository.save(passenger).block();
-
-        user.addPassenger(passenger);
-        usersRepository.save(user).block();
     }
 
     public List<PassengerResponse> getAllPassengerByUserId(String userId) {
@@ -42,7 +39,7 @@ public class PassengerService {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
 
-        List<Passenger> passengerList = user.getPassengers();
+        List<Passenger> passengerList = passengerRepository.findByUserId(userId).collectList().block();
         List<PassengerResponse> passengerResponseList = new ArrayList<>();
 
         if (passengerList != null) {

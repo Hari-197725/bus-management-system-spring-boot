@@ -12,10 +12,10 @@ import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.user.entity.User;
+import com.google.cloud.Timestamp;
+import com.project.bus_reservation.util.DateTimeUtil;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +28,7 @@ public class BookingMapper {
         booking.setId(UUID.randomUUID().toString());
         booking.setAmount(bookingCreateRequest.getAmount());
         booking.setUser(user);
-        booking.setBookingDate(LocalDate.now());
+        booking.setBookingDate(Timestamp.now());
         return booking;
     }
 
@@ -38,8 +38,8 @@ public class BookingMapper {
         busTrip.setBookings(booking);
         busTrip.setBus(bus);
         busTrip.setRoute(bus.getRoute());
-        busTrip.setDepartureTime(LocalDateTime.now());
-        busTrip.setArrivalTime(LocalDateTime.now().plusHours(4));
+        busTrip.setDepartureTime(Timestamp.now());
+        busTrip.setArrivalTime(Timestamp.ofTimeSecondsAndNanos(Timestamp.now().getSeconds() + 4 * 3600, 0));
         return busTrip;
     }
 
@@ -71,11 +71,11 @@ public class BookingMapper {
 
                 BookingProjectionImpl proj = BookingProjectionImpl.builder()
                         .bookingId(b.getId())
-                        .bookingDate(b.getBookingDate())
+                        .bookingDate(DateTimeUtil.toLocalDate(b.getBookingDate()))
                         .amount(b.getAmount())
                         .userName(b.getUser() != null ? b.getUser().getName() : null)
-                        .departureTime(trip != null ? trip.getDepartureTime() : null)
-                        .arrivalTime(trip != null ? trip.getArrivalTime() : null)
+                        .departureTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getDepartureTime() : null))
+                        .arrivalTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getArrivalTime() : null))
                         .busName(bus != null ? bus.getBusName() : null)
                         .busType(bus != null ? bus.getBusType() : null)
                         .operatorName(bus != null && bus.getOperator() != null ? bus.getOperator().getOperatorName() : null)
@@ -93,11 +93,11 @@ public class BookingMapper {
         } else {
             BookingProjectionImpl proj = BookingProjectionImpl.builder()
                     .bookingId(b.getId())
-                    .bookingDate(b.getBookingDate())
+                    .bookingDate(DateTimeUtil.toLocalDate(b.getBookingDate()))
                     .amount(b.getAmount())
                     .userName(b.getUser() != null ? b.getUser().getName() : null)
-                    .departureTime(trip != null ? trip.getDepartureTime() : null)
-                    .arrivalTime(trip != null ? trip.getArrivalTime() : null)
+                    .departureTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getDepartureTime() : null))
+                    .arrivalTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getArrivalTime() : null))
                     .busName(bus != null ? bus.getBusName() : null)
                     .busType(bus != null ? bus.getBusType() : null)
                     .operatorName(bus != null && bus.getOperator() != null ? bus.getOperator().getOperatorName() : null)

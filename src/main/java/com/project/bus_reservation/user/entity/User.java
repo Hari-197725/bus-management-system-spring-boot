@@ -1,9 +1,8 @@
 package com.project.bus_reservation.user.entity;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
-import com.project.bus_reservation.booking.entity.Booking;
-import com.project.bus_reservation.passenger.entity.Passenger;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,10 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Document(collectionName = "users")
 @Getter
@@ -38,18 +33,7 @@ public class User {
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits.")
     private String phoneNumber;
 
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
-    private LocalDateTime updatedAt;
-
-    private List<Booking> bookings = new ArrayList<>();
-
-    private List<Passenger> passengers = new ArrayList<>();
-
-    public void addPassenger(Passenger passenger) {
-        if (this.passengers == null) {
-            this.passengers = new ArrayList<>();
-        }
-        this.passengers.add(passenger);
-    }
+    private Timestamp updatedAt;
 }

@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import com.google.cloud.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +41,11 @@ public class Bus {
 
     private BusStatus status;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+    private Timestamp createdAt = Timestamp.now();
+    private Timestamp modifiedAt = Timestamp.now();
 
     private Operator operator;
     private Route route;
 
     private List<Seat> seats = new ArrayList<>();
-    private List<BusTrip> busTrips = new ArrayList<>();
 }

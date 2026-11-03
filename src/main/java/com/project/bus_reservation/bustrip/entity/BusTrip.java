@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import com.google.cloud.Timestamp;
 
 @Document(collectionName = "bus_trips")
 @Getter
@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 public class BusTrip {
     @DocumentId
     private String id;
-    private LocalDateTime departureTime = LocalDateTime.now();
-    private LocalDateTime arrivalTime = LocalDateTime.now().plusHours(4);
+    private Timestamp departureTime;
+    private Timestamp arrivalTime;
     private Bus bus;
     private Route route;
     private Booking bookings;

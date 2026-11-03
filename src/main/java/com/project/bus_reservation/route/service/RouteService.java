@@ -29,7 +29,7 @@ public class RouteService {
             throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
         }
 
-        Route route = RouteMapper.toRouteEntity(operator, routeCreateRequest);
+        Route route = RouteMapper.toRouteEntity(operatorId, routeCreateRequest);
         routeRepository.save(route).block();
     }
 
@@ -39,13 +39,11 @@ public class RouteService {
             throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
         }
 
-        List<Route> allRoutes = routeRepository.findAll().collectList().block();
+        List<Route> routes = routeRepository.findByOperatorId(operatorId).collectList().block();
         List<RouteResponse> routeResponses = new ArrayList<>();
-        if (allRoutes != null) {
-            for (Route route : allRoutes) {
-                if (route.getOperator() != null && operatorId.equals(route.getOperator().getId())) {
-                    routeResponses.add(RouteMapper.toRouteResponse(route));
-                }
+        if (routes != null) {
+            for (Route route : routes) {
+                routeResponses.add(RouteMapper.toRouteResponse(route));
             }
         }
 
@@ -59,7 +57,7 @@ public class RouteService {
         }
 
         Route route = routeRepository.findById(routeId).block();
-        if (route == null || route.getOperator() == null || !operatorId.equals(route.getOperator().getId())) {
+        if (route == null || route.getOperatorId() == null || !operatorId.equals(route.getOperatorId())) {
             throw new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route with id " + routeId + " not found for operator with id " + operatorId);
         }
 

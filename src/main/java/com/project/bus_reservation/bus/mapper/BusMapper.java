@@ -12,9 +12,10 @@ import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.route.mapper.RouteMapper;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
+import com.google.cloud.Timestamp;
+import com.project.bus_reservation.util.DateTimeUtil;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ public class BusMapper {
         bus.setBusType(busCreateRequest.getBusType());
         bus.setTotalSeats(busCreateRequest.getTotalSeats());
         bus.setStatus(BusStatus.ACTIVE);
-        bus.setCreatedAt(LocalDateTime.now());
-        bus.setModifiedAt(LocalDateTime.now());
+        bus.setCreatedAt(Timestamp.now());
+        bus.setModifiedAt(Timestamp.now());
         bus.setOperator(operator);
 
         if (route != null) {
@@ -44,7 +45,7 @@ public class BusMapper {
                     seat.setSeatNumber(seatReq.getSeatNumber());
                     seat.setSeatType(seatReq.getSeatType());
                     seat.setSeatStatus(SeatStatus.AVAILABLE);
-                    seat.setBus(bus);
+                    seat.setBusId(bus.getId());
                     return seat;
                 })
                 .toList();
@@ -78,8 +79,8 @@ public class BusMapper {
                 routeResponse,
                 bus.getTotalSeats(),
                 bus.getStatus(),
-                bus.getCreatedAt(),
-                bus.getModifiedAt()
+                DateTimeUtil.toLocalDateTime(bus.getCreatedAt()),
+                DateTimeUtil.toLocalDateTime(bus.getModifiedAt())
         );
     }
 
