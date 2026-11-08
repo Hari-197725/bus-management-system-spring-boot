@@ -30,23 +30,29 @@ public class BusService {
     @Autowired
     private RouteRepository routeRepository;
 
+    @Autowired
+    private com.project.bus_reservation.seats.repository.SeatRepository seatRepository;
+
     public void createBus(String operatorId, BusCreateRequest busCreateRequest) {
         Operator operator = operatorRepository.findById(operatorId).block();
         if (operator == null) {
             throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
         }
 
-        Route route = null;
+        String routeId = null;
         if (busCreateRequest.getRouteId() != null) {
             Route r = routeRepository.findById(busCreateRequest.getRouteId()).block();
             if (r == null || r.getOperatorId() == null || !operatorId.equals(r.getOperatorId())) {
                 throw new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route id " + busCreateRequest.getRouteId() + " not found for operator: " + operatorId);
             }
-            route = r;
+            routeId = r.getId();
         }
 
-        Bus bus = BusMapper.toBusEntity(operator, route, busCreateRequest);
+        Bus bus = BusMapper.toBusEntity(operatorId, routeId, busCreateRequest);
         busRepository.save(bus).block();
+        if (bus.getSeats() != null && !bus.getSeats().isEmpty()) {
+            seatRepository.saveAll(bus.getSeats()).collectList().block();
+        }
     }
 
     public List<BusResponse> getAllBuses(String operatorId) {
@@ -55,23 +61,18 @@ public class BusService {
             throw new NotFoundException(ErrorCode.OPERATOR_NOT_FOUND, "Operator not found with id: " + operatorId);
         }
 
-        List<Bus> allBuses = busRepository.findAll().collectList().block();
-        List<Bus> operatorBuses = new ArrayList<>();
-        if (allBuses != null) {
-            for (Bus b : allBuses) {
-                if (b.getOperator() != null && operatorId.equals(b.getOperator().getId())) {
-                    operatorBuses.add(b);
-                }
-            }
-        }
-
-        if (operatorBuses.isEmpty()) {
+        List<Bus> operatorBuses = busRepository.findByOperatorId(operatorId).collectList().block();
+        if (operatorBuses == null || operatorBuses.isEmpty()) {
             throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "No Buses found for operator with id: " + operatorId);
         }
 
         List<BusResponse> busResponses = new ArrayList<>();
         for (Bus bus : operatorBuses) {
-            busResponses.add(BusMapper.toBusResponse(bus));
+            Route route = null;
+            if (bus.getRouteId() != null) {
+                route = routeRepository.findById(bus.getRouteId()).block();
+            }
+            busResponses.add(BusMapper.toBusResponse(bus, operator, route));
         }
 
         return busResponses;
@@ -84,11 +85,16 @@ public class BusService {
         }
 
         Bus bus = busRepository.findById(busId).block();
-        if (bus == null || bus.getOperator() == null || !operatorId.equals(bus.getOperator().getId())) {
+        if (bus == null || bus.getOperatorId() == null || !operatorId.equals(bus.getOperatorId())) {
             throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus not found with id: " + busId + " for operator id: " + operatorId);
         }
 
-        return BusMapper.toBusResponse(bus);
+        Route route = null;
+        if (bus.getRouteId() != null) {
+            route = routeRepository.findById(bus.getRouteId()).block();
+        }
+
+        return BusMapper.toBusResponse(bus, operator, route);
     }
 
     public RouteResponse getRouteByBusId(String operatorId, String busId) {
@@ -98,14 +104,16 @@ public class BusService {
         }
 
         Bus bus = busRepository.findById(busId).block();
-        if (bus == null || bus.getOperator() == null || !operatorId.equals(bus.getOperator().getId())) {
+        if (bus == null || bus.getOperatorId() == null || !operatorId.equals(bus.getOperatorId())) {
             throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus with id " + busId + " not found for operator id: " + operatorId);
         }
 
-        if (bus.getRoute() != null) {
-            return RouteMapper.toRouteResponse(bus.getRoute());
-        } else {
-            throw new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route not found for Bus id: " + busId);
+        if (bus.getRouteId() != null) {
+            Route route = routeRepository.findById(bus.getRouteId()).block();
+            if (route != null) {
+                return RouteMapper.toRouteResponse(route);
+            }
         }
+        throw new NotFoundException(ErrorCode.ROUTE_NOT_FOUND, "Route not found for Bus id: " + busId);
     }
 }

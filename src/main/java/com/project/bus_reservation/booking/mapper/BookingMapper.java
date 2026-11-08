@@ -27,17 +27,18 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setId(UUID.randomUUID().toString());
         booking.setAmount(bookingCreateRequest.getAmount());
+        booking.setUserId(user != null ? user.getId() : null);
         booking.setUser(user);
         booking.setBookingDate(Timestamp.now());
         return booking;
     }
 
-    public static BusTrip toBusTripEntity(Booking booking, Bus bus) {
+    public static BusTrip toBusTripEntity(Booking booking, Bus bus, Route route) {
         BusTrip busTrip = new BusTrip();
         busTrip.setId(UUID.randomUUID().toString());
-        busTrip.setBookings(booking);
+        busTrip.setBookingId(booking.getId());
         busTrip.setBus(bus);
-        busTrip.setRoute(bus.getRoute());
+        busTrip.setRoute(route);
         busTrip.setDepartureTime(Timestamp.now());
         busTrip.setArrivalTime(Timestamp.ofTimeSecondsAndNanos(Timestamp.now().getSeconds() + 4 * 3600, 0));
         return busTrip;
@@ -46,7 +47,7 @@ public class BookingMapper {
     public static BookingDetail toBookingDetailsEntity(Booking booking, Passenger passenger, Seat seat) {
         BookingDetail bookingDetail = new BookingDetail();
         bookingDetail.setId(UUID.randomUUID().toString());
-        bookingDetail.setBooking(booking);
+        bookingDetail.setBookingId(booking.getId());
         bookingDetail.setPassenger(passenger);
         bookingDetail.setSeat(seat);
         return bookingDetail;
@@ -59,10 +60,14 @@ public class BookingMapper {
     }
 
     public static List<BookingProjection> toBookingProjections(Booking b) {
+        return toBookingProjections(b, null);
+    }
+
+    public static List<BookingProjection> toBookingProjections(Booking b, String operatorName) {
         List<BookingProjection> list = new ArrayList<>();
         BusTrip trip = b.getBusTrip();
         Bus bus = trip != null ? trip.getBus() : null;
-        Route route = trip != null ? trip.getRoute() : (bus != null ? bus.getRoute() : null);
+        Route route = trip != null ? trip.getRoute() : null;
 
         if (b.getBookingDetails() != null && !b.getBookingDetails().isEmpty()) {
             for (BookingDetail detail : b.getBookingDetails()) {
@@ -78,7 +83,7 @@ public class BookingMapper {
                         .arrivalTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getArrivalTime() : null))
                         .busName(bus != null ? bus.getBusName() : null)
                         .busType(bus != null ? bus.getBusType() : null)
-                        .operatorName(bus != null && bus.getOperator() != null ? bus.getOperator().getOperatorName() : null)
+                        .operatorName(operatorName)
                         .source(route != null ? route.getSource() : null)
                         .destination(route != null ? route.getDestination() : null)
                         .estimatedDuration(route != null ? route.getEstimatedDuration() : null)
@@ -100,7 +105,7 @@ public class BookingMapper {
                     .arrivalTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getArrivalTime() : null))
                     .busName(bus != null ? bus.getBusName() : null)
                     .busType(bus != null ? bus.getBusType() : null)
-                    .operatorName(bus != null && bus.getOperator() != null ? bus.getOperator().getOperatorName() : null)
+                    .operatorName(operatorName)
                     .source(route != null ? route.getSource() : null)
                     .destination(route != null ? route.getDestination() : null)
                     .estimatedDuration(route != null ? route.getEstimatedDuration() : null)

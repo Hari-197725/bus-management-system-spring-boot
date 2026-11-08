@@ -20,6 +20,10 @@ import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.repository.SeatRepository;
 import com.project.bus_reservation.user.entity.User;
 import com.project.bus_reservation.user.repository.UsersRepository;
+import com.project.bus_reservation.operator.entity.Operator;
+import com.project.bus_reservation.operator.repository.OperatorRepository;
+import com.project.bus_reservation.route.entity.Route;
+import com.project.bus_reservation.route.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +47,12 @@ public class BookingService {
     @Autowired
     private SeatRepository seatRepository;
 
+    @Autowired
+    private RouteRepository routeRepository;
+
+    @Autowired
+    private OperatorRepository operatorRepository;
+
     public void createBooking(String userId, BookingCreateRequest bookingCreateRequest) {
         User user = usersRepository.findById(userId).block();
         if (user == null) {
@@ -56,13 +66,14 @@ public class BookingService {
         }
 
         Bus bus = busRepository.findById(bookingCreateRequest.getBusId()).block();
-        if (bus == null || bus.getRoute() == null || !bookingCreateRequest.getRouteId().equals(bus.getRoute().getId())) {
+        if (bus == null || bus.getRouteId() == null || !bookingCreateRequest.getRouteId().equals(bus.getRouteId())) {
             throw new NotFoundException(ErrorCode.BUS_NOT_FOUND, "Bus with id " + bookingCreateRequest.getBusId() + " not found for route with id "
                     + bookingCreateRequest.getRouteId());
         }
 
+        Route route = routeRepository.findById(bus.getRouteId()).block();
         Booking booking = BookingMapper.toBookingEntity(user, bookingCreateRequest);
-        BusTrip busTrip = BookingMapper.toBusTripEntity(booking, bus);
+        BusTrip busTrip = BookingMapper.toBusTripEntity(booking, bus, route);
 
         List<BookingDetail> bookingDetails = new ArrayList<>();
 
@@ -76,7 +87,8 @@ public class BookingService {
             Seat seat = null;
             if (bus.getSeats() != null) {
                 for (Seat s : bus.getSeats()) {
-                    if (s.getId() != null && s.getId().equals(passengerReq.getSeatId())) {
+                    String sId = s.getSeatId() != null ? s.getSeatId() : s.getId();
+                    if (sId != null && sId.equals(passengerReq.getSeatId())) {
                         seat = s;
                         break;
                     }
@@ -96,12 +108,16 @@ public class BookingService {
             }
 
             seat.markAsBooked();
+            if (seat.getSeatId() != null) {
+                seat.setId(seat.getSeatId());
+            }
             seatRepository.save(seat).block();
 
             BookingDetail detail = BookingMapper.toBookingDetailsEntity(booking, passenger, seat);
             bookingDetails.add(detail);
         }
 
+        busRepository.save(bus).block();
         BookingMapper.buildCompleteBooking(booking, busTrip, bookingDetails);
         bookingRepository.save(booking).block();
     }
@@ -112,13 +128,24 @@ public class BookingService {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
 
-        List<Booking> allBookings = bookingRepository.findAll().collectList().block();
+        List<Booking> allBookings = bookingRepository.findByUserId(userId).collectList().block();
+        if (allBookings == null || allBookings.isEmpty()) {
+            allBookings = bookingRepository.findAll().collectList().block();
+        }
+
         List<BookingProjection> projections = new ArrayList<>();
 
         if (allBookings != null) {
             for (Booking b : allBookings) {
-                if (b.getUser() != null && userId.equals(b.getUser().getId())) {
-                    projections.addAll(BookingMapper.toBookingProjections(b));
+                boolean matches = (b.getUserId() != null && userId.equals(b.getUserId()))
+                        || (b.getUser() != null && userId.equals(b.getUser().getId()));
+                if (matches) {
+                    String opName = null;
+                    if (b.getBusTrip() != null && b.getBusTrip().getBus() != null && b.getBusTrip().getBus().getOperatorId() != null) {
+                        Operator op = operatorRepository.findById(b.getBusTrip().getBus().getOperatorId()).block();
+                        if (op != null) opName = op.getOperatorName();
+                    }
+                    projections.addAll(BookingMapper.toBookingProjections(b, opName));
                 }
             }
         }
@@ -145,11 +172,21 @@ public class BookingService {
         }
 
         Booking booking = bookingRepository.findById(bookingId).block();
-        if (booking == null || booking.getUser() == null || !userId.equals(booking.getUser().getId())) {
+        boolean matches = booking != null && (
+                (booking.getUserId() != null && userId.equals(booking.getUserId()))
+                || (booking.getUser() != null && userId.equals(booking.getUser().getId()))
+        );
+        if (!matches) {
             throw new NotFoundException(ErrorCode.BOOKING_NOT_FOUND, "Booking not found with id: " + bookingId);
         }
 
-        List<BookingProjection> projections = BookingMapper.toBookingProjections(booking);
+        String opName = null;
+        if (booking.getBusTrip() != null && booking.getBusTrip().getBus() != null && booking.getBusTrip().getBus().getOperatorId() != null) {
+            Operator op = operatorRepository.findById(booking.getBusTrip().getBus().getOperatorId()).block();
+            if (op != null) opName = op.getOperatorName();
+        }
+
+        List<BookingProjection> projections = BookingMapper.toBookingProjections(booking, opName);
         return BookingMapper.toBookingResponse(projections);
     }
 }

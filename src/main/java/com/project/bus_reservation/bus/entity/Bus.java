@@ -4,9 +4,6 @@ import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.bus.enums.BusStatus;
 import com.project.bus_reservation.bus.enums.BusType;
-import com.project.bus_reservation.bustrip.entity.BusTrip;
-import com.project.bus_reservation.operator.entity.Operator;
-import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -44,8 +41,8 @@ public class Bus {
     private Timestamp createdAt = Timestamp.now();
     private Timestamp modifiedAt = Timestamp.now();
 
-    private Operator operator;
-    private Route route;
+    private String operatorId;
+    private String routeId;
 
     private List<Seat> seats = new ArrayList<>();
 }

@@ -27,7 +27,11 @@ public class CancellationService {
 
     public void cancelBookingByBookingId(String userId, String bookingId, CancellationRequest cancellationRequest) {
         Booking booking = bookingRepository.findById(bookingId).block();
-        if (booking == null || booking.getUser() == null || !userId.equals(booking.getUser().getId())) {
+        boolean matches = booking != null && (
+                (booking.getUserId() != null && userId.equals(booking.getUserId()))
+                || (booking.getUser() != null && userId.equals(booking.getUser().getId()))
+        );
+        if (!matches) {
             throw new NotFoundException(ErrorCode.BOOKING_NOT_FOUND, "Booking not found with id: " + bookingId);
         }
 
@@ -39,6 +43,9 @@ public class CancellationService {
                         if (bookingDetail.getSeat() != null && seatNo.equals(bookingDetail.getSeat().getSeatNumber())) {
                             Seat seat = bookingDetail.getSeat();
                             seat.markAsAvailable();
+                            if (seat.getSeatId() != null) {
+                                seat.setId(seat.getSeatId());
+                            }
                             seatRepository.save(seat).block();
                             if (bookingDetail.getId() != null) {
                                 bookingDetailRepository.deleteById(bookingDetail.getId()).block();

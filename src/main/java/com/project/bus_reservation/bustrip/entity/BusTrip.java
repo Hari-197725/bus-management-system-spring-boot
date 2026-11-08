@@ -2,7 +2,6 @@ package com.project.bus_reservation.bustrip.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
-import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.route.entity.Route;
 import lombok.AllArgsConstructor;
@@ -24,5 +23,5 @@ public class BusTrip {
     private Timestamp arrivalTime;
     private Bus bus;
     private Route route;
-    private Booking bookings;
+    private String bookingId;
 }

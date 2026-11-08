@@ -22,7 +22,7 @@ import java.util.UUID;
 @Component
 public class BusMapper {
 
-    public static Bus toBusEntity(Operator operator, Route route, BusCreateRequest busCreateRequest) {
+    public static Bus toBusEntity(String operatorId, String routeId, BusCreateRequest busCreateRequest) {
         Bus bus = new Bus();
         bus.setId(UUID.randomUUID().toString());
         bus.setBusNumber(busCreateRequest.getBusNumber());
@@ -32,38 +32,43 @@ public class BusMapper {
         bus.setStatus(BusStatus.ACTIVE);
         bus.setCreatedAt(Timestamp.now());
         bus.setModifiedAt(Timestamp.now());
-        bus.setOperator(operator);
+        bus.setOperatorId(operatorId);
+        bus.setRouteId(routeId);
 
-        if (route != null) {
-            bus.setRoute(route);
+        if (busCreateRequest.getSeats() != null) {
+            List<Seat> seats = busCreateRequest.getSeats().stream()
+                    .map(seatReq -> {
+                        Seat seat = new Seat();
+                        String uniqueSeatId = UUID.randomUUID().toString();
+                        seat.setId(uniqueSeatId);
+                        seat.setSeatId(uniqueSeatId);
+                        seat.setSeatNumber(seatReq.getSeatNumber());
+                        seat.setSeatType(seatReq.getSeatType());
+                        seat.setSeatStatus(SeatStatus.AVAILABLE);
+                        seat.setBusId(bus.getId());
+                        return seat;
+                    })
+                    .toList();
+            bus.setSeats(seats);
         }
-
-        List<Seat> seats = busCreateRequest.getSeats().stream()
-                .map(seatReq -> {
-                    Seat seat = new Seat();
-                    seat.setId(UUID.randomUUID().toString());
-                    seat.setSeatNumber(seatReq.getSeatNumber());
-                    seat.setSeatType(seatReq.getSeatType());
-                    seat.setSeatStatus(SeatStatus.AVAILABLE);
-                    seat.setBusId(bus.getId());
-                    return seat;
-                })
-                .toList();
-        bus.setSeats(seats);
 
         return bus;
     }
 
     public static BusResponse toBusResponse(Bus bus) {
-        Operator operator = bus.getOperator();
-        OperatorResponse operatorResponse = OperatorMapper.toOperatorResponse(operator);
+        return toBusResponse(bus, null, null);
+    }
 
-        List<BusResponse.SeatResponse> seatResponses = bus.getSeats()
-                .stream()
-                .map(BusMapper::toSeatResponse)
-                .toList();
+    public static BusResponse toBusResponse(Bus bus, Operator operator, Route route) {
+        OperatorResponse operatorResponse = null;
+        if (operator != null) {
+            operatorResponse = OperatorMapper.toOperatorResponse(operator);
+        }
 
-        Route route = bus.getRoute();
+        List<BusResponse.SeatResponse> seatResponses = bus.getSeats() != null
+                ? bus.getSeats().stream().map(BusMapper::toSeatResponse).toList()
+                : List.of();
+
         RouteResponse routeResponse = null;
         if (route != null) {
             routeResponse = RouteMapper.toRouteResponse(route);
@@ -85,11 +90,14 @@ public class BusMapper {
     }
 
     public static BusResponse.SeatResponse toSeatResponse(Seat seat) {
-        return new BusResponse.SeatResponse(seat.getId(), seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
+        String seatId = seat.getSeatId() != null ? seat.getSeatId() : seat.getId();
+        return new BusResponse.SeatResponse(seatId, seat.getSeatNumber(), seat.getSeatType(), seat.getSeatStatus());
     }
 
     public static Bus updateBusTransfer(Operator transferOperator, Bus bus) {
-        bus.setOperator(transferOperator);
+        if (transferOperator != null) {
+            bus.setOperatorId(transferOperator.getId());
+        }
         return bus;
     }
 }

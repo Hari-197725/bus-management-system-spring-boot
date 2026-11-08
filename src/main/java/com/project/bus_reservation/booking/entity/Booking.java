@@ -24,6 +24,7 @@ public class Booking {
     private String id;
     private Timestamp bookingDate;
     private Double amount;
+    private String userId;
     private User user;
     private BusTrip busTrip;
     private List<BookingDetail> bookingDetails = new ArrayList<>();

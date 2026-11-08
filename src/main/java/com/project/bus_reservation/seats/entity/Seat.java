@@ -17,6 +17,8 @@ public class Seat {
     @DocumentId
     private String id;
 
+    private String seatId;
+
     @NotNull
     @Positive
     private Integer seatNumber;
