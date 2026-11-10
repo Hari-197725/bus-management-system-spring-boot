@@ -6,24 +6,22 @@ import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.booking.mapper.BookingMapper;
 import com.project.bus_reservation.booking.projection.BookingProjection;
 import com.project.bus_reservation.booking.repository.BookingRepository;
-import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
 import com.project.bus_reservation.bus.entity.Bus;
 import com.project.bus_reservation.bus.repository.BusRepository;
-import com.project.bus_reservation.bustrip.entity.BusTrip;
 import com.project.bus_reservation.exception.custom.BadRequestException;
 import com.project.bus_reservation.exception.custom.NotFoundException;
 import com.project.bus_reservation.exception.enums.ErrorCode;
+import com.project.bus_reservation.operator.entity.Operator;
+import com.project.bus_reservation.operator.repository.OperatorRepository;
 import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.passenger.repository.PassengerRepository;
+import com.project.bus_reservation.route.entity.Route;
+import com.project.bus_reservation.route.repository.RouteRepository;
 import com.project.bus_reservation.seats.entity.Seat;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.repository.SeatRepository;
 import com.project.bus_reservation.user.entity.User;
 import com.project.bus_reservation.user.repository.UsersRepository;
-import com.project.bus_reservation.operator.entity.Operator;
-import com.project.bus_reservation.operator.repository.OperatorRepository;
-import com.project.bus_reservation.route.entity.Route;
-import com.project.bus_reservation.route.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,10 +70,16 @@ public class BookingService {
         }
 
         Route route = routeRepository.findById(bus.getRouteId()).block();
-        Booking booking = BookingMapper.toBookingEntity(user, bookingCreateRequest);
-        BusTrip busTrip = BookingMapper.toBusTripEntity(booking, bus, route);
 
-        List<BookingDetail> bookingDetails = new ArrayList<>();
+        // Resolve operator name
+        String operatorName = null;
+        if (bus.getOperatorId() != null) {
+            Operator op = operatorRepository.findById(bus.getOperatorId()).block();
+            if (op != null) operatorName = op.getOperatorName();
+        }
+
+        List<Passenger> passengers = new ArrayList<>();
+        List<Seat> seats = new ArrayList<>();
 
         for (BookingCreateRequest.passengerCreateRequest passengerReq : passengerList) {
             Passenger passenger = passengerRepository.findById(passengerReq.getPassengerId()).block();
@@ -113,12 +117,14 @@ public class BookingService {
             }
             seatRepository.save(seat).block();
 
-            BookingDetail detail = BookingMapper.toBookingDetailsEntity(booking, passenger, seat);
-            bookingDetails.add(detail);
+            passengers.add(passenger);
+            seats.add(seat);
         }
 
         busRepository.save(bus).block();
-        BookingMapper.buildCompleteBooking(booking, busTrip, bookingDetails);
+
+        // Build booking with only the fields needed for BookingResponse
+        Booking booking = BookingMapper.toBookingEntity(user, bookingCreateRequest, bus, route, operatorName, passengers, seats);
         bookingRepository.save(booking).block();
     }
 
@@ -137,15 +143,8 @@ public class BookingService {
 
         if (allBookings != null) {
             for (Booking b : allBookings) {
-                boolean matches = (b.getUserId() != null && userId.equals(b.getUserId()))
-                        || (b.getUser() != null && userId.equals(b.getUser().getId()));
-                if (matches) {
-                    String opName = null;
-                    if (b.getBusTrip() != null && b.getBusTrip().getBus() != null && b.getBusTrip().getBus().getOperatorId() != null) {
-                        Operator op = operatorRepository.findById(b.getBusTrip().getBus().getOperatorId()).block();
-                        if (op != null) opName = op.getOperatorName();
-                    }
-                    projections.addAll(BookingMapper.toBookingProjections(b, opName));
+                if (b.getUserId() != null && userId.equals(b.getUserId())) {
+                    projections.addAll(BookingMapper.toBookingProjections(b));
                 }
             }
         }
@@ -172,21 +171,11 @@ public class BookingService {
         }
 
         Booking booking = bookingRepository.findById(bookingId).block();
-        boolean matches = booking != null && (
-                (booking.getUserId() != null && userId.equals(booking.getUserId()))
-                || (booking.getUser() != null && userId.equals(booking.getUser().getId()))
-        );
-        if (!matches) {
+        if (booking == null || booking.getUserId() == null || !userId.equals(booking.getUserId())) {
             throw new NotFoundException(ErrorCode.BOOKING_NOT_FOUND, "Booking not found with id: " + bookingId);
         }
 
-        String opName = null;
-        if (booking.getBusTrip() != null && booking.getBusTrip().getBus() != null && booking.getBusTrip().getBus().getOperatorId() != null) {
-            Operator op = operatorRepository.findById(booking.getBusTrip().getBus().getOperatorId()).block();
-            if (op != null) opName = op.getOperatorName();
-        }
-
-        List<BookingProjection> projections = BookingMapper.toBookingProjections(booking, opName);
+        List<BookingProjection> projections = BookingMapper.toBookingProjections(booking);
         return BookingMapper.toBookingResponse(projections);
     }
 }

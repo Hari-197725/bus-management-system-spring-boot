@@ -2,9 +2,8 @@ package com.project.bus_reservation.booking.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
-import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
-import com.project.bus_reservation.bustrip.entity.BusTrip;
-import com.project.bus_reservation.user.entity.User;
+import com.project.bus_reservation.bus.enums.BusType;
+import com.project.bus_reservation.passenger.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,33 @@ public class Booking {
     private Timestamp bookingDate;
     private Double amount;
     private String userId;
-    private User user;
-    private BusTrip busTrip;
-    private List<BookingDetail> bookingDetails = new ArrayList<>();
+    private String userName;
+    private EmbeddedBusTrip busTrip;
+    private List<EmbeddedBookingDetail> bookingDetails = new ArrayList<>();
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EmbeddedBusTrip {
+        private Timestamp departureTime;
+        private Timestamp arrivalTime;
+        private String busName;
+        private BusType busType;
+        private String operatorName;
+        private String source;
+        private String destination;
+        private Integer estimatedDuration;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EmbeddedBookingDetail {
+        private Integer passengerAge;
+        private Gender passengerGender;
+        private String passengerName;
+        private Integer seatNumber;
+    }
 }

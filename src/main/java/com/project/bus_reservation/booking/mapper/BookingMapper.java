@@ -5,9 +5,8 @@ import com.project.bus_reservation.booking.dto.response.BookingResponse;
 import com.project.bus_reservation.booking.entity.Booking;
 import com.project.bus_reservation.booking.projection.BookingProjection;
 import com.project.bus_reservation.booking.projection.BookingProjectionImpl;
-import com.project.bus_reservation.bookingdetail.entity.BookingDetail;
 import com.project.bus_reservation.bus.entity.Bus;
-import com.project.bus_reservation.bustrip.entity.BusTrip;
+import com.project.bus_reservation.operator.entity.Operator;
 import com.project.bus_reservation.passenger.entity.Passenger;
 import com.project.bus_reservation.route.entity.Route;
 import com.project.bus_reservation.seats.entity.Seat;
@@ -23,39 +22,42 @@ import java.util.UUID;
 @Component
 public class BookingMapper {
 
-    public static Booking toBookingEntity(User user, BookingCreateRequest bookingCreateRequest) {
+    public static Booking toBookingEntity(User user, BookingCreateRequest bookingCreateRequest,
+                                          Bus bus, Route route, String operatorName,
+                                          List<Passenger> passengers, List<Seat> seats) {
         Booking booking = new Booking();
         booking.setId(UUID.randomUUID().toString());
         booking.setAmount(bookingCreateRequest.getAmount());
         booking.setUserId(user != null ? user.getId() : null);
-        booking.setUser(user);
+        booking.setUserName(user != null ? user.getName() : null);
         booking.setBookingDate(Timestamp.now());
-        return booking;
-    }
 
-    public static BusTrip toBusTripEntity(Booking booking, Bus bus, Route route) {
-        BusTrip busTrip = new BusTrip();
-        busTrip.setId(UUID.randomUUID().toString());
-        busTrip.setBookingId(booking.getId());
-        busTrip.setBus(bus);
-        busTrip.setRoute(route);
-        busTrip.setDepartureTime(Timestamp.now());
-        busTrip.setArrivalTime(Timestamp.ofTimeSecondsAndNanos(Timestamp.now().getSeconds() + 4 * 3600, 0));
-        return busTrip;
-    }
+        // Build embedded bus trip with only the needed fields
+        Booking.EmbeddedBusTrip embeddedBusTrip = new Booking.EmbeddedBusTrip();
+        embeddedBusTrip.setDepartureTime(Timestamp.now());
+        embeddedBusTrip.setArrivalTime(Timestamp.ofTimeSecondsAndNanos(Timestamp.now().getSeconds() + 4 * 3600, 0));
+        embeddedBusTrip.setBusName(bus != null ? bus.getBusName() : null);
+        embeddedBusTrip.setBusType(bus != null ? bus.getBusType() : null);
+        embeddedBusTrip.setOperatorName(operatorName);
+        embeddedBusTrip.setSource(route != null ? route.getSource() : null);
+        embeddedBusTrip.setDestination(route != null ? route.getDestination() : null);
+        embeddedBusTrip.setEstimatedDuration(route != null ? route.getEstimatedDuration() : null);
+        booking.setBusTrip(embeddedBusTrip);
 
-    public static BookingDetail toBookingDetailsEntity(Booking booking, Passenger passenger, Seat seat) {
-        BookingDetail bookingDetail = new BookingDetail();
-        bookingDetail.setId(UUID.randomUUID().toString());
-        bookingDetail.setBookingId(booking.getId());
-        bookingDetail.setPassenger(passenger);
-        bookingDetail.setSeat(seat);
-        return bookingDetail;
-    }
+        // Build embedded booking details with only the needed fields
+        List<Booking.EmbeddedBookingDetail> details = new ArrayList<>();
+        for (int i = 0; i < passengers.size(); i++) {
+            Passenger passenger = passengers.get(i);
+            Seat seat = seats.get(i);
+            Booking.EmbeddedBookingDetail detail = new Booking.EmbeddedBookingDetail();
+            detail.setPassengerAge(passenger != null ? passenger.getAge() : null);
+            detail.setPassengerGender(passenger != null ? passenger.getGender() : null);
+            detail.setPassengerName(passenger != null ? passenger.getName() : null);
+            detail.setSeatNumber(seat != null ? seat.getSeatNumber() : null);
+            details.add(detail);
+        }
+        booking.setBookingDetails(details);
 
-    public static Booking buildCompleteBooking(Booking booking, BusTrip busTrip, List<BookingDetail> bookingDetails) {
-        booking.setBusTrip(busTrip);
-        booking.setBookingDetails(bookingDetails);
         return booking;
     }
 
@@ -65,32 +67,30 @@ public class BookingMapper {
 
     public static List<BookingProjection> toBookingProjections(Booking b, String operatorName) {
         List<BookingProjection> list = new ArrayList<>();
-        BusTrip trip = b.getBusTrip();
-        Bus bus = trip != null ? trip.getBus() : null;
-        Route route = trip != null ? trip.getRoute() : null;
+        Booking.EmbeddedBusTrip trip = b.getBusTrip();
+
+        // Use operatorName from the embedded trip if available, fall back to the parameter
+        String opName = (trip != null && trip.getOperatorName() != null) ? trip.getOperatorName() : operatorName;
 
         if (b.getBookingDetails() != null && !b.getBookingDetails().isEmpty()) {
-            for (BookingDetail detail : b.getBookingDetails()) {
-                Passenger p = detail.getPassenger();
-                Seat s = detail.getSeat();
-
+            for (Booking.EmbeddedBookingDetail detail : b.getBookingDetails()) {
                 BookingProjectionImpl proj = BookingProjectionImpl.builder()
                         .bookingId(b.getId())
                         .bookingDate(DateTimeUtil.toLocalDate(b.getBookingDate()))
                         .amount(b.getAmount())
-                        .userName(b.getUser() != null ? b.getUser().getName() : null)
+                        .userName(b.getUserName())
                         .departureTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getDepartureTime() : null))
                         .arrivalTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getArrivalTime() : null))
-                        .busName(bus != null ? bus.getBusName() : null)
-                        .busType(bus != null ? bus.getBusType() : null)
-                        .operatorName(operatorName)
-                        .source(route != null ? route.getSource() : null)
-                        .destination(route != null ? route.getDestination() : null)
-                        .estimatedDuration(route != null ? route.getEstimatedDuration() : null)
-                        .passengerAge(p != null ? p.getAge() : null)
-                        .passengerGender(p != null ? p.getGender() : null)
-                        .passengerName(p != null ? p.getName() : null)
-                        .seatNumber(s != null ? s.getSeatNumber() : null)
+                        .busName(trip != null ? trip.getBusName() : null)
+                        .busType(trip != null ? trip.getBusType() : null)
+                        .operatorName(opName)
+                        .source(trip != null ? trip.getSource() : null)
+                        .destination(trip != null ? trip.getDestination() : null)
+                        .estimatedDuration(trip != null ? trip.getEstimatedDuration() : null)
+                        .passengerAge(detail.getPassengerAge())
+                        .passengerGender(detail.getPassengerGender())
+                        .passengerName(detail.getPassengerName())
+                        .seatNumber(detail.getSeatNumber())
                         .build();
 
                 list.add(proj);
@@ -100,15 +100,15 @@ public class BookingMapper {
                     .bookingId(b.getId())
                     .bookingDate(DateTimeUtil.toLocalDate(b.getBookingDate()))
                     .amount(b.getAmount())
-                    .userName(b.getUser() != null ? b.getUser().getName() : null)
+                    .userName(b.getUserName())
                     .departureTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getDepartureTime() : null))
                     .arrivalTime(DateTimeUtil.toLocalDateTime(trip != null ? trip.getArrivalTime() : null))
-                    .busName(bus != null ? bus.getBusName() : null)
-                    .busType(bus != null ? bus.getBusType() : null)
-                    .operatorName(operatorName)
-                    .source(route != null ? route.getSource() : null)
-                    .destination(route != null ? route.getDestination() : null)
-                    .estimatedDuration(route != null ? route.getEstimatedDuration() : null)
+                    .busName(trip != null ? trip.getBusName() : null)
+                    .busType(trip != null ? trip.getBusType() : null)
+                    .operatorName(opName)
+                    .source(trip != null ? trip.getSource() : null)
+                    .destination(trip != null ? trip.getDestination() : null)
+                    .estimatedDuration(trip != null ? trip.getEstimatedDuration() : null)
                     .build();
             list.add(proj);
         }
