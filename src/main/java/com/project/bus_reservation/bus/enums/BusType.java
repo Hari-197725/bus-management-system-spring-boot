@@ -1,8 +1,10 @@
 package com.project.bus_reservation.bus.enums;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "Bus category: SLEEPER (1), SEMI_SLEEPER (2), SEATER (3)")
 public enum BusType {
     SLEEPER(1),
     SEMI_SLEEPER(2),

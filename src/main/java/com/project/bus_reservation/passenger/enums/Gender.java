@@ -1,5 +1,8 @@
 package com.project.bus_reservation.passenger.enums;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Gender of the passenger: MALE (1), FEMALE (2), OTHER (3)")
 public enum Gender {
     MALE(1), FEMALE(2), OTHER(3);
 

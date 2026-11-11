@@ -1,8 +1,10 @@
 package com.project.bus_reservation.exception.enums;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "Standard application error code identifiers")
 public enum ErrorCode {
 
     USER_NOT_FOUND,

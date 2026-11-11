@@ -1,5 +1,8 @@
 package com.project.bus_reservation.seats.enums;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Seat reservation status: AVAILABLE (1), BOOKED (2)")
 public enum SeatStatus {
     AVAILABLE(1), BOOKED(2);
 

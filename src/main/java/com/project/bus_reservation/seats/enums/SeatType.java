@@ -1,8 +1,10 @@
 package com.project.bus_reservation.seats.enums;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "Seat position/berth type: WINDOW (1), AISLE (2), LOWER_BERTH (3), UPPER_BERTH (4)")
 public enum SeatType {
     WINDOW(1), AISLE(2), LOWER_BERTH(3), UPPER_BERTH(4);
 
