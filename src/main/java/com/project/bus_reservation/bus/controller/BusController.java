@@ -42,7 +42,7 @@ public class BusController {
     @ApiResponse(responseCode = "201", description = "Bus created successfully")
     @PostMapping
     public ResponseEntity<Void> createBus(
-            @Parameter(description = "ID of the operator", required = true)
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId,
             @Valid @RequestBody BusCreateRequest busCreateRequest) {
         busService.createBus(operatorId, busCreateRequest);
@@ -54,7 +54,7 @@ public class BusController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = BusResponse.class))))
     @GetMapping
     public ResponseEntity<List<BusResponse>> getAllBuses(
-            @Parameter(description = "ID of the operator", required = true, example = "1")
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId) {
         return new ResponseEntity<>(busService.getAllBuses(operatorId), HttpStatus.OK);
     }
@@ -64,9 +64,9 @@ public class BusController {
             content = @Content(schema = @Schema(implementation = BusResponse.class)))
     @GetMapping("/{busId}")
     public ResponseEntity<BusResponse> getBusById(
-            @Parameter(description = "ID of the operator", required = true)
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId,
-            @Parameter(description = "ID of the bus to retrieve", required = true)
+            @Parameter(description = "ID of the bus to retrieve")
             @PathVariable Long busId) {
         return new ResponseEntity<>(busService.getBusById(operatorId, busId), HttpStatus.OK);
     }
@@ -76,9 +76,9 @@ public class BusController {
             content = @Content(schema = @Schema(implementation = RouteResponse.class)))
     @GetMapping("/{busId}/route")
     public ResponseEntity<RouteResponse> getRouteByBusId(
-            @Parameter(description = "ID of the operator", required = true)
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId,
-            @Parameter(description = "ID of the bus", required = true)
+            @Parameter(description = "ID of the bus")
             @PathVariable Long busId) {
         return new ResponseEntity<>(busService.getRouteByBusId(operatorId, busId), HttpStatus.OK);
     }

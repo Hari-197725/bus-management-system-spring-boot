@@ -58,7 +58,7 @@ public class OperatorController {
             content = @Content(schema = @Schema(implementation = OperatorResponse.class)))
     @GetMapping("/{operatorId}")
     public ResponseEntity<OperatorResponse> getOperatorById(
-            @Parameter(description = "ID of the operator to retrieve", required = true)
+            @Parameter(description = "ID of the operator to retrieve")
             @PathVariable Long operatorId) {
         return new ResponseEntity<>(operatorService.getOperatorById(operatorId), HttpStatus.OK);
     }

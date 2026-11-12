@@ -1,7 +1,9 @@
 package com.project.bus_reservation.seats.enums;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
 
+@Getter
 @Schema(description = "Seat reservation status: AVAILABLE (1), BOOKED (2)")
 public enum SeatStatus {
     AVAILABLE(1), BOOKED(2);
@@ -10,10 +12,6 @@ public enum SeatStatus {
 
     private SeatStatus(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     public static SeatStatus fromValue(int value) {

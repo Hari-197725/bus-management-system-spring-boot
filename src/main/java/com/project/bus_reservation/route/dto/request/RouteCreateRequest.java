@@ -12,20 +12,20 @@ import lombok.Setter;
 @Schema(description = "Request payload for creating a new route")
 public class RouteCreateRequest {
     @NotBlank
-    @Schema(description = "Source city/location", example = "Chennai", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Source city/location", requiredMode = Schema.RequiredMode.REQUIRED)
     private String source;
 
     @NotBlank
-    @Schema(description = "Destination city/location", example = "Bangalore", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Destination city/location", requiredMode = Schema.RequiredMode.REQUIRED)
     private String destination;
 
     @NotNull
     @Positive
-    @Schema(description = "Distance in kilometers", example = "346.5", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Distance in kilometers", requiredMode = Schema.RequiredMode.REQUIRED)
     private double distance;
 
     @NotNull
     @Positive
-    @Schema(description = "Estimated travel duration in minutes", example = "360", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "Estimated travel duration in minutes", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer estimatedDuration;
 }

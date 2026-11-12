@@ -41,7 +41,7 @@ public class RouteController {
     @ApiResponse(responseCode = "201", description = "Route created successfully")
     @PostMapping
     public ResponseEntity<Void> createRoute(
-            @Parameter(description = "ID of the operator", required = true, example = "1")
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId,
             @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
         routeService.createRoute(operatorId, routeCreateRequest);
@@ -53,7 +53,7 @@ public class RouteController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = RouteResponse.class))))
     @GetMapping
     public ResponseEntity<List<RouteResponse>> getAllRoutes(
-            @Parameter(description = "ID of the operator", required = true, example = "1")
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId) {
         return new ResponseEntity<>(routeService.getAllRoutes(operatorId), HttpStatus.OK);
     }
@@ -63,9 +63,9 @@ public class RouteController {
             content = @Content(schema = @Schema(implementation = RouteResponse.class)))
     @GetMapping("/{routeId}")
     public ResponseEntity<RouteResponse> getRouteById(
-            @Parameter(description = "ID of the operator", required = true, example = "1")
+            @Parameter(description = "ID of the operator")
             @PathVariable Long operatorId,
-            @Parameter(description = "ID of the route to retrieve", required = true, example = "1")
+            @Parameter(description = "ID of the route to retrieve")
             @PathVariable Long routeId) {
         return new ResponseEntity<>(routeService.getRouteById(operatorId, routeId), HttpStatus.OK);
     }

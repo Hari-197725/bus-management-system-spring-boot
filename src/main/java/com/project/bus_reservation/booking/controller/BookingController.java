@@ -41,7 +41,7 @@ public class BookingController {
     @ApiResponse(responseCode = "201", description = "Booking created successfully")
     @PostMapping
     public ResponseEntity<Void> createBooking(
-            @Parameter(description = "ID of the user making the booking", required = true)
+            @Parameter(description = "ID of the user making the booking")
             @PathVariable Long userId,
             @Valid @RequestBody BookingCreateRequest bookingCreateRequest) {
         bookingService.createBooking(userId, bookingCreateRequest);
@@ -53,7 +53,7 @@ public class BookingController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = BookingResponse.class))))
     @GetMapping
     public ResponseEntity<List<BookingResponse>> getAllBookings(
-            @Parameter(description = "ID of the user", required = true)
+            @Parameter(description = "ID of the user")
             @PathVariable Long userId) {
         return new ResponseEntity<>(bookingService.getAllBookings(userId), HttpStatus.OK);
     }
@@ -63,9 +63,9 @@ public class BookingController {
             content = @Content(schema = @Schema(implementation = BookingResponse.class)))
     @GetMapping("/{bookingId}")
     public ResponseEntity<BookingResponse> getBookingByBookingId(
-            @Parameter(description = "ID of the user", required = true, example = "1")
+            @Parameter(description = "ID of the user")
             @PathVariable Long userId,
-            @Parameter(description = "ID of the booking to retrieve", required = true, example = "1")
+            @Parameter(description = "ID of the booking to retrieve")
             @PathVariable Long bookingId) {
         return new ResponseEntity<>(bookingService.getBookingByBookingId(userId, bookingId), HttpStatus.OK);
     }

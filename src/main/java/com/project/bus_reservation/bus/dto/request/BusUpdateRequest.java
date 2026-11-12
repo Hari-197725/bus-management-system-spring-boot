@@ -10,12 +10,12 @@ import lombok.Setter;
 @Setter
 @Schema(description = "Request payload for updating bus details")
 public class BusUpdateRequest {
-    @Schema(description = "Updated name of the bus", example = "Volvo Sleeper")
+    @Schema(description = "Updated name of the bus")
     private String busName;
 
-    @Schema(description = "Updated type of the bus", example = "SEMI_SLEEPER")
+    @Schema(description = "Updated type of the bus")
     private BusType busType;
 
-    @Schema(description = "Updated status of the bus", example = "ACTIVE")
+    @Schema(description = "Updated status of the bus")
     private BusStatus busStatus;
 }

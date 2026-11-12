@@ -59,7 +59,7 @@ public class UserController {
             content = @Content(schema = @Schema(implementation = UserResponse.class)))
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(
-            @Parameter(description = "ID of the user to retrieve", required = true, example = "1")
+            @Parameter(description = "ID of the user to retrieve")
             @PathVariable Long userId) {
         return new ResponseEntity<>(userService.getUsersById(userId), HttpStatus.OK);
     }
@@ -68,7 +68,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "User updated successfully")
     @PatchMapping("/{userId}")
     public ResponseEntity<Void> updateUserByUserId(
-            @Parameter(description = "ID of the user to update", required = true, example = "1")
+            @Parameter(description = "ID of the user to update")
             @PathVariable Long userId,
             @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserByUserId(userId, userUpdateRequest);

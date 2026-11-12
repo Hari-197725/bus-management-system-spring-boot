@@ -41,7 +41,7 @@ public class PassengerController {
     @ApiResponse(responseCode = "201", description = "Passenger created successfully")
     @PostMapping
     public ResponseEntity<Void> createPassenger(
-            @Parameter(description = "ID of the user", required = true, example = "1")
+            @Parameter(description = "ID of the user")
             @PathVariable Long userId,
             @Valid @RequestBody PassengerCreateRequest passengerCreateRequest) {
         passengerService.createPassenger(userId, passengerCreateRequest);
@@ -53,7 +53,7 @@ public class PassengerController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = PassengerResponse.class))))
     @GetMapping
     public ResponseEntity<List<PassengerResponse>> getAllPassengerByUserId(
-            @Parameter(description = "ID of the user", required = true, example = "1")
+            @Parameter(description = "ID of the user")
             @PathVariable Long userId) {
         return new ResponseEntity<>(passengerService.getAllPassengerByUserId(userId), HttpStatus.OK);
     }

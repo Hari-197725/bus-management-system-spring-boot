@@ -9,15 +9,15 @@ import lombok.Getter;
 @Schema(description = "User details response")
 public class UserResponse {
 
-    @Schema(description = "Unique identifier of the user", example = "1")
+    @Schema(description = "Unique identifier of the user")
     private Long id;
 
-    @Schema(description = "Full name of the user", example = "John Doe")
+    @Schema(description = "Full name of the user")
     private String name;
 
-    @Schema(description = "Email address of the user", example = "john.doe@example.com")
+    @Schema(description = "Email address of the user")
     private String email;
 
-    @Schema(description = "Phone number of the user", example = "9876543210")
+    @Schema(description = "Phone number of the user")
     private String phone;
 }

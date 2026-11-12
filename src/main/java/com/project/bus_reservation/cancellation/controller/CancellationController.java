@@ -36,9 +36,9 @@ public class CancellationController {
     @ApiResponse(responseCode = "204", description = "Booking cancelled successfully")
     @DeleteMapping
     public ResponseEntity<Void> cancelBookingByBookingId(
-            @Parameter(description = "ID of the user who owns the booking", required = true, example = "1")
+            @Parameter(description = "ID of the user who owns the booking")
             @PathVariable Long userId,
-            @Parameter(description = "ID of the booking to cancel", required = true, example = "1")
+            @Parameter(description = "ID of the booking to cancel")
             @PathVariable Long bookingId,
             @RequestBody CancellationRequest cancellationRequest) {
         cancellationService.cancelBookingByBookingId(userId, bookingId, cancellationRequest);

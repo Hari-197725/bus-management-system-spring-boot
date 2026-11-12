@@ -43,9 +43,9 @@ public class BusDisplayController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = BusResponse.class))))
     @GetMapping
     public ResponseEntity<List<BusResponse>> getBusesFromTo(
-            @Parameter(description = "Source city/location", required = true)
+            @Parameter(description = "Source city/location")
             @RequestParam String from,
-            @Parameter(description = "Destination city/location", required = true)
+            @Parameter(description = "Destination city/location")
             @RequestParam String to) {
         return new ResponseEntity<>(busDisplayService.getBusesFromTo(from, to), HttpStatus.OK);
     }

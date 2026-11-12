@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Schema(description = "Passenger details response")
 public class PassengerResponse {
-    @Schema(description = "Unique identifier of the passenger", example = "1")
+    @Schema(description = "Unique identifier of the passenger")
     private Long id;
 
-    @Schema(description = "Age of the passenger", example = "25")
+    @Schema(description = "Age of the passenger")
     private Integer age;
 
     @Schema(description = "Gender of the passenger")
     private Gender gender;
 
-    @Schema(description = "Name of the passenger", example = "Rahul Kumar")
+    @Schema(description = "Name of the passenger")
     private String name;
 
     @Schema(description = "User account this passenger belongs to")

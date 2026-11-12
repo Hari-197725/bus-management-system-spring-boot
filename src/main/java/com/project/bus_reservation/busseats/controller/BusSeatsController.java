@@ -44,7 +44,7 @@ public class BusSeatsController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = BusResponse.SeatResponse.class))))
     @GetMapping
     public ResponseEntity<List<BusResponse.SeatResponse>> getSeatsByBusId(
-            @Parameter(description = "ID of the bus", required = true)
+            @Parameter(description = "ID of the bus")
             @PathVariable Long busId) {
         return new ResponseEntity<>(busSeatsService.getSeatsByBusId(busId), HttpStatus.OK);
     }
@@ -54,9 +54,9 @@ public class BusSeatsController {
             content = @Content(schema = @Schema(implementation = BusResponse.SeatResponse.class)))
     @GetMapping("/{seatId}")
     public ResponseEntity<BusResponse.SeatResponse> getSeatBySeatId(
-            @Parameter(description = "ID of the bus", required = true)
+            @Parameter(description = "ID of the bus")
             @PathVariable Long busId,
-            @Parameter(description = "ID of the seat to retrieve", required = true)
+            @Parameter(description = "ID of the seat to retrieve")
             @PathVariable Long seatId) {
         return new ResponseEntity<>(busSeatsService.getSeatBySeatId(busId, seatId), HttpStatus.OK);
     }

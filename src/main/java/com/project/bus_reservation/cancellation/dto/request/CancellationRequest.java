@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @Schema(description = "Request payload for cancelling seats from a booking")
 public class CancellationRequest {
-    @Schema(description = "List of seat numbers to cancel from the booking", example = "[1, 5]", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "List of seat numbers to cancel from the booking", requiredMode = Schema.RequiredMode.REQUIRED)
     private List<Integer> seatNumbers;
 }

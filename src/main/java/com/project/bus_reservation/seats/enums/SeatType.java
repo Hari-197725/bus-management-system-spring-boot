@@ -14,10 +14,6 @@ public enum SeatType {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     public static SeatType fromValue(int value) {
         for (SeatType type : SeatType.values()) {
             if (type.value == value) {

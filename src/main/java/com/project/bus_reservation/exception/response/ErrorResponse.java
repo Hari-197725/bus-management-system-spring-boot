@@ -9,8 +9,8 @@ import lombok.Getter;
 @Getter
 @Schema(description = "Standard error response returned for all API errors")
 public class ErrorResponse {
-    @Schema(description = "Application-specific error code")
-    private ErrorCode Code;
+    @Schema(description = "Application-specific error code", implementation = String.class)
+    private ErrorCode code;
 
     @Schema(description = "Human-readable error message")
     private String message;
