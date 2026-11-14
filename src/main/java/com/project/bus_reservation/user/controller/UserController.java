@@ -107,7 +107,7 @@ public class UserController {
     public ResponseEntity<Void> updateUserById(
             @Parameter(description = "Unique identifier of the user to update")
             @PathVariable String userId,
-            @RequestBody UserUpdateRequest userUpdateRequest) {
+            @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserById(userId, userUpdateRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

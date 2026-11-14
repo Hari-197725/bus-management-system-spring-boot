@@ -31,7 +31,7 @@ public class User {
 
     @NotBlank
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits.")
-    private String phoneNumber;
+    private String    phoneNumber;
 
     private Timestamp createdAt;
 
