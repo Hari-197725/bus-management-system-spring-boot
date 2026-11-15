@@ -4,6 +4,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
@@ -17,9 +18,11 @@ public class Route {
     private String id;
 
     @NotBlank
+    @NotNull
     private String source;
 
     @NotBlank
+    @NotNull
     private String destination;
 
     @Positive

@@ -1,6 +1,7 @@
 package com.project.bus_reservation.user.service;
 
 import com.project.bus_reservation.exception.custom.ConflictException;
+import com.project.bus_reservation.exception.custom.ForbiddenException;
 import com.project.bus_reservation.exception.custom.NotFoundException;
 import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.user.dto.request.UserCreateRequest;
@@ -20,16 +21,22 @@ public class UserService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public void createUsers(UserCreateRequest userCreateRequest) {
+
+    public void createUsers(String firebaseUid, UserCreateRequest userCreateRequest) {
+        if (usersRepository.findById(firebaseUid).block() != null) {
+            throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS, "User profile already exists");
+        }
+
         if (usersRepository.findByPhoneNumber(userCreateRequest.getPhoneNumber()).block() != null) {
             throw new ConflictException(ErrorCode.PHONE_NUMBER_ALREADY_EXISTS, "Phone number already exists");
         }
 
         if (usersRepository.findByEmail(userCreateRequest.getEmail()).block() != null) {
-            throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS, "Email already exists: " + userCreateRequest.getEmail());
+            throw new ConflictException(ErrorCode.USER_ALREADY_EXISTS,
+                    "Email already exists: " + userCreateRequest.getEmail());
         }
 
-        User user = UserMapper.toUserEntity(userCreateRequest);
+        User user = UserMapper.toUserEntity(firebaseUid, userCreateRequest);
         usersRepository.save(user).block();
     }
 
@@ -54,7 +61,13 @@ public class UserService {
         return UserMapper.toUserResponse(user);
     }
 
-    public void updateUserById(String userId, UserUpdateRequest userUpdateRequest) {
+
+    public void updateUserById(String firebaseUid, String userId, UserUpdateRequest userUpdateRequest) {
+        if (!firebaseUid.equals(userId)) {
+            throw new ForbiddenException(ErrorCode.ACCESS_DENIED,
+                    "You are not allowed to update another user's profile");
+        }
+
         User user = usersRepository.findById(userId).block();
         if (user == null) {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);

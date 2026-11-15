@@ -9,14 +9,13 @@ import org.springframework.stereotype.Component;
 import com.google.cloud.Timestamp;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 public class UserMapper {
 
-    public static User toUserEntity(UserCreateRequest userCreateRequest) {
+
+    public static User toUserEntity(String firebaseUid, UserCreateRequest userCreateRequest) {
         User user = new User();
-        user.setId(UUID.randomUUID().toString());
+        user.setId(firebaseUid);
         user.setName(userCreateRequest.getName());
         user.setEmail(userCreateRequest.getEmail());
         user.setPhoneNumber(userCreateRequest.getPhoneNumber());

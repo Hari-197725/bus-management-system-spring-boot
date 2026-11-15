@@ -1,0 +1,10 @@
+spring.application.name=bus-reservation
+
+# Admin Firebase UID - only this user can create/manage operators, buses, routes
+app.admin.uid=YOUR_ACTUAL_FIREBASE_UID_HERE
+
+# Spring Cloud GCP Firestore Configuration
+spring.cloud.gcp.project-id=YOUR_FIREBASE_PROJECT_ID_HERE
+spring.cloud.gcp.credentials.location=classpath:firebase-service-account.json
+spring.cloud.gcp.firestore.project-id=YOUR_FIREBASE_PROJECT_ID_HERE
+spring.cloud.gcp.firestore.enabled=true
