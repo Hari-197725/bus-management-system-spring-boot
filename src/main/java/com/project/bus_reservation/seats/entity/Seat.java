@@ -4,8 +4,6 @@ import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.seats.enums.SeatStatus;
 import com.project.bus_reservation.seats.enums.SeatType;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 @Document(collectionName = "seats")
@@ -19,8 +17,6 @@ public class Seat {
 
     private String seatId;
 
-    @NotNull
-    @Positive
     private Integer seatNumber;
 
     private SeatType seatType;

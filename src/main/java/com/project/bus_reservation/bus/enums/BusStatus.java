@@ -1,5 +1,8 @@
 package com.project.bus_reservation.bus.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BusStatus {
     ACTIVE(1),
     INACTIVE(2);
@@ -8,10 +11,6 @@ public enum BusStatus {
 
     BusStatus(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     public static BusStatus fromValue(int value) {

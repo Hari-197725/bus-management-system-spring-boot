@@ -3,9 +3,6 @@ package com.project.bus_reservation.route.entity;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 @Document(collectionName = "routes")
@@ -17,18 +14,12 @@ public class Route {
     @DocumentId
     private String id;
 
-    @NotBlank
-    @NotNull
     private String source;
 
-    @NotBlank
-    @NotNull
     private String destination;
 
-    @Positive
     private double distance;
 
-    @Positive
     private Integer estimatedDuration;
 
     private Timestamp createdAt = Timestamp.now();

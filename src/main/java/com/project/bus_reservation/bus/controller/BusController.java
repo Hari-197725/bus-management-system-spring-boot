@@ -3,6 +3,9 @@ package com.project.bus_reservation.bus.controller;
 import com.project.bus_reservation.bus.dto.request.BusCreateRequest;
 import com.project.bus_reservation.bus.dto.response.BusResponse;
 import com.project.bus_reservation.bus.service.BusService;
+import com.project.bus_reservation.config.security.AdminGuard;
+import com.project.bus_reservation.config.security.CurrentUser;
+import com.project.bus_reservation.config.security.FirebaseUserDetails;
 import com.project.bus_reservation.exception.response.ErrorResponse;
 import com.project.bus_reservation.route.dto.response.RouteResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +31,22 @@ import java.util.List;
         @ApiResponse(
                 responseCode = "400",
                 description = "Bad Request - Invalid request body or parameters",
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        ),
+        @ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized - No valid Firebase token provided",
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        ),
+        @ApiResponse(
+                responseCode = "403",
+                description = "Forbidden - Only admin can perform this action",
                 content = @Content(
                         mediaType = "application/json",
                         schema = @Schema(implementation = ErrorResponse.class)
@@ -63,18 +82,25 @@ public class BusController {
     @Autowired
     BusService busService;
 
-    @Operation(summary = "Create a new bus", description = "Registers a new bus under the given operator")
+    @Autowired
+    AdminGuard adminGuard;
+
+    // ADMIN ONLY — Only admin can register a new bus under an operator
+    @Operation(summary = "Create a new bus", description = "Admin only: Registers a new bus under the given operator")
     @ApiResponse(responseCode = "201", description = "Bus created successfully")
     @PostMapping
     public ResponseEntity<Void> createBus(
+            @CurrentUser FirebaseUserDetails currentUser,
             @Parameter(description = "Unique identifier of the operator")
             @PathVariable String operatorId,
             @Valid @RequestBody BusCreateRequest busCreateRequest) {
+        adminGuard.requireAdmin(currentUser);
         busService.createBus(operatorId, busCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Get all buses by operator", description = "Retrieves all buses belonging to the specified operator")
+    // PUBLIC — Anyone can see all buses under an operator
+    @Operation(summary = "Get all buses by operator", description = "Public: Retrieves all buses belonging to the specified operator")
     @ApiResponse(
             responseCode = "200",
             description = "Successfully retrieved all buses",
@@ -90,7 +116,8 @@ public class BusController {
         return new ResponseEntity<>(busService.getAllBuses(operatorId), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get bus by ID", description = "Retrieves details of a specific bus under an operator")
+    // PUBLIC — Anyone can see a specific bus's details
+    @Operation(summary = "Get bus by ID", description = "Public: Retrieves details of a specific bus under an operator")
     @ApiResponse(
             responseCode = "200",
             description = "Successfully retrieved bus details",
@@ -108,7 +135,8 @@ public class BusController {
         return new ResponseEntity<>(busService.getBusById(operatorId, busId), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get route for a bus", description = "Retrieves the assigned route for a specific bus")
+    // PUBLIC — Anyone can see the route assigned to a bus
+    @Operation(summary = "Get route for a bus", description = "Public: Retrieves the assigned route for a specific bus")
     @ApiResponse(
             responseCode = "200",
             description = "Successfully retrieved route for the bus",

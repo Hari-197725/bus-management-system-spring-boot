@@ -1,5 +1,6 @@
 package com.project.bus_reservation.user.controller;
 
+import com.project.bus_reservation.config.security.AdminGuard;
 import com.project.bus_reservation.config.security.CurrentUser;
 import com.project.bus_reservation.config.security.FirebaseUserDetails;
 import com.project.bus_reservation.exception.custom.ForbiddenException;
@@ -39,6 +40,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AdminGuard adminGuard;
+
     @Operation(summary = "Create a new user", description = "Registers a new user profile using the Firebase authenticated identity")
     @ApiResponse(responseCode = "201", description = "User created successfully")
     @PostMapping
@@ -52,10 +56,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Get all users", description = "Retrieves a list of all registered users")
+    @Operation(summary = "Get all users", description = "Admin only: Retrieves a list of all registered users")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved all users", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))))
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
+
+    public ResponseEntity<List<UserResponse>> getAllUsers(
+            @CurrentUser FirebaseUserDetails currentUser) {
+        adminGuard.requireAdmin(currentUser);
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 

@@ -57,7 +57,7 @@ public class BookingService {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND, "User not found with id: " + userId);
         }
 
-        List<BookingCreateRequest.passengerCreateRequest> passengerList = bookingCreateRequest.getPassengers();
+        List<BookingCreateRequest.PassengerBookingRequest> passengerList = bookingCreateRequest.getPassengers();
         if (bookingCreateRequest.getSeatCount() != passengerList.size()) {
             throw new BadRequestException(ErrorCode.SEAT_PASSENGER_COUNT_MISMATCH, "Seat count " + bookingCreateRequest.getSeatCount() +
                     " does not match passenger count " + passengerList.size());
@@ -81,7 +81,7 @@ public class BookingService {
         List<Passenger> passengers = new ArrayList<>();
         List<Seat> seats = new ArrayList<>();
 
-        for (BookingCreateRequest.passengerCreateRequest passengerReq : passengerList) {
+        for (BookingCreateRequest.PassengerBookingRequest passengerReq : passengerList) {
             Passenger passenger = passengerRepository.findById(passengerReq.getPassengerId()).block();
             if (passenger == null || passenger.getUserId() == null || !userId.equals(passenger.getUserId())) {
                 throw new NotFoundException(ErrorCode.PASSENGER_NOT_FOUND, "Passenger with id " + passengerReq.getPassengerId() +
@@ -153,8 +153,7 @@ public class BookingService {
                 .collect(Collectors.groupingBy(
                         BookingProjection::getBookingId,
                         LinkedHashMap::new,
-                        Collectors.toList()
-                ));
+                        Collectors.toList()));
 
         List<BookingResponse> responseList = new ArrayList<>();
         for (List<BookingProjection> bookingRows : groupedBookings.values()) {

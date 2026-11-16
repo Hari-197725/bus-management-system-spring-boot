@@ -1,17 +1,13 @@
 package com.project.bus_reservation.bus.entity;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.bus.enums.BusStatus;
 import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.seats.entity.Seat;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import com.google.cloud.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +20,12 @@ public class Bus {
     @DocumentId
     private String id;
 
-    @NotNull
-    @Positive
     private Integer busNumber;
 
-    @NotBlank
     private String busName;
 
     private BusType busType;
 
-    @Min(18)
     private Integer totalSeats;
 
     private BusStatus status;

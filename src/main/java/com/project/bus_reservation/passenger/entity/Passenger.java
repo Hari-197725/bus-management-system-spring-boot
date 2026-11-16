@@ -3,7 +3,6 @@ package com.project.bus_reservation.passenger.entity;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import com.project.bus_reservation.passenger.enums.Gender;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,15 +17,10 @@ public class Passenger {
     @DocumentId
     private String id;
 
-    @Min(3)
-    @Max(100)
-    @NotNull
     private Integer age;
 
     private Gender gender;
 
-    @NotBlank
-    @Size(max = 20)
     private String name;
 
     private String userId;

@@ -9,9 +9,11 @@ import com.project.bus_reservation.exception.handler.BadRequestExceptionHandler;
 import com.project.bus_reservation.exception.handler.ConflictExceptionHandler;
 import com.project.bus_reservation.exception.handler.ExceptionHandlerStrategy;
 import com.project.bus_reservation.exception.handler.ForbiddenExceptionHandler;
+import com.project.bus_reservation.exception.handler.MethodArgumentNotValidExceptionHandler;
 import com.project.bus_reservation.exception.handler.NotFoundExceptionHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +26,7 @@ public class ExceptionResponseBuilder {
         strategies.put(BadRequestException.class, new BadRequestExceptionHandler());
         strategies.put(ConflictException.class, new ConflictExceptionHandler());
         strategies.put(ForbiddenException.class, new ForbiddenExceptionHandler());
+        strategies.put(MethodArgumentNotValidException.class, new MethodArgumentNotValidExceptionHandler());
     }
 
     public static ResponseEntity<ErrorResponse> build(Exception exception) {

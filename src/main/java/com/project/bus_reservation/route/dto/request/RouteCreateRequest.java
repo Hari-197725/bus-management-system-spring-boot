@@ -9,17 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RouteCreateRequest {
-    @NotBlank
+    @NotBlank(message = "Source cannot be blank")
     private String source;
 
-    @NotBlank
+    @NotBlank(message = "Destination cannot be blank")
     private String destination;
 
-    @NotNull
-    @Positive
-    private double distance;
+    @NotNull(message = "Distance is required")
+    @Positive(message = "Distance must be positive")
+    private Double distance;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Estimated duration is required")
+    @Positive(message = "Estimated duration must be positive")
     private Integer estimatedDuration;
 }

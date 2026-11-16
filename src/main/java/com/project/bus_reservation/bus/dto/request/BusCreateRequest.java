@@ -2,6 +2,7 @@ package com.project.bus_reservation.bus.dto.request;
 
 import com.project.bus_reservation.bus.enums.BusType;
 import com.project.bus_reservation.seats.enums.SeatType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,17 +29,17 @@ public class BusCreateRequest {
 
     private String routeId;
 
-    @NotNull
-    private List<SeatRequest> seats;
+    @NotEmpty(message = "Seats list cannot be empty")
+    private List<@Valid SeatRequest> seats;
 
     @Getter
     public static class SeatRequest {
 
-        @NotNull
-        @Positive
+        @NotNull(message = "Seat number is required")
+        @Positive(message = "Seat number must be positive")
         private Integer seatNumber;
 
-        @NotNull
+        @NotNull(message = "Seat type is required")
         private SeatType seatType;
     }
 }

@@ -2,15 +2,19 @@ package com.project.bus_reservation.cancellation.controller;
 
 import com.project.bus_reservation.cancellation.dto.request.CancellationRequest;
 import com.project.bus_reservation.cancellation.service.CancellationService;
+import com.project.bus_reservation.config.security.CurrentUser;
+import com.project.bus_reservation.config.security.FirebaseUserDetails;
+import com.project.bus_reservation.exception.custom.ForbiddenException;
+import com.project.bus_reservation.exception.enums.ErrorCode;
 import com.project.bus_reservation.exception.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,22 @@ import org.springframework.web.bind.annotation.*;
         @ApiResponse(
                 responseCode = "400",
                 description = "Bad Request - Invalid cancellation parameters or payload",
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        ),
+        @ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized - No valid Firebase token provided",
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        ),
+        @ApiResponse(
+                responseCode = "403",
+                description = "Forbidden - Cannot cancel another user's booking",
                 content = @Content(
                         mediaType = "application/json",
                         schema = @Schema(implementation = ErrorResponse.class)
@@ -61,13 +81,19 @@ public class CancellationController {
     @ApiResponse(responseCode = "204", description = "Booking cancelled successfully")
     @DeleteMapping
     public ResponseEntity<Void> cancelBookingByBookingId(
+            @CurrentUser FirebaseUserDetails currentUser,
             @Parameter(description = "Unique identifier of the user")
             @PathVariable String userId,
             @Parameter(description = "Unique identifier of the booking to cancel")
             @PathVariable String bookingId,
-            @RequestBody CancellationRequest cancellationRequest) {
+            @Valid @RequestBody CancellationRequest cancellationRequest) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (!currentUser.getUid().equals(userId)) {
+            throw new ForbiddenException(ErrorCode.ACCESS_DENIED, "You are not allowed to cancel another user's booking");
+        }
         cancellationService.cancelBookingByBookingId(userId, bookingId, cancellationRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-
