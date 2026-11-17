@@ -43,7 +43,7 @@ public class BookingController {
         @ApiResponse(responseCode = "201", description = "Booking created successfully")
         @PostMapping
         public ResponseEntity<Void> createBooking(
-                        @CurrentUser FirebaseUserDetails currentUser,
+                        @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
                         @Parameter(description = "Unique identifier of the user") @PathVariable String userId,
                         @Valid @RequestBody BookingCreateRequest bookingCreateRequest) {
                 if (currentUser == null) {
@@ -61,7 +61,7 @@ public class BookingController {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved all bookings", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BookingResponse.class))))
         @GetMapping
         public ResponseEntity<List<BookingResponse>> getAllBookings(
-                        @CurrentUser FirebaseUserDetails currentUser,
+                        @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
                         @Parameter(description = "Unique identifier of the user") @PathVariable String userId) {
                 if (currentUser == null) {
                         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -77,7 +77,7 @@ public class BookingController {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved booking details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = BookingResponse.class)))
         @GetMapping("/{bookingId}")
         public ResponseEntity<BookingResponse> getBookingByBookingId(
-                        @CurrentUser FirebaseUserDetails currentUser,
+                        @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
                         @Parameter(description = "Unique identifier of the user") @PathVariable String userId,
                         @Parameter(description = "Unique identifier of the booking") @PathVariable String bookingId) {
                 if (currentUser == null) {

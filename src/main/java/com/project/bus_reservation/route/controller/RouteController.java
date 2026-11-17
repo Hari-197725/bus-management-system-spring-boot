@@ -47,7 +47,7 @@ public class RouteController {
     @ApiResponse(responseCode = "201", description = "Route created successfully")
     @PostMapping
     public ResponseEntity<Void> createRoute(
-            @CurrentUser FirebaseUserDetails currentUser,
+            @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
             @Parameter(description = "Unique identifier of the operator") @PathVariable String operatorId,
             @Valid @RequestBody RouteCreateRequest routeCreateRequest) {
         adminGuard.requireAdmin(currentUser);

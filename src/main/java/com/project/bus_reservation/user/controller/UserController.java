@@ -47,7 +47,7 @@ public class UserController {
     @ApiResponse(responseCode = "201", description = "User created successfully")
     @PostMapping
     public ResponseEntity<Void> createUsers(
-            @CurrentUser FirebaseUserDetails currentUser,
+            @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
             @Valid @RequestBody UserCreateRequest userCreateRequest) {
         if (currentUser == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -61,7 +61,7 @@ public class UserController {
     @GetMapping
 
     public ResponseEntity<List<UserResponse>> getAllUsers(
-            @CurrentUser FirebaseUserDetails currentUser) {
+            @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser) {
         adminGuard.requireAdmin(currentUser);
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Successfully retrieved user details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class)))
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(
-            @CurrentUser FirebaseUserDetails currentUser,
+            @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
             @Parameter(description = "Unique identifier of the user") @PathVariable String userId) {
         if (currentUser == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -86,7 +86,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "User updated successfully")
     @PatchMapping("/{userId}")
     public ResponseEntity<Void> updateUserById(
-            @CurrentUser FirebaseUserDetails currentUser,
+            @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
             @Parameter(description = "Unique identifier of the user to update") @PathVariable String userId,
             @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
         if (currentUser == null) {

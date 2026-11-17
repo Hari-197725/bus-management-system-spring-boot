@@ -47,7 +47,7 @@ public class OperatorController {
     @ApiResponse(responseCode = "201", description = "Operator created successfully")
     @PostMapping
     public ResponseEntity<Void> createOperator(
-            @CurrentUser FirebaseUserDetails currentUser,
+            @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
             @Valid @RequestBody OperatorCreateRequest operatorCreateRequest) {
         adminGuard.requireAdmin(currentUser);
         operatorService.createOperator(operatorCreateRequest);

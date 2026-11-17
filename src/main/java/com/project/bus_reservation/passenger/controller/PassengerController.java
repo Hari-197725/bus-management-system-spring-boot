@@ -43,7 +43,7 @@ public class PassengerController {
         @ApiResponse(responseCode = "201", description = "Passenger created successfully")
         @PostMapping
         public ResponseEntity<Void> createPassenger(
-                        @CurrentUser FirebaseUserDetails currentUser,
+                        @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
                         @Parameter(description = "Unique identifier of the user") @PathVariable String userId,
                         @Valid @RequestBody PassengerCreateRequest passengerCreateRequest) {
                 if (currentUser == null) {
@@ -61,7 +61,7 @@ public class PassengerController {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved all passengers", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = PassengerResponse.class))))
         @GetMapping
         public ResponseEntity<List<PassengerResponse>> getAllPassengerByUserId(
-                        @CurrentUser FirebaseUserDetails currentUser,
+                        @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
                         @Parameter(description = "Unique identifier of the user") @PathVariable String userId) {
                 if (currentUser == null) {
                         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -24,76 +24,33 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/user/{userId}/booking/{bookingId}/cancel")
 @ApiResponses(value = {
-        @ApiResponse(
-                responseCode = "400",
-                description = "Bad Request - Invalid cancellation parameters or payload",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorResponse.class)
-                )
-        ),
-        @ApiResponse(
-                responseCode = "401",
-                description = "Unauthorized - No valid Firebase token provided",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorResponse.class)
-                )
-        ),
-        @ApiResponse(
-                responseCode = "403",
-                description = "Forbidden - Cannot cancel another user's booking",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorResponse.class)
-                )
-        ),
-        @ApiResponse(
-                responseCode = "404",
-                description = "Not Found - Booking or User not found",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorResponse.class)
-                )
-        ),
-        @ApiResponse(
-                responseCode = "409",
-                description = "Conflict - Booking cannot be cancelled",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorResponse.class)
-                )
-        ),
-        @ApiResponse(
-                responseCode = "500",
-                description = "Internal Server Error - Unexpected server issue",
-                content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorResponse.class)
-                )
-        )
+                @ApiResponse(responseCode = "400", description = "Bad Request - Invalid cancellation parameters or payload", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                @ApiResponse(responseCode = "401", description = "Unauthorized - No valid Firebase token provided", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                @ApiResponse(responseCode = "403", description = "Forbidden - Cannot cancel another user's booking", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                @ApiResponse(responseCode = "404", description = "Not Found - Booking or User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                @ApiResponse(responseCode = "409", description = "Conflict - Booking cannot be cancelled", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+                @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected server issue", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
 })
 public class CancellationController {
-    @Autowired
-    CancellationService cancellationService;
+        @Autowired
+        CancellationService cancellationService;
 
-    @Operation(summary = "Cancel a booking", description = "Cancels an existing ticket booking for the specified user and releases the seats")
-    @ApiResponse(responseCode = "204", description = "Booking cancelled successfully")
-    @DeleteMapping
-    public ResponseEntity<Void> cancelBookingByBookingId(
-            @CurrentUser FirebaseUserDetails currentUser,
-            @Parameter(description = "Unique identifier of the user")
-            @PathVariable String userId,
-            @Parameter(description = "Unique identifier of the booking to cancel")
-            @PathVariable String bookingId,
-            @Valid @RequestBody CancellationRequest cancellationRequest) {
-        if (currentUser == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        @Operation(summary = "Cancel a booking", description = "Cancels an existing ticket booking for the specified user and releases the seats")
+        @ApiResponse(responseCode = "204", description = "Booking cancelled successfully")
+        @DeleteMapping
+        public ResponseEntity<Void> cancelBookingByBookingId(
+                        @Parameter(hidden = true) @CurrentUser FirebaseUserDetails currentUser,
+                        @Parameter(description = "Unique identifier of the user") @PathVariable String userId,
+                        @Parameter(description = "Unique identifier of the booking to cancel") @PathVariable String bookingId,
+                        @Valid @RequestBody CancellationRequest cancellationRequest) {
+                if (currentUser == null) {
+                        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                }
+                if (!currentUser.getUid().equals(userId)) {
+                        throw new ForbiddenException(ErrorCode.ACCESS_DENIED,
+                                        "You are not allowed to cancel another user's booking");
+                }
+                cancellationService.cancelBookingByBookingId(userId, bookingId, cancellationRequest);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        if (!currentUser.getUid().equals(userId)) {
-            throw new ForbiddenException(ErrorCode.ACCESS_DENIED, "You are not allowed to cancel another user's booking");
-        }
-        cancellationService.cancelBookingByBookingId(userId, bookingId, cancellationRequest);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }
